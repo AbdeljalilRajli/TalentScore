@@ -1,0 +1,8 @@
+/* App-specific styles for AI Resume Analyzer */
+
+/* Custom component styles can be added here if needed */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
