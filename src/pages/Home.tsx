@@ -150,13 +150,13 @@ const Home: React.FC = () => {
               AI-Powered Resume Analysis
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight font-heading">
               <span className="gradient-text">TalentScore</span>
               <br />
-              <span className="text-neutral-800 text-2xl md:text-3xl lg:text-4xl">Resume Analyzer</span>
+              <span className="text-neutral-700 text-xl md:text-2xl lg:text-3xl font-medium">Resume Analyzer</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-neutral-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base md:text-lg text-neutral-600 mb-10 max-w-2xl mx-auto leading-relaxed font-body">
               Transform your resume with AI-powered insights. Get instant feedback, match scores, 
               and personalized suggestions to land your dream job faster.
             </p>
@@ -195,17 +195,17 @@ const Home: React.FC = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-white">
+      <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20 animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary-50 text-primary-700 font-medium mb-6">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-primary-50 text-primary-700 text-sm font-medium mb-6 font-body">
               <span className="mr-2">✨</span>
               Powerful Features
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold font-display gradient-text mb-6">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 gradient-text font-heading">
               Everything You Need
             </h2>
-            <p className="text-xl text-neutral-600 max-w-3xl mx-auto font-body">
+            <p className="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto font-body">
               Transform your resume with cutting-edge AI technology and land your dream job faster than ever
             </p>
           </div>
@@ -229,17 +229,17 @@ const Home: React.FC = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 bg-gradient-to-br from-neutral-50 to-primary-50/30">
+      <section className="py-16 lg:py-24 bg-gradient-to-br from-neutral-50 to-primary-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20 animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent-50 text-accent-700 font-medium mb-6">
+          <div className="text-center mb-16 animate-on-scroll">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-accent-50 text-accent-700 text-sm font-medium mb-6 font-body">
               <span className="mr-2">💬</span>
               Testimonials
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold font-display gradient-text mb-6">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold gradient-text mb-4 font-heading">
               What Our Users Say
             </h2>
-            <p className="text-xl text-neutral-600 max-w-3xl mx-auto font-body">
+            <p className="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto font-body">
               Join thousands of successful job seekers who have transformed their careers
             </p>
           </div>
@@ -286,17 +286,17 @@ const Home: React.FC = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 bg-white">
+      <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20 animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-secondary-50 text-secondary-700 font-medium mb-6">
+          <div className="text-center mb-16 animate-on-scroll">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-secondary-50 text-secondary-700 text-sm font-medium mb-6 font-body">
               <span className="mr-2">❓</span>
               FAQ
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold font-display gradient-text mb-6">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold gradient-text mb-4 font-heading">
               Frequently Asked Questions
             </h2>
-            <p className="text-xl text-neutral-600 font-body">
+            <p className="text-base md:text-lg text-neutral-600 font-body">
               Get answers to common questions about TalentScore
             </p>
           </div>
@@ -341,7 +341,7 @@ const Home: React.FC = () => {
               Our Mission
             </div>
             
-            <h2 className="text-4xl md:text-5xl font-bold font-display mb-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold font-heading mb-6 text-white">
               Empowering Your Career Journey
             </h2>
             
@@ -367,19 +367,19 @@ const Home: React.FC = () => {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-neutral-50 to-primary-50/30">
+      <section className="py-16 lg:py-24 bg-gradient-to-br from-neutral-50 to-primary-50/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent-50 text-accent-700 font-medium mb-8">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-accent-50 text-accent-700 text-sm font-medium mb-6 font-body">
               <span className="mr-2">🚀</span>
               Get Started Today
             </div>
             
-            <h2 className="text-4xl md:text-5xl font-bold font-display gradient-text mb-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold gradient-text mb-6 font-heading">
               Ready to Transform Your Resume?
             </h2>
             
-            <p className="text-xl text-neutral-600 mb-12 max-w-3xl mx-auto font-body">
+            <p className="text-base md:text-lg text-neutral-600 mb-10 max-w-2xl mx-auto font-body">
               Join thousands of successful job seekers who have improved their resumes and landed their dream jobs with our AI-powered tool.
             </p>
             

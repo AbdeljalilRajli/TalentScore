@@ -26,7 +26,7 @@ const About: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-neutral-50 pt-18">
+    <div className="bg-neutral-50 pt-16">
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
         {/* Background Elements */}
@@ -36,33 +36,33 @@ const About: React.FC = () => {
         
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-fade-in">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-primary-200 text-primary-700 font-medium mb-8 shadow-soft">
-              <span className="w-2 h-2 bg-accent-500 rounded-full mr-2 animate-pulse"></span>
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-primary-200 text-primary-700 text-sm font-medium mb-8 shadow-sm font-body">
+              <span className="w-1.5 h-1.5 bg-accent-500 rounded-full mr-2 animate-pulse"></span>
               About Our Mission
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold font-display mb-8 leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading mb-6 leading-tight">
               <span className="gradient-text">Empowering Careers</span>
               <br />
-              <span className="text-neutral-800 text-3xl md:text-4xl lg:text-5xl">with AI Innovation</span>
+              <span className="text-neutral-700 text-xl md:text-2xl lg:text-3xl font-medium">with AI Innovation</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-neutral-600 mb-12 max-w-4xl mx-auto leading-relaxed font-body">
+            <p className="text-base md:text-lg text-neutral-600 mb-10 max-w-2xl mx-auto leading-relaxed font-body">
               We're revolutionizing how job seekers create compelling resumes with AI-driven insights 
               that help you stand out in today's competitive job market.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <a href="/analyze" className="btn-primary text-lg px-10 py-4 group">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a href="/analyze" className="btn-primary">
                 <span className="mr-2">🚀</span>
                 Try Our AI Tool
-                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </a>
-              <a href="#mission" className="btn-secondary text-lg px-10 py-4 group">
+              <a href="#mission" className="btn-secondary">
                 Learn More
-                <svg className="w-5 h-5 ml-2 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
               </a>
@@ -72,17 +72,17 @@ const About: React.FC = () => {
       </section>
 
       {/* Mission Section */}
-      <section id="mission" className="py-24 bg-white">
+      <section id="mission" className="py-16 lg:py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20 animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary-50 text-primary-700 font-medium mb-6">
+          <div className="text-center mb-16 animate-on-scroll">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-primary-50 text-primary-700 text-sm font-medium mb-6 font-body">
               <span className="mr-2">🎯</span>
               Our Mission
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold font-display gradient-text mb-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold gradient-text mb-4 font-heading">
               Democratizing Career Success
             </h2>
-            <p className="text-xl text-neutral-600 leading-relaxed max-w-4xl mx-auto font-body">
+            <p className="text-base md:text-lg text-neutral-600 leading-relaxed max-w-2xl mx-auto font-body">
               We believe that everyone deserves a fair chance at their dream job. Our AI-powered 
               resume analyzer levels the playing field by providing professional-grade resume 
               optimization tools that were once only available to those who could afford expensive 
@@ -127,7 +127,7 @@ const About: React.FC = () => {
                 <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${value.color} text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-soft`}>
                   {value.icon}
                 </div>
-                <h3 className="text-xl font-bold text-neutral-900 mb-4 font-display">{value.title}</h3>
+                <h3 className="text-xl font-bold text-neutral-900 mb-4 font-heading">{value.title}</h3>
                 <p className="text-neutral-600 leading-relaxed font-body">{value.description}</p>
               </div>
             ))}
@@ -136,17 +136,17 @@ const About: React.FC = () => {
       </section>
 
       {/* How AI Works Section */}
-      <section className="py-24 bg-gradient-to-br from-neutral-50 to-primary-50/30">
+      <section className="py-16 lg:py-24 bg-gradient-to-br from-neutral-50 to-primary-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20 animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-secondary-50 text-secondary-700 font-medium mb-6">
+          <div className="text-center mb-16 animate-on-scroll">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-secondary-50 text-secondary-700 text-sm font-medium mb-6 font-body">
               <span className="mr-2">🤖</span>
               AI Technology
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold font-display gradient-text mb-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold gradient-text mb-4 font-heading">
               How Our AI Works
             </h2>
-            <p className="text-xl text-neutral-600 max-w-4xl mx-auto font-body">
+            <p className="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto font-body">
               Our advanced artificial intelligence combines natural language processing, 
               machine learning, and industry expertise to provide comprehensive resume analysis.
             </p>
@@ -182,11 +182,11 @@ const About: React.FC = () => {
                   }
                 ].map((item, index) => (
                   <div key={index} className="flex items-start group" style={{ animationDelay: `${index * 100}ms` }}>
-                    <div className={`w-12 h-12 bg-gradient-to-br ${item.color} text-white rounded-xl flex items-center justify-center font-bold font-display mr-6 mt-1 shadow-soft group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`w-12 h-12 bg-gradient-to-br ${item.color} text-white rounded-xl flex items-center justify-center font-bold font-heading mr-6 mt-1 shadow-soft group-hover:scale-110 transition-transform duration-300`}>
                       {item.step}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-neutral-900 mb-3 font-display group-hover:text-primary-600 transition-colors">
+                      <h3 className="text-xl font-bold text-neutral-900 mb-3 font-heading group-hover:text-primary-600 transition-colors">
                         {item.title}
                       </h3>
                       <p className="text-neutral-600 leading-relaxed font-body">
@@ -206,7 +206,7 @@ const About: React.FC = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold font-display gradient-text mb-6">
+                <h3 className="text-2xl font-bold font-heading gradient-text mb-6">
                   Powered by Advanced AI
                 </h3>
                 <p className="text-neutral-600 mb-8 font-body leading-relaxed">
@@ -215,11 +215,11 @@ const About: React.FC = () => {
                 </p>
                 <div className="grid grid-cols-2 gap-6">
                   <div className="p-4 rounded-xl bg-primary-50">
-                    <div className="text-3xl font-bold font-display gradient-text">98%</div>
+                    <div className="text-3xl font-bold font-heading gradient-text">98%</div>
                     <div className="text-sm text-neutral-600 font-medium">Accuracy Rate</div>
                   </div>
                   <div className="p-4 rounded-xl bg-accent-50">
-                    <div className="text-3xl font-bold font-display gradient-text">10k+</div>
+                    <div className="text-3xl font-bold font-heading gradient-text">10k+</div>
                     <div className="text-sm text-gray-500">Resumes Analyzed</div>
                   </div>
                 </div>
@@ -230,31 +230,31 @@ const About: React.FC = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="relative py-24 bg-gradient-to-br from-primary-600 via-secondary-600 to-accent-600 text-white overflow-hidden">
+      <section className="relative py-16 lg:py-24 bg-gradient-to-br from-primary-600 via-secondary-600 to-accent-600 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-x-48 -translate-y-48"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl translate-x-48 translate-y-48"></div>
         
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white font-medium mb-8">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-medium mb-6 font-body">
               <span className="mr-2">🚀</span>
               Get Started
             </div>
             
-            <h2 className="text-4xl md:text-5xl font-bold font-display mb-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold font-heading mb-6 text-white">
               Ready to Transform Your Resume?
             </h2>
             
-            <p className="text-xl mb-12 opacity-90 max-w-3xl mx-auto font-body">
+            <p className="text-base md:text-lg mb-10 opacity-90 max-w-2xl mx-auto font-body">
               Join thousands of job seekers who have improved their resumes and landed their dream jobs with our AI-powered tool.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <a href="/analyze" className="btn-secondary bg-white text-primary-600 hover:bg-neutral-50 text-lg px-10 py-4 group">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a href="/analyze" className="btn-secondary bg-white text-primary-600 hover:bg-neutral-50">
                 <span className="mr-2">⚡</span>
                 Start Your Analysis
-                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </a>

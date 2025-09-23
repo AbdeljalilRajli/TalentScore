@@ -1,24 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&family=Lato:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Lato', system-ui, sans-serif;
     font-size: 16px;
     scroll-behavior: smooth;
   }
   
   body {
-    @apply text-neutral-700 antialiased;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    @apply text-neutral-700 antialiased font-body;
     line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-neutral-900;
-    font-feature-settings: 'ss01', 'ss02';
+    @apply text-neutral-900 font-heading;
     line-height: 1.2;
   }
 }

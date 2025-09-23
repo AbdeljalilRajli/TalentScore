@@ -30,8 +30,8 @@ const Header: React.FC = () => {
                 </div>
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-bold gradient-text">TalentScore</span>
-                <span className="text-xs text-neutral-500 font-medium -mt-0.5">AI Resume Analyzer</span>
+                <span className="text-lg font-bold gradient-text font-heading">TalentScore</span>
+                <span className="text-xs text-neutral-500 font-medium -mt-0.5 font-body">AI Resume Analyzer</span>
               </div>
             </a>
           </div>
