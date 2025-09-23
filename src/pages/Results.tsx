@@ -11,7 +11,8 @@ const defaultResults: AnalysisResult = {
     "Mention Docker projects or deployments in your experience",
     "Highlight AWS cloud experience if you have any",
     "Emphasize leadership and teamwork skills more prominently"
-  ]
+  ],
+  isValidResume: true
 };
 
 const Results: React.FC = () => {
@@ -92,8 +93,43 @@ const Results: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        {/* Error Message for Invalid Resume */}
+        {!results.isValidResume && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-8 mb-8">
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-red-800 font-heading">Invalid Document Detected</h3>
+                <p className="text-red-700 font-body">{results.error}</p>
+              </div>
+            </div>
+            <div className="bg-red-100 rounded-lg p-4 mb-4">
+              <h4 className="font-semibold text-red-800 mb-2">What to do:</h4>
+              <ul className="text-red-700 text-sm space-y-1">
+                <li>• Upload a proper resume document (PDF, DOC, or TXT)</li>
+                <li>• Ensure your resume contains sections like Experience, Education, and Skills</li>
+                <li>• Avoid uploading recipes, manuals, or other non-resume documents</li>
+              </ul>
+            </div>
+            <div className="flex gap-4">
+              <a href="/analyze" className="btn-primary">
+                Try Again
+              </a>
+              <a href="/about" className="btn-secondary">
+                Learn More
+              </a>
+            </div>
+          </div>
+        )}
+
+        {/* Dashboard Grid - Only show if valid resume */}
+        {results.isValidResume && (
+          <>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* Match Score Card */}
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Match Score</h2>
@@ -226,6 +262,8 @@ const Results: React.FC = () => {
             </div>
           </div>
         </div>
+        </>
+        )}
 
         {/* Additional Insights */}
         <div className="mt-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8">
