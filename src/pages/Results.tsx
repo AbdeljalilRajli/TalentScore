@@ -65,17 +65,32 @@ const Results: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Resume Analysis Results
-          </h1>
-          <p className="text-xl text-gray-600">
-            Here's how your resume performs against the job description
-          </p>
+    <div className="bg-neutral-50 pt-16">
+      {/* Hero Section */}
+      <section className="relative py-16 lg:py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-accent-50"></div>
+        <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-br from-primary-400/10 to-secondary-400/10 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-10 right-10 w-80 h-80 bg-gradient-to-br from-accent-400/10 to-primary-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 animate-fade-in">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-primary-200 text-primary-700 text-sm font-medium mb-6 shadow-sm font-body">
+              <span className="w-1.5 h-1.5 bg-accent-500 rounded-full mr-2 animate-pulse"></span>
+              Analysis Complete
+            </div>
+            
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-heading mb-4 leading-tight">
+              <span className="gradient-text">Resume Analysis Results</span>
+            </h1>
+            
+            <p className="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto font-body leading-relaxed">
+              Here's how your resume performs against the job description
+            </p>
+          </div>
         </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
