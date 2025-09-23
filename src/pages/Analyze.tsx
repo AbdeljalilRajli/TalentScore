@@ -89,7 +89,8 @@ const Analyze: React.FC = () => {
       
       // Navigate to results page after a brief delay
       setTimeout(() => {
-        window.location.href = '/results';
+        window.history.pushState({}, '', '/results');
+        window.dispatchEvent(new PopStateEvent('popstate'));
       }, 1000);
     } catch (error) {
       console.error('Analysis failed:', error);
