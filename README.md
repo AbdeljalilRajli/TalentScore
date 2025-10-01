@@ -2,7 +2,6 @@
 
 A professional SaaS application that uses AI to analyze resumes and provide actionable insights to help job seekers optimize their applications for better job matching.
 
-![TalentScore](https://via.placeholder.com/800x400/4F46E5/FFFFFF?text=TalentScore)
 
 ## 🚀 Features
 
