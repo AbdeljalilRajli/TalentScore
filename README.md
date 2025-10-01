@@ -183,11 +183,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-Built with ❤️ by [Your Name]
+Built with ❤️ by Abdeljalil
 
-- Portfolio: [your-portfolio.com](https://your-portfolio.com)
-- LinkedIn: [your-linkedin](https://linkedin.com/in/your-profile)
-- GitHub: [your-github](https://github.com/your-username)
+- Portfolio: [www.3bdeljalil.com](https://www.3bdeljalil.com/)
 
 ## 🙏 Acknowledgments
 
