@@ -1,491 +1,378 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import { AnimatedSection } from '../components/modern/AnimatedSection';
 
 const Home: React.FC = () => {
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = document.querySelectorAll('.animate-on-scroll');
-    elements.forEach((el) => observerRef.current?.observe(el));
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
-
-  const features = [
-    {
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
-      title: "Resume Analysis",
-      description: "Get detailed analysis of your resume with AI-powered insights and recommendations.",
-      color: "ocean"
-    },
-    {
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      ),
-      title: "Match Score",
-      description: "See how well your resume matches job descriptions with our scoring algorithm.",
-      color: "sage"
-    },
-    {
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-        </svg>
-      ),
-      title: "Smart Suggestions",
-      description: "Receive personalized suggestions to improve your resume and increase your chances.",
-      color: "sky"
-    },
-    {
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-        </svg>
-      ),
-      title: "Visual Charts",
-      description: "Understand your resume performance through interactive charts and visualizations.",
-      color: "cream"
-    }
-  ];
-
   const testimonials = [
     {
-      name: "Alice Johnson",
-      role: "Software Engineer",
-      company: "TechCorp",
-      photo: "https://randomuser.me/api/portraits/women/44.jpg",
-      quote: "This tool helped me optimize my resume in minutes. The AI suggestions were spot-on!",
+      name: 'Sarah Johnson',
+      role: 'Software Engineer',
+      company: 'Google',
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
+      quote: 'TalentScore helped me land my dream job at Google. The AI insights were incredibly accurate and actionable.',
       rating: 5
     },
     {
-      name: "Mark Thompson",
-      role: "Product Manager",
-      company: "StartupXYZ",
-      photo: "https://randomuser.me/api/portraits/men/32.jpg",
-      quote: "I finally understood which skills I was missing. Amazing tool!",
+      name: 'Michael Chen',
+      role: 'Product Manager',
+      company: 'Microsoft',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+      quote: 'The match score feature is game-changing. I optimized my resume for each application and saw immediate results.',
       rating: 5
     },
     {
-      name: "Sophia Lee",
-      role: "UX Designer",
-      company: "DesignStudio",
-      photo: "https://randomuser.me/api/portraits/women/68.jpg",
-      quote: "Clean design and really easy to use. Definitely portfolio-worthy.",
+      name: 'Emily Rodriguez',
+      role: 'UX Designer',
+      company: 'Apple',
+      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
+      quote: 'Best career tool I\'ve ever used. The visual insights made it so easy to understand what I needed to improve.',
       rating: 5
-    }
-  ];
-
-  const faqs = [
-    {
-      question: "How accurate is the match score?",
-      answer: "The match score is a guideline based on keyword matching and relevance. It helps you identify missing skills or areas to improve.",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
-    },
-    {
-      question: "Can I upload multiple resumes?",
-      answer: "Currently, you can analyze one resume at a time. Future versions will support multiple uploads and comparison.",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-        </svg>
-      )
-    },
-    {
-      question: "Is my data saved?",
-      answer: "No personal data is stored in this demo app. Everything is processed locally or via mock API for portfolio purposes.",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-        </svg>
-      )
-    },
-    {
-      question: "Can I export the results?",
-      answer: "Yes, the results can be exported as a PDF report (mocked for now).",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-      )
     }
   ];
 
   return (
-    <div className="bg-white pt-16">
+    <div className="bg-white pt-16 overflow-hidden">
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 -left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-[#DDF4E7] to-[#67C090] rounded-full blur-3xl opacity-20" />
+          <div className="absolute bottom-0 -right-1/4 w-[700px] h-[700px] bg-gradient-to-br from-[#26667F] to-[#124170] rounded-full blur-3xl opacity-15" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            
-            {/* Left Content */}
-            <div className="text-left">
-              {/* Badge */}
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-ocean-50 text-ocean-700 text-sm font-medium mb-8">
-                <div className="w-2 h-2 bg-ocean-500 rounded-full mr-3"></div>
-                AI-Powered Resume Analysis
+            <AnimatedSection className="text-left">
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#DDF4E7] to-[#67C090]/30 border border-[#67C090]/20 mb-6">
+                <span className="w-2 h-2 bg-[#67C090] rounded-full mr-2 animate-pulse" />
+                <span className="text-xs font-semibold text-[#26667F]">
+                  AI-Powered Analysis
+                </span>
               </div>
-              
-              {/* Main Heading */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-neutral-900">
-                Get Your Resume
-                <span className="text-ocean-600"> Job-Ready</span>
+
+              <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+                <span className="bg-gradient-to-r from-[#124170] to-[#26667F] bg-clip-text text-transparent">
+                  Transform Your Resume
+                </span>
+                <br />
+                <span className="text-neutral-900">into Interview Gold</span>
               </h1>
-              
-              {/* Subtitle */}
-              <p className="text-xl text-neutral-600 mb-8 leading-relaxed max-w-lg">
-                AI-powered analysis that helps you optimize your resume for any job. 
-                Get instant feedback and land more interviews.
+
+              <p className="text-lg text-neutral-600 mb-8 leading-relaxed">
+                AI-driven insights, instant match scores, and personalized optimization tips. Land more interviews with confidence.
               </p>
-              
-              {/* CTA Buttons */}
+
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                <a href="/analyze" className="btn-primary text-lg px-8 py-4">
-                  Analyze Resume Free
+                <a 
+                  href="/analyze" 
+                  className="group relative px-8 py-5 bg-gradient-to-r from-[#124170] to-[#26667F] text-white rounded-2xl font-bold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    Start Free Analysis
+                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#26667F] to-[#67C090] opacity-0 group-hover:opacity-100 transition-opacity" />
                 </a>
-                <a href="/about" className="btn-secondary text-lg px-8 py-4">
-                  See How It Works
+                
+                <a 
+                  href="#features" 
+                  className="px-8 py-5 bg-white border-2 border-[#26667F] text-[#26667F] rounded-2xl font-bold text-lg hover:bg-[#DDF4E7] transition-all duration-300 hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2"
+                >
+                  Watch Demo
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
                 </a>
               </div>
 
-              {/* Trust Indicators */}
-              <div className="flex items-center space-x-8 text-sm text-neutral-500">
-                <div className="flex items-center">
-                  <svg className="w-5 h-5 text-sage-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              {/* Trust indicators */}
+              <div className="flex flex-wrap items-center gap-6 text-sm text-neutral-600">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-[#67C090]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  Free to use
+                  <span className="font-medium">Free Forever</span>
                 </div>
-                <div className="flex items-center">
-                  <svg className="w-5 h-5 text-sage-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-[#67C090]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  Secure & Private
+                  <span className="font-medium">No Credit Card</span>
                 </div>
-                <div className="flex items-center">
-                  <svg className="w-5 h-5 text-sage-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-[#67C090]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  Instant Results
+                  <span className="font-medium">Instant Results</span>
                 </div>
               </div>
-            </div>
+            </AnimatedSection>
 
-            {/* Right Content - Visual */}
-            <div className="relative">
-              <div className="bg-cream-50 rounded-2xl p-8 border border-cream-200">
-                {/* Mock Resume Preview */}
-                <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-ocean-100 rounded-full mr-4"></div>
-                    <div>
-                      <div className="h-3 bg-neutral-200 rounded w-24 mb-2"></div>
-                      <div className="h-2 bg-neutral-100 rounded w-32"></div>
+            {/* Right: Dashboard Preview */}
+            <AnimatedSection delay={200} className="relative">
+              <div className="relative">
+                <div className="absolute -inset-4 bg-gradient-to-r from-[#67C090] to-[#26667F] rounded-3xl blur-2xl opacity-20" />
+                
+                <div className="relative">
+                  <img 
+                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop"
+                    alt="Resume Analysis Dashboard"
+                    className="rounded-3xl shadow-2xl border-4 border-white"
+                  />
+                  <div className="absolute -bottom-4 -right-4 bg-white p-4 rounded-2xl shadow-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#67C090] to-[#26667F] flex items-center justify-center text-2xl font-bold text-white">
+                        87%
+                      </div>
+                      <div>
+                        <div className="text-xs text-neutral-600">Match Score</div>
+                        <div className="text-sm font-bold text-[#26667F]">Excellent</div>
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-2 mb-4">
-                    <div className="h-2 bg-neutral-100 rounded w-full"></div>
-                    <div className="h-2 bg-neutral-100 rounded w-3/4"></div>
-                    <div className="h-2 bg-neutral-100 rounded w-5/6"></div>
-                  </div>
-                  <div className="flex space-x-2">
-                    <div className="px-3 py-1 bg-sage-100 text-sage-700 rounded-full text-xs">React</div>
-                    <div className="px-3 py-1 bg-ocean-100 text-ocean-700 rounded-full text-xs">JavaScript</div>
-                    <div className="px-3 py-1 bg-sky-100 text-sky-700 rounded-full text-xs">Node.js</div>
-                  </div>
-                </div>
-                
-                {/* Score Display */}
-                <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-ocean-500">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-neutral-700">Match Score</span>
-                    <span className="text-2xl font-bold text-ocean-600">87%</span>
-                  </div>
-                  <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div className="bg-ocean-500 h-2 rounded-full" style={{width: '87%'}}></div>
-                  </div>
                 </div>
               </div>
-              
-              {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 bg-sage-500 text-white p-3 rounded-lg shadow-lg">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div className="absolute -bottom-4 -left-4 bg-sky-500 text-white p-3 rounded-lg shadow-lg">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-            </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-neutral-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { number: "25K+", label: "Resumes Analyzed", color: "ocean" },
-              { number: "98%", label: "Success Rate", color: "sage" },
-              { number: "4.9/5", label: "User Rating", color: "sky" }
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className={`text-4xl md:text-5xl font-bold text-${stat.color}-600 mb-2`}>{stat.number}</div>
-                <div className="text-neutral-600 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 lg:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-sage-50 text-sage-700 text-sm font-medium mb-8">
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              How It Works
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-neutral-900">
-              Simple, Fast, Effective
-            </h2>
-            <p className="text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
-              Get professional resume insights in minutes with our AI-powered analysis
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="text-center">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-xl mb-6 ${
-                  index === 0 ? 'bg-ocean-100 text-ocean-600' :
-                  index === 1 ? 'bg-beige-200 text-beige-700' :
-                  index === 2 ? 'bg-sky-100 text-sky-600' :
-                  'bg-cream-200 text-cream-700'
-                }`}>
-                  {feature.icon}
-                </div>
-                <h3 className="text-lg font-semibold text-neutral-900 mb-3">{feature.title}</h3>
-                <p className="text-neutral-600 leading-relaxed text-sm">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 lg:py-24 bg-white">
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20 animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-sage-50 text-sage-700 text-sm font-medium mb-8">
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-              Success Stories
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
-              What Our Users Say
-            </h2>
-            <p className="text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
-              Join thousands of successful job seekers who have transformed their careers with TalentScore
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div 
-                key={index} 
-                className="card p-8"
-              >
-                <div>
-                  <div className="flex text-sage-400 mb-6">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  
-                  <blockquote className="text-neutral-700 text-lg leading-relaxed mb-8 italic font-medium">
-                    "{testimonial.quote}"
-                  </blockquote>
-                  
-                  <div className="flex items-center">
-                    <img
-                      src={testimonial.photo}
-                      alt={testimonial.name}
-                      className="w-16 h-16 rounded-full mr-4 ring-4 ring-white/50 shadow-xl"
-                    />
-                    <div>
-                      <h4 className="font-bold text-neutral-900 text-lg">{testimonial.name}</h4>
-                      <p className="text-neutral-600">{testimonial.role}</p>
-                      <p className="text-ocean-600 font-semibold">{testimonial.company}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-20 lg:py-24 bg-neutral-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-sky-50 text-sky-700 text-sm font-medium mb-8">
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              FAQ
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-neutral-900">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
-              Get answers to common questions about TalentScore
-            </p>
-          </div>
-          
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <details 
-                key={index} 
-                className="group bg-white rounded-lg border border-neutral-200 p-6 hover:shadow-md transition-all duration-200"
-              >
-                <summary className="flex items-center justify-between font-semibold text-neutral-900 cursor-pointer list-none">
-                  <div className="flex items-center">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ocean-100 text-ocean-600 mr-4">
-                      {faq.icon}
-                    </div>
-                    {faq.question}
-                  </div>
-                  <svg className="w-5 h-5 text-neutral-400 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <div className="mt-4 pl-12">
-                  <p className="text-neutral-600 leading-relaxed">{faq.answer}</p>
-                </div>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section className="py-24 bg-ocean-600 text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium mb-8">
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            Our Mission
-          </div>
-          
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-white leading-tight">
-            Empowering Your Career Journey
-          </h2>
-          
-          <p className="text-xl mb-8 leading-relaxed max-w-4xl mx-auto">
-            We're on a mission to help job seekers create compelling resumes that get noticed. 
-            Using advanced AI technology, we analyze your resume against job descriptions 
-            and provide actionable insights to improve your chances of landing interviews.
-          </p>
-          
-          <p className="text-lg mb-12 opacity-90 max-w-3xl mx-auto leading-relaxed">
-            Whether you're a recent graduate or an experienced professional, our tool 
-            adapts to your needs and helps you present your best self to potential employers.
-          </p>
-          
-          <a href="/about" className="btn-secondary bg-white text-ocean-600 hover:bg-neutral-50">
-            Learn More About Us
-          </a>
-        </div>
-      </section>
-
-      {/* Final CTA Section */}
-      <section className="py-24 bg-cream-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-cream-100 text-cream-800 text-sm font-medium mb-8">
-              <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              Get Started Today
-            </div>
-            
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 leading-tight">
-              Ready to Transform Your Resume?
-            </h2>
-            
-            <p className="text-lg text-neutral-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Join thousands of successful job seekers who have improved their resumes and landed their dream jobs with our AI-powered tool.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-              <a href="/analyze" className="btn-primary text-lg px-8 py-4">
-                <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Start Analyzing Now
-                <svg className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
-              
-              <div className="flex items-center text-neutral-600 font-medium">
-                <svg className="w-6 h-6 mr-3 text-sage-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Free to use • No signup required
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+      <AnimatedSection>
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                { icon: "⚡", text: "Instant Analysis" },
-                { icon: "🎯", text: "Accurate Scoring" },
-                { icon: "🚀", text: "Career Growth" }
-              ].map((item, index) => (
-                <div key={index} className="flex items-center justify-center space-x-3 text-neutral-600 font-medium">
-                  <span className="text-2xl">{item.icon}</span>
-                  <span>{item.text}</span>
-                </div>
+                { 
+                  number: '50K+', 
+                  label: 'Resumes Analyzed',
+                  icon: (
+                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  ),
+                  color: 'from-[#124170] to-[#26667F]'
+                },
+                { 
+                  number: '98%', 
+                  label: 'Success Rate',
+                  icon: (
+                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                  ),
+                  color: 'from-[#26667F] to-[#67C090]'
+                },
+                { 
+                  number: '4.9/5', 
+                  label: 'User Rating',
+                  icon: (
+                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ),
+                  color: 'from-[#67C090] to-[#26667F]'
+                },
+                { 
+                  number: '24/7', 
+                  label: 'Always Available',
+                  icon: (
+                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  ),
+                  color: 'from-[#124170] to-[#67C090]'
+                },
+              ].map((stat, idx) => (
+                <AnimatedSection key={idx} delay={idx * 100}>
+                  <div className="group relative bg-gradient-to-br from-white to-[#DDF4E7]/20 rounded-2xl p-6 border border-neutral-200 hover:border-[#67C090] transition-all duration-300 hover:shadow-2xl overflow-hidden">
+                    <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-10 bg-gradient-to-br group-hover:scale-150 transition-transform duration-500" style={{ background: `linear-gradient(135deg, #67C090, #26667F)` }} />
+                    <div className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.color} text-white flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      {stat.icon}
+                    </div>
+                    <div className="relative">
+                      <div className="text-3xl font-extrabold bg-gradient-to-r from-[#124170] to-[#26667F] bg-clip-text text-transparent mb-1">
+                        {stat.number}
+                      </div>
+                      <div className="text-sm text-neutral-600 font-medium">{stat.label}</div>
+                    </div>
+                  </div>
+                </AnimatedSection>
               ))}
             </div>
           </div>
+        </section>
+      </AnimatedSection>
+
+      {/* Features Section */}
+      <section id="features" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center mb-16">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#DDF4E7] to-[#67C090]/20 mb-4">
+              <span className="text-xs font-semibold text-[#26667F]">⚡ FEATURES</span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-[#124170] to-[#26667F] bg-clip-text text-transparent">
+                Everything You Need
+              </span>
+            </h2>
+            <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+              Professional-grade tools powered by AI
+            </p>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { icon: '🎯', title: 'Smart Matching', desc: 'AI analyzes your resume against job descriptions', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop' },
+              { icon: '📊', title: 'Visual Insights', desc: 'Beautiful charts showing your strengths and gaps', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop' },
+              { icon: '✨', title: 'AI Suggestions', desc: 'Personalized recommendations to improve', img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop' },
+              { icon: '🚀', title: 'Instant Results', desc: 'Get analysis in under 3 seconds', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop' },
+              { icon: '🔒', title: 'Secure & Private', desc: 'Your data is never stored', img: 'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=400&h=300&fit=crop' },
+              { icon: '📱', title: 'Export & Share', desc: 'Download PDF reports easily', img: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=300&fit=crop' },
+            ].map((feature, idx) => (
+              <AnimatedSection key={idx} delay={idx * 50}>
+                <div className="group bg-white rounded-2xl overflow-hidden border border-neutral-200 hover:border-[#67C090] transition-all duration-300 hover:shadow-xl h-full">
+                  <div className="relative h-48 overflow-hidden">
+                    <img src={feature.img} alt={feature.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-white flex items-center justify-center text-2xl shadow-lg">
+                      {feature.icon}
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-neutral-900 mb-2">{feature.title}</h3>
+                    <p className="text-neutral-600">{feature.desc}</p>
+                  </div>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
         </div>
       </section>
+
+      {/* How It Works */}
+      <section className="py-20 bg-gradient-to-br from-[#DDF4E7]/30 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-[#124170] to-[#26667F] bg-clip-text text-transparent">
+                How It Works
+              </span>
+            </h2>
+            <p className="text-lg text-neutral-600">Simple, fast, and effective</p>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { step: '01', title: 'Upload Resume', desc: 'Drop your resume file or paste the text', img: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=400&fit=crop' },
+              { step: '02', title: 'Paste Job Description', desc: 'Add the job posting you\'re targeting', img: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=400&fit=crop' },
+              { step: '03', title: 'Get Insights', desc: 'Receive AI-powered analysis instantly', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop' },
+            ].map((item, idx) => (
+              <AnimatedSection key={idx} delay={idx * 100}>
+                <div className="relative">
+                  <div className="absolute -top-6 -left-6 w-16 h-16 rounded-2xl bg-gradient-to-br from-[#124170] to-[#26667F] text-white flex items-center justify-center text-2xl font-bold shadow-xl z-10">
+                    {item.step}
+                  </div>
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-neutral-200 pt-6">
+                    <img src={item.img} alt={item.title} className="w-full h-48 object-cover" />
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-neutral-900 mb-2">{item.title}</h3>
+                      <p className="text-neutral-600">{item.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Carousel */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center mb-16">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#DDF4E7] to-[#67C090]/20 mb-4">
+              <span className="text-xs font-semibold text-[#26667F]">⭐ TESTIMONIALS</span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-[#124170] to-[#26667F] bg-clip-text text-transparent">
+                Loved by Job Seekers
+              </span>
+            </h2>
+            <p className="text-lg text-neutral-600">Join thousands who landed their dream jobs</p>
+          </AnimatedSection>
+
+          <div className="relative">
+            <div className="flex overflow-hidden">
+              <div className="flex animate-scroll gap-6">
+                {[...testimonials, ...testimonials].map((testimonial, idx) => (
+                  <div 
+                    key={idx}
+                    className="flex-shrink-0 w-96 bg-gradient-to-br from-white to-[#DDF4E7]/20 rounded-2xl p-8 border border-neutral-200 shadow-lg"
+                  >
+                    <div className="flex items-center gap-4 mb-6">
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.name}
+                        className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg"
+                      />
+                      <div>
+                        <div className="font-bold text-neutral-900">{testimonial.name}</div>
+                        <div className="text-sm text-neutral-600">{testimonial.role}</div>
+                        <div className="text-xs font-semibold text-[#26667F]">{testimonial.company}</div>
+                      </div>
+                    </div>
+                    <div className="flex gap-1 mb-4">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <svg key={i} className="w-5 h-5 text-[#67C090]" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="text-neutral-700 leading-relaxed italic">"{testimonial.quote}"</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <AnimatedSection>
+        <section className="py-32 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#124170] via-[#26667F] to-[#67C090]" />
+          <div className="absolute inset-0">
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float" />
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+          </div>
+          
+          <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
+              Ready to Transform<br />Your Career?
+            </h2>
+            <p className="text-lg text-white/90 mb-12 max-w-3xl mx-auto">
+              Join over 50,000 job seekers who have already optimized their resumes with TalentScore
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <a 
+                href="/analyze" 
+                className="group px-10 py-6 bg-white text-[#26667F] rounded-2xl font-bold text-xl hover:bg-[#DDF4E7] transition-all duration-300 hover:scale-105 shadow-2xl flex items-center justify-center gap-3"
+              >
+                Start Free Analysis
+                <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </a>
+              <a 
+                href="/pricing" 
+                className="px-10 py-6 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 rounded-2xl font-bold text-xl hover:bg-white/20 transition-all duration-300 hover:scale-105 shadow-2xl"
+              >
+                View Pricing
+              </a>
+            </div>
+          </div>
+        </section>
+      </AnimatedSection>
     </div>
   );
 };

@@ -69,21 +69,17 @@ const Results: React.FC = () => {
     <div className="bg-neutral-50 pt-16">
       {/* Hero Section */}
       <section className="relative py-16 lg:py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-accent-50"></div>
-        <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-br from-primary-400/10 to-secondary-400/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-10 right-10 w-80 h-80 bg-gradient-to-br from-accent-400/10 to-primary-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-        
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -top-20 -left-20 w-[360px] h-[360px] rounded-full blob" style={{ background: 'radial-gradient(circle at 40% 40%, rgba(221,244,231,0.9), rgba(221,244,231,0.0) 60%)' }} />
+          <div className="absolute -bottom-20 right-[-120px] w-[520px] h-[520px] rounded-full blob" style={{ background: 'radial-gradient(circle at 70% 60%, rgba(103,192,144,0.35), rgba(103,192,144,0.0) 60%)' }} />
+        </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 animate-fade-in">
-            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-primary-200 text-primary-700 text-sm font-medium mb-6 shadow-sm font-body">
-              <span className="w-1.5 h-1.5 bg-accent-500 rounded-full mr-2 animate-pulse"></span>
+            <div className="page-kicker mb-6">
+              <span className="w-2 h-2 bg-ocean-600 rounded-full mr-3"></span>
               Analysis Complete
             </div>
-            
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-heading mb-4 leading-tight">
-              <span className="gradient-text">Resume Analysis Results</span>
-            </h1>
-            
+            <h1 className="page-title mb-4 leading-tight">Resume Analysis Results</h1>
             <p className="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto font-body leading-relaxed">
               Here's how your resume performs against the job description
             </p>
@@ -149,15 +145,15 @@ const Results: React.FC = () => {
                     cy="50"
                     r="40"
                     fill="transparent"
-                    stroke="url(#gradient)"
+                    stroke="url(#brandGradient)"
                     strokeWidth="8"
                     strokeDasharray={`${results.score * 2.51} ${(100 - results.score) * 2.51}`}
                     strokeLinecap="round"
                   />
                   <defs>
-                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#3b82f6" />
-                      <stop offset="100%" stopColor="#8b5cf6" />
+                    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#26667F" />
+                      <stop offset="100%" stopColor="#67C090" />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -232,7 +228,7 @@ const Results: React.FC = () => {
             <div className="space-y-4">
               {results.suggestions.map((suggestion, index) => (
                 <div key={index} className="flex items-start">
-                  <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-semibold mr-3 mt-0.5">
+                  <span className="w-6 h-6 bg-sky-200 text-ocean-700 rounded-full flex items-center justify-center text-sm font-semibold mr-3 mt-0.5">
                     {index + 1}
                   </span>
                   <p className="text-gray-700 leading-relaxed">{suggestion}</p>
@@ -247,15 +243,15 @@ const Results: React.FC = () => {
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Next Steps</h2>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105">
+              <button className="bg-gradient-to-r from-[#124170] to-[#26667F] text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105">
                 📄 Export PDF Report
               </button>
-              <button className="border-2 border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:border-blue-600 hover:text-blue-600 transition-all duration-200">
+              <button className="border-2 border-neutral-300 text-neutral-700 px-8 py-3 rounded-lg font-semibold hover:border-ocean-600 hover:text-ocean-600 transition-all duration-200">
                 📤 Share Results
               </button>
               <a
                 href="/analyze"
-                className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-all duration-200 inline-block"
+                className="bg-sage-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-sage-600 transition-all duration-200 inline-block"
               >
                 🔄 Analyze Another Resume
               </a>
@@ -266,13 +262,13 @@ const Results: React.FC = () => {
         )}
 
         {/* Additional Insights */}
-        <div className="mt-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8">
+        <div className="mt-8 bg-gradient-to-r from-[#124170] to-[#26667F] text-white rounded-lg p-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-4">Want More Detailed Analysis?</h2>
             <p className="text-lg mb-6 opacity-90">
               Get personalized career coaching and detailed resume optimization strategies
             </p>
-            <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200">
+            <button className="bg-white text-ocean-700 px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200">
               Upgrade to Premium
             </button>
           </div>

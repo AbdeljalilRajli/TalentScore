@@ -6,56 +6,60 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Custom color palette - exact values provided
-        cream: {
-          50: '#fefcfa',
-          100: '#fdf9f4',
-          200: '#fbf3e9',
-          300: '#f8edde',
-          400: '#f7e7d3',
-          500: '#F5EFE6', // Main cream color
-          600: '#ddd7ce',
-          700: '#b8b3ab',
-          800: '#938f88',
-          900: '#787570',
-        },
-        beige: {
-          50: '#faf8f3',
-          100: '#f5f1e7',
-          200: '#ebe3d0',
-          300: '#e1d5b9',
-          400: '#eee7d7',
-          500: '#E8DFCA', // Main beige color
-          600: '#d1c9b6',
-          700: '#aea798',
-          800: '#8b857a',
-          900: '#726d64',
-        },
+        // Remapped semantic palette to user's requested colors
+        // ocean -> primary teal-blue #26667F
         ocean: {
-          50: '#f2f6fb',
-          100: '#e6edf7',
-          200: '#c0d2eb',
-          300: '#9ab7df',
-          400: '#8aa5d5',
-          500: '#6D94C5', // Main ocean blue
-          600: '#6285b1',
-          700: '#526f94',
-          800: '#425977',
-          900: '#364962',
+          50: '#f0f5f8',
+          100: '#d9e6ed',
+          200: '#b3ccd9',
+          300: '#86aabb',
+          400: '#5e8798',
+          500: '#3f6f82',
+          600: '#26667F', // primary
+          700: '#1f566c',
+          800: '#194557',
+          900: '#143846',
         },
+        // sage -> accent green #67C090
+        sage: {
+          50: '#ecf9f2',
+          100: '#d9f3e6',
+          200: '#b8e7d1',
+          300: '#92daba',
+          400: '#78cfa7',
+          500: '#67C090', // accent
+          600: '#57a67b',
+          700: '#458764',
+          800: '#356a50',
+          900: '#2a5440',
+        },
+        // sky -> mint light #DDF4E7
         sky: {
-          50: '#f7fbfe',
-          100: '#eff7fd',
-          200: '#d7ebfa',
-          300: '#bfdef7',
-          400: '#d6e8f5',
-          500: '#CBDCEB', // Main sky blue
-          600: '#b7c6d4',
-          700: '#99a5b0',
-          800: '#7b848c',
-          900: '#656d73',
+          50: '#f6fcf9',
+          100: '#eefaf4',
+          200: '#DDF4E7', // light brand
+          300: '#c7ead7',
+          400: '#a9dcc3',
+          500: '#8ecfb1',
+          600: '#72b999',
+          700: '#5e9d82',
+          800: '#4e826c',
+          900: '#406a58',
         },
-        // Enhanced neutrals for better contrast
+        // cream -> complementary soft neutral derived from the mint tone
+        cream: {
+          50: '#f8fdfb',
+          100: '#f0fbf6',
+          200: '#e7f7ef',
+          300: '#DDF4E7',
+          400: '#cdebdc',
+          500: '#bfe0d0',
+          600: '#9ec9b5',
+          700: '#7eac98',
+          800: '#648c7b',
+          900: '#506f62',
+        },
+        // Enhanced neutrals for better contrast (unchanged)
         neutral: {
           50: '#fafbfc',
           100: '#f4f6f8',
@@ -69,10 +73,10 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Poppins', 'system-ui', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'Poppins', 'system-ui', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Poppins', 'system-ui', 'sans-serif'],
+        heading: ['Plus Jakarta Sans', 'Poppins', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         xs: ['0.75rem', { lineHeight: '1rem' }],

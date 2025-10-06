@@ -16,15 +16,15 @@ const Header: React.FC = () => {
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${
       isScrolled 
-        ? 'bg-white shadow-sm border-b border-neutral-200' 
-        : 'bg-white/95 backdrop-blur-sm'
+        ? 'bg-white/95 shadow-sm border-b border-neutral-200' 
+        : 'bg-white/80 backdrop-blur-xl'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
             <a href="/" className="flex items-center space-x-3 group">
-              <div className="w-10 h-10 bg-ocean-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-[#124170] rounded-lg flex items-center justify-center shadow-sm">
                 <span className="text-white font-bold text-lg">TS</span>
               </div>
               <div className="flex flex-col">
@@ -41,12 +41,13 @@ const Header: React.FC = () => {
               { name: 'Analyze', href: '/analyze' },
               { name: 'About', href: '/about' },
               { name: 'FAQ', href: '/faq' },
-              { name: 'Testimonials', href: '/testimonials' }
+              { name: 'Testimonials', href: '/testimonials' },
+              { name: 'Pricing', href: '/pricing' }
             ].map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="px-3 py-2 text-sm font-medium text-neutral-700 hover:text-ocean-600 transition-colors duration-200 rounded-md hover:bg-ocean-50"
+                className="px-3 py-2 text-sm font-medium text-neutral-700 hover:text-[#124170] transition-colors duration-200 rounded-md hover:bg-sky-200"
               >
                 {item.name}
               </a>
@@ -78,27 +79,28 @@ const Header: React.FC = () => {
         </div>
 
         {/* Mobile Navigation */}
-        <div className={`lg:hidden transition-all duration-500 ease-in-out ${
-          isMenuOpen 
-            ? 'max-h-96 opacity-100 py-6' 
-            : 'max-h-0 opacity-0 py-0'
-        } overflow-hidden`}>
-          <div className="flex flex-col space-y-2 border-t border-neutral-200/50 pt-6">
-            {[
-              { name: 'Home', href: '/' },
-              { name: 'Analyze', href: '/analyze' },
-              { name: 'About', href: '/about' },
-              { name: 'FAQ', href: '/faq' },
-              { name: 'Testimonials', href: '/testimonials' }
-            ].map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="px-4 py-3 text-sm font-semibold text-neutral-700 hover:text-ocean-600 hover:bg-ocean-50/50 rounded-xl transition-all duration-300"
-              >
-                {item.name}
-              </a>
-            ))}
+          <div className={`lg:hidden transition-all duration-500 ease-in-out ${
+            isMenuOpen 
+              ? 'max-h-96 opacity-100 py-6' 
+              : 'max-h-0 opacity-0 py-0'
+          } overflow-hidden`}>
+            <div className="flex flex-col space-y-2 border-t border-neutral-200/50 pt-6">
+              {[
+                { name: 'Home', href: '/' },
+                { name: 'Analyze', href: '/analyze' },
+                { name: 'About', href: '/about' },
+                { name: 'FAQ', href: '/faq' },
+                { name: 'Testimonials', href: '/testimonials' },
+                { name: 'Pricing', href: '/pricing' }
+              ].map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="px-4 py-3 text-sm font-semibold text-neutral-700 hover:text-ocean-600 hover:bg-ocean-50/50 rounded-xl transition-all duration-300"
+                >
+                  {item.name}
+                </a>
+              ))}
             <div className="pt-4">
               <a href="/analyze" className="btn-primary w-full justify-center">
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

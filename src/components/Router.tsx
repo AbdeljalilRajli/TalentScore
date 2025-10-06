@@ -5,6 +5,7 @@ import Results from '../pages/Results';
 import About from '../pages/About';
 import FAQ from '../pages/FAQ';
 import Testimonials from '../pages/Testimonials';
+import Pricing from '../pages/Pricing';
 
 interface RouterProps {
   currentPath: string;
@@ -24,6 +25,8 @@ const Router: React.FC<RouterProps> = ({ currentPath }) => {
       return <FAQ />;
     case '/testimonials':
       return <Testimonials />;
+    case '/pricing':
+      return <Pricing />;
     default:
       return <Home />;
   }

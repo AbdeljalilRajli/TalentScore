@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AnimatedSection } from '../components/modern/AnimatedSection';
 
 const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -39,36 +40,58 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <div className="bg-white pt-16">
+    <div className="bg-gradient-to-br from-white via-[#DDF4E7]/20 to-white pt-16 overflow-hidden">
       {/* Hero Section */}
-      <section className="py-20 lg:py-24">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-neutral-900">
-            FAQ
-          </h1>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
-            Get answers to common questions about TalentScore
-          </p>
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-[#DDF4E7] to-[#67C090] rounded-full blur-3xl opacity-20" />
+          <div className="absolute bottom-1/4 -right-1/4 w-[700px] h-[700px] bg-gradient-to-br from-[#26667F] to-[#124170] rounded-full blur-3xl opacity-15" />
         </div>
+
+        <AnimatedSection className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#DDF4E7] to-[#67C090]/30 border border-[#67C090]/20 mb-6">
+            <span className="w-2 h-2 bg-[#67C090] rounded-full mr-2 animate-pulse" />
+            <span className="text-xs font-semibold text-[#26667F]">Help & Support</span>
+          </div>
+          
+          <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+            <span className="bg-gradient-to-r from-[#124170] to-[#26667F] bg-clip-text text-transparent">
+              Frequently Asked Questions
+            </span>
+          </h1>
+          
+          <p className="text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed mb-8">
+            Everything you need to know about TalentScore
+          </p>
+
+          <img 
+            src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&h=400&fit=crop"
+            alt="FAQ"
+            className="rounded-3xl shadow-2xl border-4 border-white mx-auto max-w-4xl"
+          />
+        </AnimatedSection>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 bg-cream-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-6">
+      {/* FAQ Grid */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {faqs.map((faq, index) => (
-              <div key={index} className="card overflow-hidden">
-                <button
-                  onClick={() => toggleFAQ(index)}
-                  className="w-full px-8 py-6 text-left focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:ring-offset-2"
-                >
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-bold text-neutral-900 pr-4">
-                      {faq.question}
-                    </h3>
-                    <div className="flex-shrink-0">
+              <AnimatedSection key={index} delay={index * 50}>
+                <div className="bg-gradient-to-br from-white to-[#DDF4E7]/20 rounded-2xl p-6 border border-neutral-200 hover:border-[#67C090] transition-all hover:shadow-xl h-full">
+                  <button
+                    onClick={() => toggleFAQ(index)}
+                    className="w-full text-left"
+                  >
+                    <div className="flex justify-between items-start gap-4 mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#124170] to-[#26667F] text-white flex items-center justify-center font-bold flex-shrink-0">
+                        Q
+                      </div>
+                      <h3 className="text-lg font-bold text-neutral-900 flex-1">
+                        {faq.question}
+                      </h3>
                       <svg
-                        className={`w-6 h-6 text-ocean-500 transform transition-transform duration-300 ${
+                        className={`w-6 h-6 text-[#26667F] transform transition-transform duration-300 flex-shrink-0 ${
                           openIndex === index ? 'rotate-180' : ''
                         }`}
                         fill="none"
@@ -78,38 +101,41 @@ const FAQ: React.FC = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
-                  </div>
-                </button>
-                {openIndex === index && (
-                  <div className="px-8 pb-6 border-t border-neutral-100">
-                    <div className="pt-6">
-                      <p className="text-neutral-600 leading-relaxed text-lg">{faq.answer}</p>
+                  </button>
+                  {openIndex === index && (
+                    <div className="pl-14 pr-10 animate-in">
+                      <p className="text-neutral-600 leading-relaxed">{faq.answer}</p>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              </AnimatedSection>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-beige-500">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
-            Ready to Optimize Your Resume?
-          </h2>
-          <p className="text-lg text-neutral-700 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Join thousands of successful job seekers who have improved their resumes with our AI-powered tool.
-          </p>
-          <a
-            href="/analyze"
-            className="btn-secondary bg-white text-beige-700 hover:bg-neutral-50"
-          >
-            Start Free Analysis
-          </a>
-        </div>
-      </section>
+      <AnimatedSection>
+        <section className="py-20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#124170] via-[#26667F] to-[#67C090]" />
+          <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
+              Still Have Questions?
+            </h2>
+            <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+              Try our AI-powered tool for free or reach out to our support team
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="/analyze" className="px-10 py-5 bg-white text-[#26667F] rounded-2xl font-bold text-lg hover:bg-[#DDF4E7] transition-all duration-300 hover:scale-105 shadow-2xl">
+                Start Free Analysis
+              </a>
+              <a href="/about" className="px-10 py-5 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 rounded-2xl font-bold text-lg hover:bg-white/20 transition-all duration-300">
+                Contact Support
+              </a>
+            </div>
+          </div>
+        </section>
+      </AnimatedSection>
     </div>
   );
 };
