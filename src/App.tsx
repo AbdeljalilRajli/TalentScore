@@ -9,6 +9,7 @@ function App() {
     // Simple client-side routing
     const handlePopState = () => {
       setCurrentPath(window.location.pathname);
+      window.scrollTo(0, 0);
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -23,6 +24,7 @@ function App() {
         const newPath = new URL(link.href).pathname;
         window.history.pushState({}, '', newPath);
         setCurrentPath(newPath);
+        window.scrollTo(0, 0);
       }
     };
 
