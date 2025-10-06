@@ -4,11 +4,7 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-900/20 to-accent-900/20"></div>
-      <div className="absolute top-0 left-0 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl -translate-x-48 -translate-y-48"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl translate-x-48 translate-y-48"></div>
+    <footer className="bg-neutral-900 text-white">
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -16,13 +12,12 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
               <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-500 via-secondary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-soft">
-                  <span className="text-white font-bold text-xl font-display">TS</span>
+                <div className="w-12 h-12 bg-ocean-600 rounded-xl flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">TS</span>
                 </div>
-                <div className="absolute -inset-1 bg-gradient-to-br from-primary-500 via-secondary-500 to-accent-500 rounded-xl opacity-20 blur"></div>
               </div>
               <div className="flex flex-col">
-                <span className="text-2xl font-bold font-display gradient-text">TalentScore</span>
+                <span className="text-2xl font-bold text-white">TalentScore</span>
                 <span className="text-sm text-neutral-400 font-medium -mt-1">AI Resume Analyzer</span>
               </div>
             </div>
@@ -65,7 +60,7 @@ const Footer: React.FC = () => {
                 <a
                   key={social.name}
                   href={social.href}
-                  className="group p-3 rounded-xl bg-neutral-800/50 text-neutral-400 hover:text-white hover:bg-gradient-to-br hover:from-primary-500/20 hover:to-accent-500/20 transition-all duration-300 hover:shadow-glow"
+                  className="group p-3 rounded-xl bg-neutral-800/50 text-neutral-400 hover:text-white hover:bg-gradient-to-br hover:from-ocean-500/20 hover:to-sage-500/20 transition-all duration-300 hover:shadow-xl"
                   aria-label={social.name}
                 >
                   {social.icon}
@@ -76,7 +71,7 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold font-display mb-6 gradient-text">Quick Links</h3>
+            <h3 className="text-lg font-bold mb-6 text-white">Quick Links</h3>
             <ul className="space-y-3">
               {[
                 { name: 'Home', href: '/' },
@@ -99,7 +94,7 @@ const Footer: React.FC = () => {
 
           {/* Support */}
           <div>
-            <h3 className="text-lg font-bold font-display mb-6 gradient-text">Support</h3>
+            <h3 className="text-lg font-bold mb-6 text-white">Support</h3>
             <ul className="space-y-3">
               {[
                 { name: 'Help Center', href: '#' },
@@ -122,9 +117,9 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="mt-16 p-8 rounded-2xl bg-gradient-to-r from-primary-500/10 to-accent-500/10 border border-neutral-700/50">
+        <div className="mt-16 p-8 rounded-2xl bg-neutral-800 border border-neutral-700">
           <div className="text-center max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold font-display mb-4 gradient-text">Stay Updated</h3>
+            <h3 className="text-2xl font-bold mb-4 text-white">Stay Updated</h3>
             <p className="text-neutral-300 mb-6 font-body">
               Get the latest tips and insights on resume optimization and career development.
             </p>
@@ -132,7 +127,7 @@ const Footer: React.FC = () => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-xl bg-neutral-800/50 border border-neutral-600 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent font-body"
+                className="flex-1 px-4 py-3 rounded-xl bg-neutral-800/50 border border-neutral-600 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:border-transparent"
               />
               <button className="btn-primary px-6 py-3 whitespace-nowrap">
                 Subscribe
@@ -152,7 +147,7 @@ const Footer: React.FC = () => {
                 Built with 💜 for job seekers worldwide
               </p>
               <div className="flex items-center space-x-2 text-neutral-400 text-sm">
-                <span className="w-2 h-2 bg-accent-500 rounded-full animate-pulse"></span>
+                <span className="w-2 h-2 bg-sage-500 rounded-full animate-pulse"></span>
                 <span className="font-body">AI-Powered</span>
               </div>
             </div>

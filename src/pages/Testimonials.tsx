@@ -52,91 +52,54 @@ const Testimonials: React.FC = () => {
     }
   ];
 
-  const stats = [
-    { number: "10,000+", label: "Happy Users" },
-    { number: "35%", label: "Avg. Score Improvement" },
-    { number: "98%", label: "User Satisfaction" },
-    { number: "24/7", label: "Available Support" }
-  ];
 
   return (
-    <div className="bg-neutral-50 pt-16">
+    <div className="bg-white pt-16">
       {/* Hero Section */}
-      <section className="relative py-16 lg:py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-accent-50"></div>
-        <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-br from-primary-400/10 to-secondary-400/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-10 right-10 w-80 h-80 bg-gradient-to-br from-accent-400/10 to-primary-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 animate-fade-in">
-            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-primary-200 text-primary-700 text-sm font-medium mb-6 shadow-sm font-body">
-              <span className="w-1.5 h-1.5 bg-accent-500 rounded-full mr-2 animate-pulse"></span>
-              Success Stories
-            </div>
-            
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-heading mb-4 leading-tight">
-              <span className="gradient-text">Testimonials</span>
-            </h1>
-            
-            <p className="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto font-body leading-relaxed">
-              Discover how job seekers like you have transformed their careers with our AI Resume Analyzer.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            {stats.map((stat, index) => (
-              <div key={index} className="p-6">
-                <div className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+      <section className="py-20 lg:py-24">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-neutral-900">
+            Testimonials
+          </h1>
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
+            Real stories from job seekers who transformed their careers with TalentScore
+          </p>
         </div>
       </section>
 
       {/* Testimonials Grid */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-cream-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              What Our Users Say
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Real feedback from real people who have successfully improved their resumes and career prospects.
-            </p>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
-                <div className="flex items-center mb-4">
+              <div key={index} className="card p-8 hover:shadow-lg transition-all duration-300">
+                <div className="flex text-ocean-400 mb-6">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                
+                <blockquote className="text-neutral-700 text-lg leading-relaxed mb-8 italic">
+                  "{testimonial.quote}"
+                </blockquote>
+                
+                <div className="flex items-center">
                   <img
                     src={testimonial.photo}
                     alt={testimonial.name}
                     className="w-16 h-16 rounded-full mr-4 object-cover"
                   />
                   <div>
-                    <h3 className="font-semibold text-gray-900 text-lg">{testimonial.name}</h3>
-                    <p className="text-gray-600 text-sm">{testimonial.role}</p>
-                    <p className="text-gray-500 text-sm">{testimonial.company}</p>
+                    <h3 className="font-bold text-neutral-900 text-lg">{testimonial.name}</h3>
+                    <p className="text-neutral-600 text-sm">{testimonial.role}</p>
+                    <p className="text-ocean-600 text-sm font-semibold">{testimonial.company}</p>
                   </div>
                 </div>
                 
-                <div className="flex text-yellow-400 mb-4">
-                  {"★".repeat(5)}
-                </div>
-                
-                <blockquote className="text-gray-700 italic mb-4 leading-relaxed">
-                  "{testimonial.quote}"
-                </blockquote>
-                
-                <div className="bg-green-50 rounded-lg p-3 text-center">
-                  <span className="text-green-800 font-semibold">
+                <div className="mt-6 bg-sky-50 rounded-lg p-4 text-center">
+                  <span className="text-sky-700 font-semibold">
                     +{testimonial.improvement} Match Score Improvement
                   </span>
                 </div>
@@ -146,123 +109,19 @@ const Testimonials: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured Success Story */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 md:p-12">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-4">Featured Success Story</h2>
-              <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden">
-                <img
-                  src="https://randomuser.me/api/portraits/women/25.jpg"
-                  alt="Sarah Martinez"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <h3 className="text-xl font-semibold">Sarah Martinez</h3>
-              <p className="opacity-90">Senior Frontend Developer at Google</p>
-            </div>
-            
-            <blockquote className="text-lg italic text-center mb-8 leading-relaxed">
-              "I was struggling to get interviews despite having 5 years of experience. 
-              After using the AI Resume Analyzer, I realized I was missing key technologies 
-              in my resume. Within two weeks of updating it based on the suggestions, 
-              I had interviews with three major tech companies and landed my dream job at Google!"
-            </blockquote>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div className="bg-white bg-opacity-20 rounded-lg p-4">
-                <div className="text-2xl font-bold">67%</div>
-                <div className="text-sm opacity-90">Match Score Improvement</div>
-              </div>
-              <div className="bg-white bg-opacity-20 rounded-lg p-4">
-                <div className="text-2xl font-bold">3</div>
-                <div className="text-sm opacity-90">Interview Calls</div>
-              </div>
-              <div className="bg-white bg-opacity-20 rounded-lg p-4">
-                <div className="text-2xl font-bold">2 weeks</div>
-                <div className="text-sm opacity-90">To Land Dream Job</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Industry Breakdown */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Success Across Industries
-            </h2>
-            <p className="text-xl text-gray-600">
-              Our AI Resume Analyzer helps professionals in every field
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-              <div className="text-4xl mb-4">💻</div>
-              <h3 className="font-semibold text-gray-900 mb-2">Technology</h3>
-              <p className="text-gray-600 text-sm">Software Engineers, Data Scientists, DevOps</p>
-              <div className="mt-3 text-blue-600 font-semibold">2,500+ users</div>
-            </div>
-
-            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-              <div className="text-4xl mb-4">📊</div>
-              <h3 className="font-semibold text-gray-900 mb-2">Business</h3>
-              <p className="text-gray-600 text-sm">Product Managers, Analysts, Consultants</p>
-              <div className="mt-3 text-purple-600 font-semibold">1,800+ users</div>
-            </div>
-
-            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-              <div className="text-4xl mb-4">🎨</div>
-              <h3 className="font-semibold text-gray-900 mb-2">Design</h3>
-              <p className="text-gray-600 text-sm">UX/UI Designers, Creative Directors</p>
-              <div className="mt-3 text-green-600 font-semibold">1,200+ users</div>
-            </div>
-
-            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-              <div className="text-4xl mb-4">📈</div>
-              <h3 className="font-semibold text-gray-900 mb-2">Marketing</h3>
-              <p className="text-gray-600 text-sm">Digital Marketers, Content Creators</p>
-              <div className="mt-3 text-red-600 font-semibold">900+ users</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-ocean-500">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Ready to Join Our Success Stories?
           </h2>
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            Don't let a poorly optimized resume hold you back from your dream job. 
-            Start your journey to career success today.
+          <p className="text-lg text-white/90 mb-8 leading-relaxed max-w-2xl mx-auto">
+            Start your journey to career success today with our AI-powered resume analyzer.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <a
-              href="/analyze"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105"
-            >
-              Analyze Your Resume
-            </a>
-            <a
-              href="/about"
-              className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg text-lg font-semibold hover:border-blue-600 hover:text-blue-600 transition-all duration-200"
-            >
-              Learn More
-            </a>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <p className="text-gray-600 text-sm">
-              ⭐ Trusted by 10,000+ professionals worldwide • 98% satisfaction rate • Free to use
-            </p>
-          </div>
+          <a href="/analyze" className="btn-secondary bg-white text-ocean-500 hover:bg-neutral-50">
+            Analyze Your Resume Free
+          </a>
         </div>
       </section>
     </div>

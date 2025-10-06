@@ -16,22 +16,20 @@ const Header: React.FC = () => {
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${
       isScrolled 
-        ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-neutral-200/50' 
-        : 'bg-white/80 backdrop-blur-sm'
+        ? 'bg-white shadow-sm border-b border-neutral-200' 
+        : 'bg-white/95 backdrop-blur-sm'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center space-x-2 group">
-              <div className="relative">
-                <div className="w-8 h-8 bg-gradient-to-br from-primary-500 via-secondary-500 to-accent-500 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200 transform group-hover:scale-105">
-                  <span className="text-white font-bold text-sm">TS</span>
-                </div>
+            <a href="/" className="flex items-center space-x-3 group">
+              <div className="w-10 h-10 bg-ocean-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">TS</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-bold gradient-text font-heading">TalentScore</span>
-                <span className="text-xs text-neutral-500 font-medium -mt-0.5 font-body">AI Resume Analyzer</span>
+                <span className="text-xl font-bold text-neutral-900">TalentScore</span>
+                <span className="text-xs text-neutral-500 -mt-1">AI Resume Analyzer</span>
               </div>
             </a>
           </div>
@@ -48,7 +46,7 @@ const Header: React.FC = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="px-3 py-2 text-sm font-medium text-neutral-700 hover:text-primary-600 transition-colors duration-200 rounded-md hover:bg-primary-50"
+                className="px-3 py-2 text-sm font-medium text-neutral-700 hover:text-ocean-600 transition-colors duration-200 rounded-md hover:bg-ocean-50"
               >
                 {item.name}
               </a>
@@ -66,7 +64,7 @@ const Header: React.FC = () => {
           <div className="lg:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 text-neutral-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-200 focus-ring"
+              className="p-3 text-neutral-700 hover:text-ocean-600 hover:bg-ocean-50/50 rounded-xl transition-all duration-300 focus-ring"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMenuOpen ? (
@@ -80,12 +78,12 @@ const Header: React.FC = () => {
         </div>
 
         {/* Mobile Navigation */}
-        <div className={`lg:hidden transition-all duration-300 ease-in-out ${
+        <div className={`lg:hidden transition-all duration-500 ease-in-out ${
           isMenuOpen 
-            ? 'max-h-80 opacity-100 py-4' 
+            ? 'max-h-96 opacity-100 py-6' 
             : 'max-h-0 opacity-0 py-0'
         } overflow-hidden`}>
-          <div className="flex flex-col space-y-1 border-t border-neutral-200 pt-4">
+          <div className="flex flex-col space-y-2 border-t border-neutral-200/50 pt-6">
             {[
               { name: 'Home', href: '/' },
               { name: 'Analyze', href: '/analyze' },
@@ -96,13 +94,16 @@ const Header: React.FC = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="px-3 py-2 text-sm font-medium text-neutral-700 hover:text-primary-600 hover:bg-primary-50 rounded-md transition-colors duration-200"
+                className="px-4 py-3 text-sm font-semibold text-neutral-700 hover:text-ocean-600 hover:bg-ocean-50/50 rounded-xl transition-all duration-300"
               >
                 {item.name}
               </a>
             ))}
-            <div className="pt-3">
+            <div className="pt-4">
               <a href="/analyze" className="btn-primary w-full justify-center">
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
                 Get Started
               </a>
             </div>

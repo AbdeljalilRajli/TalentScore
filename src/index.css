@@ -1,33 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&family=Lato:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   html {
-    font-family: 'Lato', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     font-size: 16px;
     scroll-behavior: smooth;
   }
   
   body {
-    @apply text-neutral-700 antialiased font-body;
+    @apply text-neutral-700 antialiased;
     line-height: 1.6;
+    background-color: #fafbfc;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-neutral-900 font-heading;
+    @apply text-neutral-900;
+    font-family: 'Poppins', system-ui, sans-serif;
     line-height: 1.2;
+    font-weight: 600;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg shadow-sm hover:shadow-md transform hover:scale-[1.02] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold bg-ocean-600 text-white rounded-lg shadow-sm hover:bg-ocean-700 hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:ring-offset-2;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium bg-white text-primary-600 rounded-lg border border-neutral-300 shadow-sm hover:border-primary-300 hover:shadow-md transform hover:scale-[1.02] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold bg-white text-ocean-600 rounded-lg border border-neutral-300 shadow-sm hover:bg-neutral-50 hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:ring-offset-2;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold bg-sage-600 text-white rounded-lg shadow-sm hover:bg-sage-700 hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sage-500 focus:ring-offset-2;
   }
 
   .card {
@@ -38,12 +45,12 @@
     @apply card hover:shadow-lg hover:-translate-y-0.5;
   }
 
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary-600 via-secondary-500 to-accent-500 bg-clip-text text-transparent;
+  .accent-text {
+    @apply text-ocean-600 font-semibold;
   }
 
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+    @apply focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:ring-offset-2;
   }
 }
 
@@ -68,20 +75,48 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f9fafb;
+  background: #f4f6f8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  border-radius: 4px;
+  background: linear-gradient(135deg, #6b8bb6, #8ba076);
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #4338ca, #4f46e5);
+  background: linear-gradient(135deg, #5a7aa4, #708060);
 }
 
 /* Text selection */
 ::selection {
-  background-color: rgba(79, 70, 229, 0.2);
-  color: #1e1b4b;
+  background-color: rgba(107, 139, 182, 0.2);
+  color: #384a63;
+}
+
+/* Modern glass morphism effects */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Pulse glow effect */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(107, 139, 182, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(107, 139, 182, 0.6); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }

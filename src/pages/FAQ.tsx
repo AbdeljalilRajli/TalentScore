@@ -39,48 +39,36 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <div className="bg-neutral-50 pt-16">
+    <div className="bg-white pt-16">
       {/* Hero Section */}
-      <section className="relative py-16 lg:py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-accent-50"></div>
-        <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-br from-primary-400/10 to-secondary-400/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-10 right-10 w-80 h-80 bg-gradient-to-br from-accent-400/10 to-primary-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 animate-fade-in">
-            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-primary-200 text-primary-700 text-sm font-medium mb-6 shadow-sm font-body">
-              <span className="w-1.5 h-1.5 bg-accent-500 rounded-full mr-2 animate-pulse"></span>
-              Frequently Asked Questions
-            </div>
-            
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-heading mb-4 leading-tight">
-              <span className="gradient-text">FAQ</span>
-            </h1>
-            
-            <p className="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto font-body leading-relaxed">
-              Get answers to common questions about our TalentScore and how it can help you land your dream job.
-            </p>
-          </div>
+      <section className="py-20 lg:py-24">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-neutral-900">
+            FAQ
+          </h1>
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
+            Get answers to common questions about TalentScore
+          </p>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20">
+      <section className="py-20 bg-cream-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             {faqs.map((faq, index) => (
-              <div key={index} className="bg-white border border-gray-200 rounded-lg shadow-sm">
+              <div key={index} className="card overflow-hidden">
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full px-6 py-6 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+                  className="w-full px-8 py-6 text-left focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:ring-offset-2"
                 >
                   <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-semibold text-gray-900 pr-4">
+                    <h3 className="text-lg font-bold text-neutral-900 pr-4">
                       {faq.question}
                     </h3>
                     <div className="flex-shrink-0">
                       <svg
-                        className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${
+                        className={`w-6 h-6 text-ocean-500 transform transition-transform duration-300 ${
                           openIndex === index ? 'rotate-180' : ''
                         }`}
                         fill="none"
@@ -93,9 +81,9 @@ const FAQ: React.FC = () => {
                   </div>
                 </button>
                 {openIndex === index && (
-                  <div className="px-6 pb-6">
-                    <div className="border-t border-gray-200 pt-4">
-                      <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                  <div className="px-8 pb-6 border-t border-neutral-100">
+                    <div className="pt-6">
+                      <p className="text-neutral-600 leading-relaxed text-lg">{faq.answer}</p>
                     </div>
                   </div>
                 )}
@@ -105,117 +93,21 @@ const FAQ: React.FC = () => {
         </div>
       </section>
 
-      {/* Help Section */}
-      <section className="bg-gray-50 py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Still Have Questions?
-            </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              We're here to help you succeed. Explore our resources or get in touch with our support team.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-lg shadow-md p-6 text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">📚</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Resume Tips
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Learn best practices for creating compelling resumes that get noticed.
-              </p>
-              <a
-                href="/analyze"
-                className="text-blue-600 hover:text-blue-700 font-medium"
-              >
-                View Tips →
-              </a>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md p-6 text-center">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🎯</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Try the Analyzer
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Experience our AI-powered resume analysis tool firsthand.
-              </p>
-              <a
-                href="/analyze"
-                className="text-purple-600 hover:text-purple-700 font-medium"
-              >
-                Get Started →
-              </a>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md p-6 text-center">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">💬</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Contact Support
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Get personalized help from our career experts and technical team.
-              </p>
-              <a
-                href="#"
-                className="text-green-600 hover:text-green-700 font-medium"
-              >
-                Contact Us →
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 text-center">
-            <h2 className="text-3xl font-bold mb-4">
-              Ready to Optimize Your Resume?
-            </h2>
-            <p className="text-lg mb-6 opacity-90">
-              Join thousands of successful job seekers who have improved their resumes with our AI-powered tool.
-            </p>
-            <a
-              href="/analyze"
-              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200 inline-block"
-            >
-              Start Free Analysis
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Quick Stats */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-blue-600 mb-2">10,000+</div>
-              <div className="text-gray-600">Resumes Analyzed</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-purple-600 mb-2">35%</div>
-              <div className="text-gray-600">Average Improvement</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-green-600 mb-2">98%</div>
-              <div className="text-gray-600">User Satisfaction</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-red-600 mb-2">2-3s</div>
-              <div className="text-gray-600">Analysis Time</div>
-            </div>
-          </div>
+      <section className="py-20 bg-beige-500">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
+            Ready to Optimize Your Resume?
+          </h2>
+          <p className="text-lg text-neutral-700 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Join thousands of successful job seekers who have improved their resumes with our AI-powered tool.
+          </p>
+          <a
+            href="/analyze"
+            className="btn-secondary bg-white text-beige-700 hover:bg-neutral-50"
+          >
+            Start Free Analysis
+          </a>
         </div>
       </section>
     </div>

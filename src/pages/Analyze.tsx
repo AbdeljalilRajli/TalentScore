@@ -156,34 +156,30 @@ const Analyze: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-neutral-50 pt-16">
+    <div className="min-h-screen bg-white pt-16">
       {/* Hero Section */}
-      <section className="relative py-16 lg:py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-accent-50"></div>
-        <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-br from-primary-400/10 to-secondary-400/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-10 right-10 w-80 h-80 bg-gradient-to-br from-accent-400/10 to-primary-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 animate-fade-in">
-            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-primary-200 text-primary-700 text-sm font-medium mb-6 shadow-sm font-body">
-              <span className="w-1.5 h-1.5 bg-accent-500 rounded-full mr-2 animate-pulse"></span>
-              AI-Powered Analysis
-            </div>
-            
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-heading mb-4 leading-tight">
-              <span className="gradient-text">Analyze Your Resume</span>
-            </h1>
-            
-            <p className="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto font-body leading-relaxed">
-              Upload your resume and paste the job description to get AI-powered insights 
-              and personalized recommendations for improvement.
-            </p>
+      <section className="py-20 lg:py-24">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-ocean-50 text-ocean-700 text-sm font-medium mb-8">
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            AI-Powered Analysis
           </div>
+          
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-neutral-900">
+            Analyze Your Resume
+          </h1>
+          
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
+            Upload your resume and paste the job description to get AI-powered insights 
+            and personalized recommendations for improvement.
+          </p>
         </div>
       </section>
 
       {/* Main Content */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-cream-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Form */}
@@ -193,7 +189,7 @@ const Analyze: React.FC = () => {
                   {/* Resume Upload */}
                   <div>
                     <div className="flex items-center mb-6">
-                      <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 text-white rounded-xl flex items-center justify-center font-bold font-display mr-4">
+                      <div className="w-8 h-8 bg-ocean-500 text-white rounded-xl flex items-center justify-center font-bold mr-4">
                         1
                       </div>
                       <label className="text-xl font-bold text-neutral-900 font-display">
@@ -204,10 +200,10 @@ const Analyze: React.FC = () => {
                     <div 
                       className={`relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer group ${
                         dragActive 
-                          ? 'border-primary-500 bg-primary-50' 
+                          ? 'border-ocean-500 bg-ocean-50' 
                           : resumeFile 
-                            ? 'border-accent-400 bg-accent-50' 
-                            : 'border-neutral-300 hover:border-primary-400 hover:bg-primary-50/50'
+                            ? 'border-sky-400 bg-sky-50' 
+                            : 'border-neutral-300 hover:border-ocean-400 hover:bg-ocean-50/50'
                       }`}
                       onDragEnter={handleDrag}
                       onDragLeave={handleDrag}
@@ -224,12 +220,12 @@ const Analyze: React.FC = () => {
                       <label htmlFor="resume-upload" className="cursor-pointer block">
                         {resumeFile ? (
                           <div className="animate-scale-in">
-                            <div className="w-16 h-16 bg-gradient-to-br from-accent-500 to-accent-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-soft">
+                            <div className="w-16 h-16 bg-sky-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
                               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                               </svg>
                             </div>
-                            <p className="text-lg font-bold text-accent-700 mb-2 font-display">
+                            <p className="text-lg font-bold text-sky-700 mb-2">
                               ✓ {resumeFile.name}
                             </p>
                             <p className="text-sm text-neutral-600 font-body">
@@ -238,12 +234,12 @@ const Analyze: React.FC = () => {
                           </div>
                         ) : (
                           <div>
-                            <div className="w-16 h-16 bg-gradient-to-br from-neutral-200 to-neutral-300 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:from-primary-200 group-hover:to-primary-300 transition-all duration-300">
-                              <svg className="w-8 h-8 text-neutral-600 group-hover:text-primary-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="w-16 h-16 bg-neutral-200 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-ocean-200 transition-all duration-300">
+                              <svg className="w-8 h-8 text-neutral-600 group-hover:text-ocean-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                               </svg>
                             </div>
-                            <p className="text-lg font-bold text-neutral-900 mb-2 font-display group-hover:text-primary-600 transition-colors">
+                            <p className="text-lg font-bold text-neutral-900 mb-2 group-hover:text-ocean-600 transition-colors">
                               Drop your resume here or click to browse
                             </p>
                             <p className="text-sm text-neutral-600 font-body">
@@ -258,7 +254,7 @@ const Analyze: React.FC = () => {
                   {/* Job Description */}
                   <div>
                     <div className="flex items-center mb-6">
-                      <div className="w-8 h-8 bg-gradient-to-br from-secondary-500 to-accent-500 text-white rounded-xl flex items-center justify-center font-bold font-display mr-4">
+                      <div className="w-8 h-8 bg-beige-600 text-white rounded-xl flex items-center justify-center font-bold mr-4">
                         2
                       </div>
                       <label className="text-xl font-bold text-neutral-900 font-display">
@@ -271,7 +267,7 @@ const Analyze: React.FC = () => {
                         value={jobDescription}
                         onChange={(e) => setJobDescription(e.target.value)}
                         placeholder="Paste the job description here. Include requirements, responsibilities, and preferred qualifications..."
-                        className="w-full h-64 p-6 border-2 border-neutral-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none font-body text-neutral-700 placeholder-neutral-400 transition-all duration-200"
+                        className="w-full h-64 p-6 border-2 border-neutral-200 rounded-2xl focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 resize-none text-neutral-700 placeholder-neutral-400 transition-all duration-200"
                       />
                       <div className="absolute bottom-4 right-4 text-sm text-neutral-500 font-medium">
                         {jobDescription.length} characters
@@ -314,7 +310,7 @@ const Analyze: React.FC = () => {
               {/* Tips Card */}
               <div className="card p-8 animate-on-scroll">
                 <div className="flex items-center mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-br from-accent-500 to-accent-600 rounded-xl flex items-center justify-center mr-4">
+                  <div className="w-10 h-10 bg-sky-500 rounded-xl flex items-center justify-center mr-4">
                     <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                     </svg>
@@ -326,7 +322,7 @@ const Analyze: React.FC = () => {
                 <ul className="space-y-4">
                   {tips.map((tip, index) => (
                     <li key={index} className="flex items-start group">
-                      <div className="flex items-center justify-center w-6 h-6 rounded-lg bg-accent-100 text-accent-600 mr-4 mt-0.5 group-hover:bg-accent-200 transition-colors">
+                      <div className="flex items-center justify-center w-6 h-6 rounded-lg bg-sky-100 text-sky-600 mr-4 mt-0.5 group-hover:bg-sky-200 transition-colors">
                         {tip.icon}
                       </div>
                       <span className="text-sm text-neutral-600 font-body leading-relaxed group-hover:text-neutral-800 transition-colors">{tip.text}</span>
@@ -338,7 +334,7 @@ const Analyze: React.FC = () => {
               {/* Process Steps */}
               <div className="card p-8 animate-on-scroll">
                 <div className="flex items-center mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center mr-4">
+                  <div className="w-10 h-10 bg-ocean-500 rounded-xl flex items-center justify-center mr-4">
                     <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
@@ -349,13 +345,13 @@ const Analyze: React.FC = () => {
                 </div>
                 <div className="space-y-6">
                   {[
-                    { step: 1, text: "Upload your resume", color: "from-primary-500 to-secondary-500" },
-                    { step: 2, text: "Paste job description", color: "from-secondary-500 to-accent-500" },
-                    { step: 3, text: "Get AI analysis", color: "from-accent-500 to-primary-500" },
-                    { step: "✓", text: "Improve your resume", color: "from-accent-600 to-accent-700" }
+                    { step: 1, text: "Upload your resume", color: "ocean" },
+                    { step: 2, text: "Paste job description", color: "beige" },
+                    { step: 3, text: "Get AI analysis", color: "sky" },
+                    { step: "✓", text: "Improve your resume", color: "cream" }
                   ].map((item, index) => (
                     <div key={index} className="flex items-center group">
-                      <div className={`w-10 h-10 bg-gradient-to-br ${item.color} text-white rounded-xl flex items-center justify-center font-bold font-display mr-4 group-hover:scale-110 transition-transform duration-300 shadow-soft`}>
+                      <div className={`w-10 h-10 bg-${item.color}-500 text-white rounded-xl flex items-center justify-center font-bold mr-4 group-hover:scale-110 transition-transform duration-300`}>
                         {item.step}
                       </div>
                       <span className="text-sm text-neutral-600 font-body group-hover:text-neutral-800 transition-colors">{item.text}</span>
@@ -365,9 +361,8 @@ const Analyze: React.FC = () => {
               </div>
 
               {/* Stats Card */}
-              <div className="card p-8 bg-gradient-to-br from-primary-600 via-secondary-600 to-accent-600 text-white animate-on-scroll relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-12 translate-x-12"></div>
-                <div className="relative">
+              <div className="card p-8 bg-ocean-500 text-white">
+                <div>
                   <div className="flex items-center mb-6">
                     <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mr-4">
                       <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
