@@ -167,3 +167,85 @@
 .animate-scroll:hover {
   animation-play-state: paused;
 }
+
+/* How It Works Process Flow Animations */
+@keyframes draw-path {
+  0% {
+    stroke-dasharray: 0 1000;
+  }
+  100% {
+    stroke-dasharray: 1000 0;
+  }
+}
+
+.animate-draw-path {
+  stroke-dasharray: 1000;
+  animation: draw-path 3s ease-in-out infinite;
+}
+
+@keyframes bounce-x {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+.animate-bounce-x {
+  animation: bounce-x 2s ease-in-out infinite;
+}
+
+@keyframes move-dot {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-move-dot {
+  animation: move-dot 3s ease-in-out infinite;
+}
+
+/* Enhanced floating animation for process steps */
+@keyframes animate-float {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  33% { 
+    transform: translateY(-10px) rotate(1deg); 
+  }
+  66% { 
+    transform: translateY(5px) rotate(-1deg); 
+  }
+}
+
+.animate-float {
+  animation: animate-float 6s ease-in-out infinite;
+}
+
+/* Gradient animation for process flow */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background: linear-gradient(-45deg, #124170, #26667F, #67C090, #DDF4E7);
+  background-size: 400% 400%;
+  animation: gradient-shift 4s ease infinite;
+}
