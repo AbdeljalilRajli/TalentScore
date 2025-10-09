@@ -509,7 +509,7 @@ const Home: React.FC = () => {
                   <div className="text-sm text-neutral-600 font-medium">Improvement Rate</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-[#67C090] to-[#26667F] bg-clip-text text-transparent mb-2">3s</div>
+                  <div className="text-3xl font-bold bg-gradient-to-r from-[#67C090] to-[#26667F] bg-clip-text text-transparent mb-2">3.0s</div>
                   <div className="text-sm text-neutral-600 font-medium">Average Analysis Time</div>
                 </div>
                 <div>
