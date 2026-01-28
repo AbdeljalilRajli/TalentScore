@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getStoredAnalysisResult, type AnalysisResult } from '../utils/mockApi';
+import { getStoredAnalysisContext, getStoredAnalysisResult, type AnalysisResult } from '../utils/mockApi';
+import { generateWithOllama, isOllamaAvailable, listOllamaModels } from '../utils/ollama';
 
 // Default mock data in case no stored result is found
 const defaultResults: AnalysisResult = {
   score: 82,
+  breakdown: { skills: 80, experience: 75, impact: 70, quality: 85 },
   foundKeywords: ["React", "JavaScript", "Node.js", "TailwindCSS", "TypeScript"],
   missingKeywords: ["GraphQL", "Docker", "AWS"],
   suggestions: [
@@ -12,11 +14,29 @@ const defaultResults: AnalysisResult = {
     "Highlight AWS cloud experience if you have any",
     "Emphasize leadership and teamwork skills more prominently"
   ],
+  evidence: [
+    { keyword: 'React', snippet: 'Developed web applications using React and TypeScript' },
+    { keyword: 'Node.js', snippet: 'Built REST APIs with Node.js and Express' },
+  ],
   isValidResume: true
 };
 
 const Results: React.FC = () => {
   const [results, setResults] = useState<AnalysisResult>(defaultResults);
+  const [ollamaStatus, setOllamaStatus] = useState<'checking' | 'available' | 'unavailable'>('checking');
+  const [ollamaModels, setOllamaModels] = useState<string[]>([]);
+  const [ollamaModel, setOllamaModel] = useState<string>('');
+  const [ollamaTask, setOllamaTask] = useState<'tailor' | 'rewrite_bullets' | 'summary'>('tailor');
+  const [ollamaOutput, setOllamaOutput] = useState<string>('');
+  const [ollamaError, setOllamaError] = useState<string>('');
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const breakdown = results.breakdown ?? {
+    skills: results.score,
+    experience: results.score,
+    impact: results.score,
+    quality: results.score,
+  };
 
   useEffect(() => {
     // Try to get stored analysis result
@@ -25,6 +45,108 @@ const Results: React.FC = () => {
       setResults(storedResult);
     }
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const ok = await isOllamaAvailable();
+      if (cancelled) return;
+      if (!ok) {
+        setOllamaStatus('unavailable');
+        return;
+      }
+
+      setOllamaStatus('available');
+      const models = await listOllamaModels();
+      if (cancelled) return;
+      setOllamaModels(models);
+      if (!ollamaModel && models.length > 0) {
+        setOllamaModel(models[0]);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [ollamaModel]);
+
+  const buildPrompt = (args: { resumeText: string; jobDescription: string }) => {
+    const maxResumeChars = 3500;
+    const maxJdChars = 2500;
+    const header =
+      'You are a resume reviewer. Be concise, practical, and ATS-friendly. Do not invent experience.\n\n';
+    const resumeText = args.resumeText.slice(0, maxResumeChars);
+    const jobDescription = args.jobDescription.slice(0, maxJdChars);
+    const resume = `RESUME:\n${resumeText}\n\n`;
+    const jd = `JOB DESCRIPTION:\n${jobDescription}\n\n`;
+
+    if (ollamaTask === 'summary') {
+      return (
+        header +
+        resume +
+        jd +
+        'Task: Write a professional resume summary (3-5 lines) tailored to the job description.\n' +
+        'Output: Plain text only.'
+      );
+    }
+
+    if (ollamaTask === 'rewrite_bullets') {
+      return (
+        header +
+        resume +
+        jd +
+        'Task: Rewrite up to 6 strongest experience bullets to better match the job description.\n' +
+        'Rules: Keep them truthful, add metrics only if present, use action verbs, one bullet per line.\n' +
+        'Output: Bullets only.'
+      );
+    }
+
+    return (
+      header +
+      resume +
+      jd +
+      'Task: Provide 8 tailored improvements to increase match for this job.\n' +
+      'Output format:\n- Missing keywords to add (max 8)\n- Where to add them\n- 5 bullet rewrite suggestions\n- 3 formatting/ATS suggestions'
+    );
+  };
+
+  const handleGenerate = async () => {
+    setOllamaError('');
+    setOllamaOutput('');
+
+    if (ollamaStatus !== 'available') {
+      setOllamaError('Ollama is not available. Start Ollama locally and try again.');
+      return;
+    }
+
+    if (!ollamaModel) {
+      setOllamaError('No Ollama model selected.');
+      return;
+    }
+
+    const ctx = getStoredAnalysisContext();
+    if (!ctx || !ctx.resumeText || !ctx.jobDescription) {
+      setOllamaError('Missing analysis context. Please analyze a resume first.');
+      return;
+    }
+
+    if (ctx.resumeText.trim().length < 50) {
+      setOllamaError('Resume text is missing or too short. Use Paste text mode or upload a .txt resume.');
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const prompt = buildPrompt({ resumeText: ctx.resumeText, jobDescription: ctx.jobDescription });
+      const output = await generateWithOllama({ model: ollamaModel, prompt });
+      setOllamaOutput(output);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setOllamaError(msg || 'Failed to generate with Ollama. Ensure the model is downloaded and Ollama is running.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   // Simple pie chart component (we'll replace with Recharts later)
   const PieChart = () => {
@@ -204,6 +326,33 @@ const Results: React.FC = () => {
           </div>
         </div>
 
+        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Score Breakdown</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {(
+              [
+                { label: 'Skills Match', value: breakdown.skills, color: 'from-emerald-500 to-emerald-700' },
+                { label: 'Experience Match', value: breakdown.experience, color: 'from-sky-500 to-sky-700' },
+                { label: 'Impact & Metrics', value: breakdown.impact, color: 'from-amber-500 to-amber-700' },
+                { label: 'Resume Quality', value: breakdown.quality, color: 'from-violet-500 to-violet-700' },
+              ] as const
+            ).map((item) => (
+              <div key={item.label} className="rounded-xl border border-neutral-200 p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-neutral-800">{item.label}</span>
+                  <span className="font-bold text-neutral-900">{Math.round(item.value)}%</span>
+                </div>
+                <div className="h-3 w-full rounded-full bg-neutral-100 overflow-hidden">
+                  <div
+                    className={`h-3 rounded-full bg-gradient-to-r ${item.color}`}
+                    style={{ width: `${Math.max(0, Math.min(100, item.value))}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Second Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Keyword Distribution Chart */}
@@ -236,6 +385,96 @@ const Results: React.FC = () => {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Evidence */}
+        {results.evidence && results.evidence.length > 0 && (
+          <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Evidence (Where matches were found)</h2>
+            <div className="space-y-4">
+              {results.evidence.map((e, idx) => (
+                <div key={idx} className="rounded-xl border border-neutral-200 p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-neutral-900">{e.keyword}</span>
+                  </div>
+                  <p className="text-sm text-neutral-700">{e.snippet}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Local AI (Ollama) */}
+        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Local AI (Ollama)</h2>
+          <p className="text-sm text-neutral-600 mb-6">
+            Uses a model running on your machine via Ollama. Nothing is sent to a paid API.
+          </p>
+
+          <div className="flex flex-col md:flex-row gap-4 md:items-end mb-4">
+            <div className="flex-1">
+              <label className="block text-sm font-semibold text-neutral-800 mb-2">Status</label>
+              <div className="px-4 py-3 rounded-xl border border-neutral-200 bg-neutral-50 text-sm">
+                {ollamaStatus === 'checking' && 'Checking…'}
+                {ollamaStatus === 'available' && 'Available'}
+                {ollamaStatus === 'unavailable' && 'Not detected (start Ollama locally: http://localhost:11434)'}
+              </div>
+            </div>
+
+            <div className="flex-1">
+              <label className="block text-sm font-semibold text-neutral-800 mb-2">Model</label>
+              <select
+                value={ollamaModel}
+                onChange={(e) => setOllamaModel(e.target.value)}
+                disabled={ollamaStatus !== 'available' || ollamaModels.length === 0}
+                className="w-full px-4 py-3 rounded-xl border border-neutral-200 bg-white"
+              >
+                {ollamaModels.length === 0 ? (
+                  <option value="">No models found</option>
+                ) : (
+                  ollamaModels.map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+
+            <div className="flex-1">
+              <label className="block text-sm font-semibold text-neutral-800 mb-2">Task</label>
+              <select
+                value={ollamaTask}
+                onChange={(e) => setOllamaTask(e.target.value as typeof ollamaTask)}
+                disabled={ollamaStatus !== 'available'}
+                className="w-full px-4 py-3 rounded-xl border border-neutral-200 bg-white"
+              >
+                <option value="tailor">Tailored improvements</option>
+                <option value="rewrite_bullets">Rewrite bullets</option>
+                <option value="summary">Write a summary</option>
+              </select>
+            </div>
+
+            <button
+              onClick={handleGenerate}
+              disabled={ollamaStatus !== 'available' || isGenerating}
+              className="px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-[#124170] to-[#26667F] text-white disabled:opacity-50"
+            >
+              {isGenerating ? 'Generating…' : 'Generate'}
+            </button>
+          </div>
+
+          {ollamaError && (
+            <div className="mb-4 p-4 rounded-xl border border-red-200 bg-red-50 text-red-800 text-sm">
+              {ollamaError}
+            </div>
+          )}
+
+          {ollamaOutput && (
+            <div className="p-4 rounded-xl border border-neutral-200 bg-neutral-50">
+              <pre className="whitespace-pre-wrap text-sm text-neutral-800">{ollamaOutput}</pre>
+            </div>
+          )}
         </div>
 
         {/* Action Buttons */}

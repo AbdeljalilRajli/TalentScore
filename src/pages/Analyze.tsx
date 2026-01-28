@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { analyzeResume, storeAnalysisResult } from '../utils/mockApi';
+import { analyzeResumeText, extractResumeTextFromFile, storeAnalysisContext, storeAnalysisResult } from '../utils/mockApi';
 import { AnimatedSection } from '../components/modern/AnimatedSection';
 import { GlowCard } from '../components/modern/GlowCard';
 
 const Analyze: React.FC = () => {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [resumeText, setResumeText] = useState('');
+  const [resumeInputMode, setResumeInputMode] = useState<'file' | 'text'>('file');
   const [jobDescription, setJobDescription] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -50,6 +52,7 @@ const Analyze: React.FC = () => {
     
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       setResumeFile(e.dataTransfer.files[0]);
+      setResumeInputMode('file');
     }
   };
 
@@ -57,12 +60,30 @@ const Analyze: React.FC = () => {
     const file = event.target.files?.[0];
     if (file) {
       setResumeFile(file);
+      setResumeInputMode('file');
     }
   };
 
+  const canAnalyze =
+    !!jobDescription.trim() &&
+    (
+      (resumeInputMode === 'file' && !!resumeFile) ||
+      (resumeInputMode === 'text' && resumeText.trim().length >= 50)
+    );
+
   const handleAnalyze = async () => {
-    if (!resumeFile || !jobDescription.trim()) {
-      alert('Please upload a resume and provide a job description.');
+    if (!jobDescription.trim()) {
+      alert('Please provide a job description.');
+      return;
+    }
+
+    if (resumeInputMode === 'file' && !resumeFile) {
+      alert('Please upload a resume file or switch to paste mode.');
+      return;
+    }
+
+    if (resumeInputMode === 'text' && resumeText.trim().length < 50) {
+      alert('Please paste your resume text (at least a few lines).');
       return;
     }
 
@@ -81,13 +102,55 @@ const Analyze: React.FC = () => {
     }, 200);
     
     try {
-      // Call mock API
-      const result = await analyzeResume(resumeFile, jobDescription);
+      let contextResumeText = '';
+      let result;
+
+      if (resumeInputMode === 'text') {
+        contextResumeText = resumeText;
+        result = await analyzeResumeText(resumeText, jobDescription);
+      } else {
+        const file = resumeFile as File;
+        const lowerName = file.name.toLowerCase();
+        const isTextLike = file.type === 'text/plain' || lowerName.endsWith('.txt');
+        const isPdf = file.type === 'application/pdf' || lowerName.endsWith('.pdf');
+        const isDocx =
+          file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+          lowerName.endsWith('.docx');
+
+        if (isPdf || isDocx) {
+          const form = new FormData();
+          form.append('file', file);
+          const res = await fetch('/api/extract', { method: 'POST', body: form });
+          if (!res.ok) {
+            let msg = '';
+            try {
+              const data = (await res.json()) as { error?: string; details?: string; textLength?: number };
+              const base = data.details ? `${data.error ?? 'Extract failed'}: ${data.details}` : (data.error ?? 'Extract failed');
+              msg = typeof data.textLength === 'number' ? `${base} (extracted ${data.textLength} chars)` : base;
+            } catch {
+              msg = await res.text();
+            }
+            throw new Error(msg || 'Failed to extract resume text');
+          }
+          const data = (await res.json()) as { text?: string };
+          contextResumeText = data.text ?? '';
+          if (contextResumeText.trim().length < 50) {
+            throw new Error('Could not extract enough text from this file. If it was exported from Figma, the text may be outlined (vector shapes). Export a text-based PDF or upload a DOCX.');
+          }
+          result = await analyzeResumeText(contextResumeText, jobDescription);
+        } else if (isTextLike) {
+          contextResumeText = await extractResumeTextFromFile(file);
+          result = await analyzeResumeText(contextResumeText, jobDescription);
+        } else {
+          throw new Error('Unsupported file type. Please upload a PDF, DOCX, or TXT.');
+        }
+      }
       
       setProgress(100);
       
       // Store result for results page
       storeAnalysisResult(result);
+      storeAnalysisContext({ resumeText: contextResumeText, jobDescription });
       
       // Navigate to results page after a brief delay
       setTimeout(() => {
@@ -95,8 +158,9 @@ const Analyze: React.FC = () => {
         window.dispatchEvent(new PopStateEvent('popstate'));
       }, 1000);
     } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
       console.error('Analysis failed:', error);
-      alert('Analysis failed. Please try again.');
+      alert(`Analysis failed: ${msg}`);
       clearInterval(progressInterval);
     } finally {
       setTimeout(() => {
@@ -217,10 +281,36 @@ const Analyze: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-neutral-900">Upload Resume</h3>
-                    <p className="text-sm text-neutral-600">PDF, DOC, DOCX, or TXT</p>
+                    <p className="text-sm text-neutral-600">PDF, DOCX, or TXT</p>
                   </div>
                 </div>
+
+                <div className="flex flex-wrap gap-3 mb-6">
+                  <button
+                    type="button"
+                    onClick={() => setResumeInputMode('file')}
+                    className={`px-4 py-2 rounded-xl font-semibold border transition-all ${
+                      resumeInputMode === 'file'
+                        ? 'bg-[#124170] text-white border-[#124170]'
+                        : 'bg-white text-neutral-700 border-neutral-200 hover:border-[#67C090]'
+                    }`}
+                  >
+                    Upload file
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setResumeInputMode('text')}
+                    className={`px-4 py-2 rounded-xl font-semibold border transition-all ${
+                      resumeInputMode === 'text'
+                        ? 'bg-[#124170] text-white border-[#124170]'
+                        : 'bg-white text-neutral-700 border-neutral-200 hover:border-[#67C090]'
+                    }`}
+                  >
+                    Paste text
+                  </button>
+                </div>
                 
+                {resumeInputMode === 'file' ? (
                 <label
                   htmlFor="resume-upload"
                   className={`relative block border-3 border-dashed rounded-3xl p-12 text-center transition-all duration-300 cursor-pointer group ${
@@ -235,7 +325,7 @@ const Analyze: React.FC = () => {
                   onDragOver={handleDrag}
                   onDrop={handleDrop}
                 >
-                  <input id="resume-upload" type="file" accept=".pdf,.doc,.docx,.txt" onChange={handleFileUpload} className="hidden" />
+                  <input id="resume-upload" type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} className="hidden" />
                   
                   {resumeFile ? (
                     <div className="space-y-4">
@@ -248,6 +338,9 @@ const Analyze: React.FC = () => {
                         </p>
                         <p className="text-sm text-neutral-600">
                           Click to change or drag a new file
+                        </p>
+                        <p className="text-xs text-neutral-500 mt-2">
+                          Tip: For best results in this frontend-only demo, upload a .txt resume or use Paste text.
                         </p>
                       </div>
                     </div>
@@ -269,10 +362,34 @@ const Analyze: React.FC = () => {
                           </svg>
                           Choose File
                         </div>
+                        <p className="text-xs text-neutral-500 mt-4">
+                          PDF/DOCX are supported. DOC is not supported.
+                        </p>
                       </div>
                     </div>
                   )}
                 </label>
+                ) : (
+                <div className="space-y-3">
+                  <textarea
+                    value={resumeText}
+                    onChange={(e) => setResumeText(e.target.value)}
+                    placeholder="Paste your resume text here (copy from your PDF/DOCX). Include sections like Experience, Education, Skills..."
+                    className="w-full h-64 p-6 border-2 border-neutral-200 rounded-3xl focus:ring-4 focus:ring-[#67C090]/20 focus:border-[#67C090] resize-none text-neutral-700 placeholder-neutral-400 transition-all duration-300 bg-gradient-to-br from-white to-[#DDF4E7]/20"
+                    style={{ fontFamily: 'Inter' }}
+                  />
+                  <div className="flex items-center justify-between text-xs text-neutral-500">
+                    <span>{resumeText.length} characters</span>
+                    <button
+                      type="button"
+                      onClick={() => setResumeText('')}
+                      className="px-3 py-1 rounded-lg border border-neutral-200 hover:border-[#67C090] transition-all"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+                )}
               </GlowCard>
 
               {/* Job Description Card */}
@@ -303,7 +420,7 @@ const Analyze: React.FC = () => {
                 <div className="mt-8 flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={handleAnalyze}
-                    disabled={!resumeFile || !jobDescription.trim() || isAnalyzing}
+                    disabled={!canAnalyze || isAnalyzing}
                     className="group relative flex-1 px-8 py-5 bg-gradient-to-r from-[#124170] to-[#26667F] text-white rounded-2xl font-bold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
                     <span className="relative z-10 flex items-center justify-center gap-3">
