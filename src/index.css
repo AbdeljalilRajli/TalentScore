@@ -1,251 +1,77 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  html {
-    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-    font-size: 16px;
-    scroll-behavior: smooth;
+  /* Aggressive Global Font Reset */
+  * {
+    font-family: 'Sora', sans-serif !important;
   }
-  
+
+  /* Monospace overrides for technical data blocks */
+  code, pre, .font-mono, .mono-text {
+    font-family: 'Space Mono', monospace !important;
+  }
+
+  html {
+    @apply bg-wallet-bg text-wallet-text;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+  }
+
   body {
-    @apply text-neutral-700 antialiased;
+    @apply bg-wallet-bg text-wallet-text;
     line-height: 1.6;
-    /* Subtle diagonal gradient using brand colors */
-    background-image: radial-gradient(1200px 600px at 10% -10%, #DDF4E7 0%, rgba(221,244,231,0.4) 40%, transparent 70%),
-      radial-gradient(1000px 500px at 110% 10%, rgba(103,192,144,0.25) 0%, transparent 60%),
-      linear-gradient(180deg, #ffffff 0%, #f7fbf9 100%);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-neutral-900;
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    line-height: 1.2;
-    font-weight: 600;
+    @apply text-wallet-text font-bold;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  /* Ensure inputs and buttons inherit correctly despite browser defaults */
+  input, button, select, textarea, optgroup {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-xl text-white shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:ring-offset-2;
-    background: linear-gradient(135deg, #26667F 0%, #124170 100%);
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-wallet-bg bg-wallet-purple hover:bg-wallet-purple/90 transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded-2xl;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold bg-white text-ocean-600 rounded-xl border border-neutral-200 shadow-sm hover:bg-neutral-50 hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-bold bg-wallet-yellow text-wallet-bg hover:bg-wallet-yellow/90 transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded-2xl;
   }
 
-  .btn-accent {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold bg-sage-500 text-white rounded-xl shadow-sm hover:bg-sage-600 hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sage-500 focus:ring-offset-2;
-  }
-
-  .card {
-    @apply bg-white rounded-xl shadow-sm border border-neutral-200 hover:shadow-md transition-all duration-200;
-  }
-
-  .card-hover {
-    @apply card hover:shadow-lg hover:-translate-y-0.5;
-  }
-
-  .accent-text {
-    @apply text-ocean-600 font-semibold;
-  }
-
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:ring-offset-2;
-  }
-
-  /* Shared title style */
-  .page-title {
-    @apply text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-neutral-900;
-  }
-  .page-kicker {
-    @apply inline-flex items-center px-4 py-2 rounded-full bg-sky-200 text-ocean-700 text-sm font-medium;
+  .card-dark {
+    @apply bg-wallet-card rounded-[2.5rem] border border-white/5 shadow-2xl;
   }
 }
 
-@layer utilities {
-  .animate-on-scroll {
-    @apply opacity-0 translate-y-4;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .animate-on-scroll.animate {
-    @apply opacity-100 translate-y-0;
-  }
-
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
-/* Custom scrollbar */
+/* Custom Webkit Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f4f6f8;
+  @apply bg-wallet-bg;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #26667F, #67C090);
-  border-radius: 6px;
+  @apply bg-white/5 rounded-full border-4 border-wallet-bg;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #5a7aa4, #708060);
+  @apply bg-wallet-purple/40;
 }
 
-/* Text selection */
 ::selection {
-  background-color: rgba(38, 102, 127, 0.18);
-  color: #124170;
-}
-
-/* Modern glass morphism effects */
-.glass-morphism {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-}
-
-/* Floating animation */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-}
-
-.float {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* Pulse glow effect */
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(38, 102, 127, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(103, 192, 144, 0.6); }
-}
-
-.pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-/* Organic blob background */
-.blob {
-  filter: blur(40px);
-  opacity: 0.6;
-}
-
-/* Dash animation for progress circle */
-@keyframes dash {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-.animate-dash {
-  animation: dash 2s ease-in-out forwards;
-}
-
-/* Testimonials scroll animation */
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-scroll {
-  animation: scroll 30s linear infinite;
-}
-
-.animate-scroll:hover {
-  animation-play-state: paused;
-}
-
-/* How It Works Process Flow Animations */
-@keyframes draw-path {
-  0% {
-    stroke-dasharray: 0 1000;
-  }
-  100% {
-    stroke-dasharray: 1000 0;
-  }
-}
-
-.animate-draw-path {
-  stroke-dasharray: 1000;
-  animation: draw-path 3s ease-in-out infinite;
-}
-
-@keyframes bounce-x {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(4px);
-  }
-}
-
-.animate-bounce-x {
-  animation: bounce-x 2s ease-in-out infinite;
-}
-
-@keyframes move-dot {
-  0% {
-    offset-distance: 0%;
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    offset-distance: 100%;
-    opacity: 0;
-  }
-}
-
-.animate-move-dot {
-  animation: move-dot 3s ease-in-out infinite;
-}
-
-/* Enhanced floating animation for process steps */
-@keyframes animate-float {
-  0%, 100% { 
-    transform: translateY(0px) rotate(0deg); 
-  }
-  33% { 
-    transform: translateY(-10px) rotate(1deg); 
-  }
-  66% { 
-    transform: translateY(5px) rotate(-1deg); 
-  }
-}
-
-.animate-float {
-  animation: animate-float 6s ease-in-out infinite;
-}
-
-/* Gradient animation for process flow */
-@keyframes gradient-shift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.animate-gradient {
-  background: linear-gradient(-45deg, #124170, #26667F, #67C090, #DDF4E7);
-  background-size: 400% 400%;
-  animation: gradient-shift 4s ease infinite;
+  @apply bg-wallet-purple/30 text-white;
 }

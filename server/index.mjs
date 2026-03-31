@@ -90,7 +90,7 @@ app.post('/api/extract', upload.single('file'), async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT ? Number(process.env.PORT) : 5174;
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`TalentScore API listening on http://localhost:${PORT}`);
