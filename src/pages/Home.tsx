@@ -82,27 +82,38 @@ const Home: React.FC = () => {
     {
       icon: Search,
       title: "Semantic Analysis",
-      description: "Deep contextual matching between your experience and job requirements using vector similarity."
+      description: "Deep contextual matching between your experience and job requirements using vector similarity.",
+      size: "large"
     },
     {
       icon: BarChart,
       title: "Impact Scoring",
-      description: "Quantitative assessment of measurable outcomes, decision density, and technical depth."
+      description: "Quantitative assessment of measurable outcomes, decision density, and technical depth.",
+      size: "small"
     },
     {
       icon: Cpu,
       title: "AI Enhancement",
-      description: "Intelligent rewriting suggestions that preserve your voice while amplifying professional signals."
+      description: "Intelligent rewriting suggestions that preserve your voice while amplifying professional signals.",
+      size: "small"
     },
     {
       icon: FileText,
       title: "Cover Letter Generator",
-      description: "Transform resume + job description into tailored cover letters that get interviews."
+      description: "Transform resume + job description into tailored cover letters that get interviews.",
+      size: "small"
     },
     {
       icon: Briefcase,
       title: "Application Tracker",
-      description: "Kanban-style tracker to organize your job search and never lose an opportunity."
+      description: "Kanban-style tracker to organize your job search and never lose an opportunity.",
+      size: "small"
+    },
+    {
+      icon: Sparkles,
+      title: "ATS Optimization",
+      description: "Ensure your resume passes automated screening systems with formatting and keyword optimization.",
+      size: "large"
     }
   ];
 
@@ -385,7 +396,7 @@ const Home: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -393,13 +404,18 @@ const Home: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="card card-hover p-6"
+                className={`group relative overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/50 p-6 transition-all hover:border-primary-500/30 hover:bg-neutral-800/50 ${
+                  feature.size === 'large' ? 'md:col-span-2' : ''
+                }`}
               >
-                <div className="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-primary-400" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                <div className="relative">
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 transition-colors group-hover:bg-primary-500/20">
+                    <feature.icon className="h-5 w-5 text-primary-400" />
+                  </div>
+                  <h4 className="mb-2 text-lg font-medium text-neutral-100">{feature.title}</h4>
+                  <p className="text-sm leading-relaxed text-neutral-500">{feature.description}</p>
                 </div>
-                <h4 className="text-neutral-100 font-medium mb-2">{feature.title}</h4>
-                <p className="text-neutral-500 text-sm">{feature.description}</p>
               </motion.div>
             ))}
           </div>
