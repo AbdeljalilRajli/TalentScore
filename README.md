@@ -1,198 +1,48 @@
 # TalentScore
 
-A professional SaaS application that uses AI to analyze resumes and provide actionable insights to help job seekers optimize their applications for better job matching.
+AI-powered resume analyzer to help you land more interviews.
 
+## Features
 
-## 🚀 Features
+- **Resume Analysis** — Upload PDF/DOCX/TXT and get instant match scores
+- **AI Assistant** — Get tailored suggestions, bullet rewrites, and cover letters  
+- **Job Tracker** — Save applications and track your job search progress
+- **Firebase Auth** — Sign in with email or Google to sync your data
 
-### Core Functionality
-- **Resume Upload**: Support for PDF, DOC, DOCX, and TXT files
-- **Job Description Analysis**: Paste job descriptions for targeted analysis
-- **AI-Powered Matching**: Get match scores and keyword analysis
-- **Visual Dashboard**: Interactive charts and progress indicators
-- **Smart Suggestions**: Personalized recommendations for improvement
+## Tech Stack
 
-### Pages & Sections
-- **Landing Page**: Hero section, features, testimonials, FAQ, and about
-- **Analyze Page**: Resume upload with step-by-step guidance
-- **Results Dashboard**: Match scores, keyword analysis, and suggestions
-- **About Page**: Mission, AI explanation, and team information
-- **FAQ Page**: Comprehensive answers to common questions
-- **Testimonials**: Success stories from real users
+React + TypeScript + Vite + Tailwind CSS + Firebase
 
-### Design & UX
-- **Professional SaaS Design**: Modern, clean interface
-- **Fully Responsive**: Mobile, tablet, and desktop optimized
-- **Smooth Animations**: Hover effects and transitions
-- **Accessible**: WCAG compliant design patterns
-- **Consistent Branding**: Blue/purple gradient theme
+## Quick Start
 
-## 🛠️ Tech Stack
-
-- **Frontend**: React 19 + TypeScript
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS 4.x
-- **Charts**: Custom SVG charts (ready for Recharts integration)
-- **Icons**: Emoji-based with space for Lucide React
-- **Routing**: Custom client-side routing
-- **State Management**: React hooks and localStorage
-
-## 📦 Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/talentscore.git
-   cd talentscore
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start development server**
-   ```bash
-   npm run dev
-   ```
-
-4. **Open in browser**
-   ```
-   http://localhost:5173
-   ```
-
-## 🏗️ Project Structure
-
-```
-src/
-├── components/
-│   ├── Layout/
-│   │   ├── Header.tsx       # Navigation header
-│   │   ├── Footer.tsx       # Site footer
-│   │   └── Layout.tsx       # Main layout wrapper
-│   └── Router.tsx           # Client-side routing
-├── pages/
-│   ├── Home.tsx            # Landing page
-│   ├── Analyze.tsx         # Resume upload page
-│   ├── Results.tsx         # Analysis results dashboard
-│   ├── About.tsx           # About page
-│   ├── FAQ.tsx             # FAQ page
-│   └── Testimonials.tsx    # Testimonials page
-├── utils/
-│   └── mockApi.ts          # Mock API for demo
-├── App.tsx                 # Main app component
-└── main.tsx               # App entry point
+```bash
+npm install
+npm run dev
 ```
 
-## 🔧 Available Scripts
+Open http://localhost:5173
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
+## Environment Variables
 
-## 🎨 Design System
+Create a `.env` file with your Firebase config:
 
-### Colors
-- **Primary**: Blue (#3B82F6) to Purple (#8B5CF6) gradient
-- **Success**: Green (#10B981)
-- **Warning**: Yellow (#F59E0B)
-- **Error**: Red (#EF4444)
-- **Gray Scale**: Tailwind gray palette
-
-### Typography
-- **Headings**: Font weights 600-800
-- **Body**: Font weight 400-500
-- **Spacing**: Consistent 4px grid system
-
-## 🤖 Mock API
-
-The application includes a mock API that simulates resume analysis:
-
-```typescript
-// Example API response
-{
-  score: 82,
-  foundKeywords: ["React", "JavaScript", "Node.js"],
-  missingKeywords: ["GraphQL", "Docker", "AWS"],
-  suggestions: [
-    "Add more GraphQL experience",
-    "Mention Docker projects",
-    "Highlight AWS cloud experience"
-  ]
-}
+```
+VITE_FIREBASE_API_KEY=your_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
 ```
 
-## 🚀 Deployment
+## Deployment
 
-### Vercel (Recommended)
-1. Push code to GitHub
-2. Connect repository to Vercel
-3. Deploy automatically
-
-### Netlify
-1. Build the project: `npm run build`
-2. Upload `dist` folder to Netlify
-3. Configure redirects for SPA routing
-
-### Manual Deployment
 ```bash
 npm run build
-# Upload dist/ folder to your hosting provider
 ```
 
-## 📱 Responsive Design
-
-- **Mobile**: 320px - 767px
-- **Tablet**: 768px - 1023px
-- **Desktop**: 1024px+
-
-All components are fully responsive with mobile-first design approach.
-
-## 🔮 Future Enhancements
-
-### Planned Features
-- [ ] Real AI integration (OpenAI/Anthropic)
-- [ ] User authentication system
-- [ ] Resume template suggestions
-- [ ] ATS compatibility checker
-- [ ] Multiple resume comparison
-- [ ] PDF export functionality
-- [ ] Dark mode toggle
-- [ ] Advanced analytics dashboard
-
-### Technical Improvements
-- [ ] Add Recharts for better visualizations
-- [ ] Implement React Router for better routing
-- [ ] Add Framer Motion for animations
-- [ ] Integrate with real backend API
-- [ ] Add comprehensive testing suite
-- [ ] Implement PWA features
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Author
-
-Built with ❤️ by Abdeljalil
-
-- Portfolio: [www.3bdeljalil.com](https://www.3bdeljalil.com/)
-
-## 🙏 Acknowledgments
-
-- Design inspiration from modern SaaS applications
-- Tailwind CSS for the utility-first styling approach
-- React and Vite for the excellent developer experience
-- The open-source community for amazing tools and libraries
+Deploy `dist/` folder to Vercel, Netlify, or any static host.
 
 ---
 
-**Note**: This is a portfolio/demo project showcasing modern React development practices and SaaS application design. The AI analysis is currently mocked but the frontend is production-ready and can be easily connected to real AI services.
+Built with ❤️ by [Abdeljalil](https://www.3bdeljalil.com/)
