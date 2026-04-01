@@ -1,405 +1,646 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, BarChart, Cpu, ChevronRight, Play, Star, Plus, Minus, FileUp, GitCompare, Sparkles, ArrowLeft, ArrowRight } from 'lucide-react';
+import { 
+  Upload, GitCompare, Sparkles, Star, Plus, Minus, ArrowRight,
+  Search, BarChart, Cpu, Check, ChevronLeft, ChevronRight, Play, X
+} from 'lucide-react';
 
 const Home: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [direction, setDirection] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const testimonials = [
     {
-      quote: "Finally, an analyzer that actually understands tech roles. TalentScore's feedback helped me fix my bullets and land 3 recruiters calls in a week.",
+      quote: "TalentScore helped me identify exactly where my resume was falling through the cracks. Landed three interviews within a week.",
       author: "Alex Rivera",
-      role: "Full-Stack Engineer @ Stripe",
-      img: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100&h=100"
+      role: "Full-Stack Engineer",
+      company: "Stripe"
     },
     {
-      quote: "The semantic mapping identified exactly where I was underselling my systems design experience. A must-have for senior technical roles.",
+      quote: "The semantic analysis pinpointed gaps I never would have noticed. Essential for anyone targeting senior technical roles.",
       author: "Sarah Chen",
-      role: "Senior Developer @ Google",
-      img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100&h=100"
+      role: "Senior Developer",
+      company: "Google"
     },
     {
-      quote: "Clean, fast, and remarkably accurate. It actually feels like a professional technical tool, not just another generic AI wrapper.",
+      quote: "Finally, a tool that understands tech hiring. The AI suggestions transformed my bullet points from vague to compelling.",
       author: "James Wilson",
-      role: "Frontend Lead @ Airbnb",
-      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100&h=100"
+      role: "Frontend Lead",
+      company: "Airbnb"
     },
     {
-      quote: "The bullet point refinement is sharp. It helped me translate complex technical wins into high-value professional signals.",
+      quote: "My resume went from being ignored to getting callbacks. The structured feedback is worth every second.",
       author: "Linda Wu",
-      role: "Engineering Manager @ Vercel",
-      img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100&h=100"
+      role: "Engineering Manager",
+      company: "Vercel"
     }
   ];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setDirection(1);
-      setCurrentSlide((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-    
-    return () => clearInterval(timer);
-  }, [testimonials.length]);
-
   const faqs = [
     {
-      q: "Does TalentScore work with any ATS?",
-      a: "Yes, our engine is built to mimic the parsing rules of over 50+ major Applicant Tracking Systems including Workday, Taleo, and Greenhouse."
+      q: "How does TalentScore analyze my resume?",
+      a: "We use a multi-layered analysis engine that evaluates semantic relevance, impact metrics, and structural quality. Our algorithm mimics how modern ATS systems and technical recruiters actually review candidates."
     },
     {
-       q: "Is my resume data kept private?",
-       a: "100%. All processing happens locally in your browser session and we never store your resume or personal information on our servers."
+      q: "Is my resume data private?",
+      a: "Absolutely. All processing happens in your browser. We never store your resume or personal information on our servers. Your data stays on your device."
     },
     {
-       q: "How does the AI assistant work?",
-       a: "We integrate directly with Google Gemini Flash to rewrite your bullet points in real-time, mapping your raw experience strictly to the job description keywords."
+      q: "What file formats are supported?",
+      a: "We support PDF, DOCX, and plain text files. For best results, we recommend uploading a text-based PDF or DOCX exported directly from your word processor."
+    },
+    {
+      q: "How accurate is the AI assistant?",
+      a: "Our AI integration provides contextual suggestions based on your specific resume and target job description. It's designed to enhance your existing experience, not replace your voice."
     }
   ];
 
   const steps = [
     {
-      title: "Upload CV",
-      desc: "Securely inject your PDF or DOCX file into our local parsing environment.",
-      icon: <FileUp className="w-8 h-8 text-white" />,
-      color: "bg-white/5 border border-white/10"
+      number: "01",
+      title: "Upload",
+      description: "Import your resume in PDF, DOCX, or paste as text.",
+      icon: Upload
     },
     {
-      title: "Mapping",
-      desc: "Paste the job description to initialize the structural match delta.",
-      icon: <GitCompare className="w-8 h-8 text-white" />,
-      color: "bg-white/5 border border-white/10"
+      number: "02", 
+      title: "Map",
+      description: "Add the job description to establish the match baseline.",
+      icon: GitCompare
     },
     {
-      title: "Optimization",
-      desc: "Get instant AI-driven bullet rewrites and structural fixes.",
-      icon: <Sparkles className="w-8 h-8 text-white" />,
-      color: "bg-white/5 border border-white/10"
+      number: "03",
+      title: "Optimize",
+      description: "Receive AI-powered suggestions to strengthen your application.",
+      icon: Sparkles
     }
   ];
 
-  const paginate = (newDirection: number) => {
-    setDirection(newDirection);
-    setCurrentSlide((prev) => (prev + newDirection + testimonials.length) % testimonials.length);
+  const features = [
+    {
+      icon: Search,
+      title: "Semantic Analysis",
+      description: "Deep contextual matching between your experience and job requirements using vector similarity."
+    },
+    {
+      icon: BarChart,
+      title: "Impact Scoring",
+      description: "Quantitative assessment of measurable outcomes, decision density, and technical depth."
+    },
+    {
+      icon: Cpu,
+      title: "AI Enhancement",
+      description: "Intelligent rewriting suggestions that preserve your voice while amplifying professional signals."
+    }
+  ];
+
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % testimonials.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [isAutoPlaying, testimonials.length]);
+
+  const nextSlide = () => {
+    setIsAutoPlaying(false);
+    setCurrentSlide((prev) => (prev + 1) % testimonials.length);
   };
 
-  const variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 100 : -100,
-      opacity: 0
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 100 : -100,
-      opacity: 0
-    })
+  const prevSlide = () => {
+    setIsAutoPlaying(false);
+    setCurrentSlide((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
   return (
-      <div className="min-h-screen bg-wallet-bg text-wallet-text overflow-x-hidden selection:bg-wallet-purple/30">
-        
-        {/* 1. TOP NAV */}
-        <nav className="w-full max-w-[1280px] mx-auto px-6 py-8 flex items-center justify-between">
-          <div className="flex items-center gap-6">
+    <div className="min-h-screen bg-neutral-950">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 glass">
+        <div className="container-premium">
+          <div className="flex items-center justify-between h-16 md:h-20">
             <a href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-2xl bg-wallet-card flex items-center justify-center border border-white/10 shadow-lg group-hover:border-wallet-purple/50 transition-all">
-                <span className="text-white font-bold text-sm tracking-tight">TS</span>
+              <div className="w-9 h-9 rounded-lg bg-primary-600 flex items-center justify-center">
+                <span className="text-white font-semibold text-sm">TS</span>
               </div>
-              <span className="text-xl font-bold tracking-tight text-white group-hover:text-wallet-purple transition-colors">TalentScore</span>
+              <span className="text-lg font-semibold text-neutral-100">TalentScore</span>
             </a>
-            <div className="hidden md:flex items-center gap-6">
-              <div className="w-px h-4 bg-white/10"></div>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <a href="/analyze" className="bg-wallet-purple hover:bg-wallet-purple/90 text-wallet-bg px-6 py-3 rounded-2xl text-sm font-bold flex items-center gap-2 group transition-all hover:scale-[1.02] active:scale-100 shadow-xl">
-              Scan Resume
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <a 
+              href="/analyze" 
+              className="btn-primary text-sm"
+            >
+              Analyze Resume
+              <ArrowRight className="w-4 h-4" />
             </a>
           </div>
-        </nav>
+        </div>
+      </nav>
 
-      {/* 2. HERO */}
-      <section className="w-full relative overflow-hidden">
-        {/* Background Glow */}
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-white/5 blur-[160px] rounded-full -mr-80 -mt-80 animate-pulse pointer-events-none"></div>
+      {/* Hero Section - Unique Developer-Made Design */}
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+        {/* Background grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
         
-        <main className="max-w-[1280px] mx-auto px-6 pt-16 pb-32 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
-        
-        <div className="flex flex-col items-start relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-10"
-          >
-            <h1 className="text-5xl lg:text-7xl font-extrabold text-white leading-[0.95] tracking-tight mb-8">
-              Expose the <br/>
-              <span className="text-wallet-purple">Hidden Gap.</span>
-            </h1>
-            <p className="text-lg lg:text-xl text-wallet-muted max-w-md font-medium leading-relaxed">
-              The high-precision scanning engine that maps your CV against real-world ATS algorithms. Secure the interview by neutralizing the bots.
-            </p>
-          </motion.div>
+        {/* Floating orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-600/10 rounded-full blur-[128px] animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-primary-500/5 rounded-full blur-[96px]" />
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-wrap items-center gap-6"
-          >
-            <a href="/analyze" className="flex items-center gap-4 bg-wallet-yellow text-wallet-bg px-10 py-5 rounded-[2rem] shadow-2xl transition-all hover:bg-wallet-yellow/90 font-bold hover:scale-[1.03] active:scale-100 group">
-              <span className="text-lg">Start Analysis</span>
-              <div className="bg-wallet-bg/10 rounded-full p-2">
-                <Play className="w-5 h-5 fill-wallet-bg" />
-              </div>
-            </a>
-          </motion.div>
-        </div>
-
-        {/* Right Column - Scanning UI */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3 }}
-          className="relative bg-wallet-card/20 border border-white/5 rounded-[3.5rem] p-4 lg:p-10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] flex flex-col justify-center min-h-[500px] backdrop-blur-xl"
-        >
-          <div className="relative w-full max-w-[340px] mx-auto bg-wallet-bg/80 rounded-[2.5rem] shadow-2xl border border-white/5 p-8 overflow-hidden pt-12 backdrop-blur-xl ring-1 ring-white/5">
-            <div className="h-4 w-28 bg-white/10 rounded-full mb-8"></div>
-            <div className="space-y-5 mb-10">
-              <div className="h-2.5 w-full bg-white/5 rounded-full overflow-hidden relative">
-                <motion.div className="absolute inset-0 bg-wallet-purple h-full w-[0%]" animate={{ width: "84%" }} transition={{ duration: 2.5, delay: 1 }} />
-              </div>
-              <div className="h-2.5 w-3/4 bg-white/5 rounded-full overflow-hidden relative">
-                <motion.div className="absolute inset-0 bg-wallet-yellow h-full w-[0%]" animate={{ width: "62%" }} transition={{ duration: 2.5, delay: 1.3 }} />
-              </div>
-              <div className="h-2.5 w-full bg-white/5 rounded-full overflow-hidden relative">
-                <motion.div className="absolute inset-0 bg-emerald-400 h-full w-[0%]" animate={{ width: "92%" }} transition={{ duration: 2.5, delay: 1.6 }} />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-wallet-card/60 rounded-[1.5rem] p-5 border border-white/5 shadow-inner">
-                <span className="text-[10px] font-bold text-white/20 uppercase block mb-2 tracking-[0.2em]">ATS Score</span>
-                <span className="text-3xl font-bold text-white tabular-nums tracking-tighter">84.2</span>
-              </div>
-              <div className="bg-wallet-purple rounded-[1.5rem] p-5 shadow-inner relative overflow-hidden group font-bold">
-                <span className="text-[10px] font-bold text-wallet-bg/50 uppercase block mb-2 tracking-[0.2em]">Score Lift</span>
-                <span className="text-3xl font-bold text-wallet-bg tabular-nums tracking-tighter">+12%</span>
-              </div>
-            </div>
-            <motion.div 
-              className="absolute left-0 right-0 h-0.5 bg-wallet-yellow/80 z-10 shadow-[0_0_20px_rgba(248,213,126,0.6)] rounded-full"
-              animate={{ top: ['0%', '100%', '0%'] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </div>
-        </motion.div>
-      </main>
-      </section>
-
-      {/* 3. TRUST BANNER - LOCAL BRAND LOGOS */}
-      <section className="w-full max-w-[1280px] mx-auto px-6 py-20 mb-20 border-y border-white/5 relative overflow-hidden">
-         <div className="flex flex-wrap justify-center md:justify-between items-center gap-12 lg:gap-20 opacity-20 grayscale hover:opacity-100 transition-all duration-700 brightness-0 invert">
-           {/* Vercel */}
-           <img src="/homepage/icons/vercel.svg" alt="Vercel" className="h-6 md:h-8 w-auto" />
-           {/* Stripe */}
-           <img src="/homepage/icons/stripe.svg" alt="Stripe" className="h-6 md:h-8 w-auto" />
-           {/* Google */}
-           <img src="/homepage/icons/google.svg" alt="Google" className="h-6 md:h-8 w-auto" />
-           {/* GitHub */}
-           <img src="/homepage/icons/github.svg" alt="GitHub" className="h-6 md:h-8 w-auto" />
-           {/* Netflix */}
-           <img src="/homepage/icons/netflix.svg" alt="Netflix" className="h-6 md:h-8 w-auto" />
-         </div>
-      </section>
-
-      {/* 4. CORE MECHANICS */}
-      <section className="max-w-[1280px] mx-auto px-6 py-20">
-        <div className="bg-wallet-cream rounded-[3.5rem] p-10 lg:p-20 mb-24 shadow-2xl relative overflow-hidden border border-white/10 ring-1 ring-black/5">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-16 relative z-20">
-            <div className="max-w-2xl">
-              <h2 className="text-5xl md:text-7xl font-bold text-[#1b1c1e] leading-tight mb-6 tracking-tight">The Three Layers.</h2>
-              <p className="text-xl text-[#1b1c1e]/60 font-semibold leading-relaxed">
-                Most platforms just count keywords. We simulate the final-stage technical screen using proprietary structural logic.
-              </p>
-            </div>
-          </div>
-          <div className="bg-[#1b1c1e] rounded-[2.5rem] p-10 md:p-16 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)] relative overflow-hidden ring-1 ring-white/10">
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-               <div className="bg-[#2a2b2f] border border-white/5 p-10 rounded-[2rem] shadow-inner hover:translate-y-[-8px] transition-transform">
-                 <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center mb-10">
-                   <Search className="w-8 h-8 text-white" />
-                 </div>
-                 <h3 className="text-white font-bold text-2xl mb-4">Semantic Context</h3>
-                 <p className="text-base text-wallet-muted leading-relaxed font-medium">We map the conceptual proximity of your experience using deep vector embeddings.</p>
-               </div>
-               <div className="bg-[#2a2b2f] border border-white/5 p-10 rounded-[2rem] shadow-inner hover:translate-y-[-8px] transition-transform">
-                 <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center mb-10">
-                   <BarChart className="w-8 h-8 text-white" />
-                 </div>
-                 <h3 className="text-white font-bold text-2xl mb-4">Impact Intensity</h3>
-                 <p className="text-base text-wallet-muted leading-relaxed font-medium">Proprietary scoring model evaluating decision-making density and measurable metrics.</p>
-               </div>
-               <div className="bg-[#2a2b2f] border border-white/5 p-10 rounded-[2rem] shadow-inner relative overflow-hidden group hover:translate-y-[-8px] transition-transform">
-                 <div className="absolute inset-0 bg-wallet-purple/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                 <div className="w-16 h-16 bg-white/5 border border-white/10 text-white rounded-2xl flex items-center justify-center mb-10 relative z-10">
-                   <Cpu className="w-8 h-8" />
-                 </div>
-                 <h3 className="text-white font-bold text-2xl mb-4 relative z-10">Neural Tuning</h3>
-                 <p className="text-base text-wallet-muted leading-relaxed font-medium relative z-10">Instant conversion of weak bullet points into high-density professional signals.</p>
-               </div>
-             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. PROCESS SECTION */}
-      <section className="max-w-[1280px] mx-auto px-6 py-24 mb-24">
-        <div className="text-center mb-24">
-          <h2 className="text-5xl md:text-6xl font-bold text-white tracking-tight mb-6 leading-tight">Optimized Workflow.</h2>
-          <p className="text-xl text-white/40 font-bold max-w-2xl mx-auto">Three phases to land your next technical interview.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-          {steps.map((step, i) => (
-            <div key={i} className="flex flex-col items-center text-center group">
-              <div className={`w-28 h-28 ${step.color} rounded-[2.5rem] flex items-center justify-center mb-10 shadow-xl group-hover:scale-110 transition-transform duration-500`}>
-                {step.icon}
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">{step.title}</h3>
-              <p className="text-white/40 font-bold leading-relaxed max-w-[280px]">{step.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 6. TESTIMONIALS CAROUSEL */}
-      <section className="max-w-[1280px] mx-auto px-6 py-12 mb-24 relative">
-        <div className="bg-wallet-purple rounded-[3.5rem] p-16 md:p-24 text-center relative overflow-hidden shadow-2xl min-h-[500px] flex flex-col justify-center">
-          <Star className="w-16 h-16 text-[#1b1c1e]/10 absolute top-12 left-12 rotate-12" />
-          <Star className="w-16 h-16 text-[#1b1c1e]/10 absolute bottom-12 right-12 -rotate-12" />
-          
-          <div className="relative h-full flex flex-col items-center">
-            <AnimatePresence initial={false} custom={direction}>
+        <div className="container-premium relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Left - Text Content */}
+            <div>
               <motion.div
-                key={currentSlide}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.2 }
-                }}
-                className="absolute inset-0 flex flex-col items-center justify-center"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
-                <p className="text-[#1b1c1e] text-2xl md:text-4xl font-bold leading-tight mb-16 max-w-4xl mx-auto tracking-tight">
-                  "{testimonials[currentSlide].quote}"
+                <div className="inline-flex items-center gap-2 mb-6">
+                  <span className="w-2 h-2 rounded-full bg-success-500 animate-pulse" />
+                  <span className="text-neutral-500 text-sm font-mono">v2.0 now available</span>
+                </div>
+
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold text-neutral-50 mb-6 leading-[1.1]">
+                  Your resume.{' '}
+                  <span className="relative inline-block">
+                    <span className="text-gradient">Decoded.</span>
+                    <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 200 8" fill="none">
+                      <path d="M0 4C50 4 50 1 100 1C150 1 150 7 200 7" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" className="animate-[dash_3s_ease-in-out_infinite]" strokeDasharray="200" strokeDashoffset="200"/>
+                    </svg>
+                  </span>
+                </h1>
+
+                <p className="text-lg md:text-xl text-neutral-400 mb-8 max-w-lg leading-relaxed">
+                  Stop wondering why you're not getting callbacks. We analyze how ATS systems actually read your resume and tell you exactly what's missing.
                 </p>
-                <div className="flex items-center justify-center gap-6">
-                   <div className="w-16 h-16 bg-white/40 rounded-[1.5rem] overflow-hidden border-2 border-[#1b1c1e]/10 shadow-2xl">
-                     <img src={testimonials[currentSlide].img} alt={testimonials[currentSlide].author} className="w-full h-full object-cover" />
-                   </div>
-                   <div className="text-left font-bold text-[#1b1c1e]">
-                     <p className="text-lg leading-none">{testimonials[currentSlide].author}</p>
-                     <p className="text-sm opacity-60 font-semibold italic">{testimonials[currentSlide].role}</p>
-                   </div>
+
+                <div className="flex flex-wrap items-center gap-4">
+                  <a href="/analyze" className="group relative inline-flex items-center gap-3 bg-primary-600 hover:bg-primary-500 text-white px-8 py-4 rounded-xl font-medium transition-all hover:scale-[1.02] active:scale-[0.98]">
+                    <span>Analyze Your Resume</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                  <a href="#how-it-works" className="inline-flex items-center gap-2 text-neutral-400 hover:text-neutral-200 px-6 py-4 rounded-xl font-medium transition-colors">
+                    <span className="w-8 h-8 rounded-lg bg-neutral-800 flex items-center justify-center">
+                      <Play className="w-4 h-4 fill-current" />
+                    </span>
+                    See how it works
+                  </a>
+                </div>
+
+                {/* Stats row */}
+                <div className="flex items-center gap-8 mt-12 pt-8 border-t border-neutral-800/50">
+                  <div>
+                    <p className="text-2xl font-semibold text-neutral-100">50K+</p>
+                    <p className="text-neutral-500 text-sm">Resumes analyzed</p>
+                  </div>
+                  <div className="w-px h-10 bg-neutral-800" />
+                  <div>
+                    <p className="text-2xl font-semibold text-neutral-100">87%</p>
+                    <p className="text-neutral-500 text-sm">Avg. score improvement</p>
+                  </div>
+                  <div className="w-px h-10 bg-neutral-800" />
+                  <div>
+                    <p className="text-2xl font-semibold text-neutral-100">3x</p>
+                    <p className="text-neutral-500 text-sm">More interviews</p>
+                  </div>
                 </div>
               </motion.div>
-            </AnimatePresence>
-          </div>
+            </div>
 
-          {/* Navigation Arrows */}
-          <div className="absolute inset-x-8 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none">
-            <button 
-              onClick={() => paginate(-1)}
-              className="w-14 h-14 rounded-2xl bg-white/10 hover:bg-white/20 text-[#1b1c1e] flex items-center justify-center transition-all pointer-events-auto active:scale-95 group"
+            {/* Right - Terminal Window */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="relative lg:pl-8"
             >
-              <ArrowLeft className="w-6 h-6 group-hover:-translate-x-1 transition-transform" />
-            </button>
-            <button 
-              onClick={() => paginate(1)}
-              className="w-14 h-14 rounded-2xl bg-white/10 hover:bg-white/20 text-[#1b1c1e] flex items-center justify-center transition-all pointer-events-auto active:scale-95 group"
-            >
-              <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
+              {/* Terminal Window */}
+              <div className="relative bg-neutral-900 rounded-2xl border border-neutral-800 shadow-2xl overflow-hidden">
+                {/* Terminal Header */}
+                <div className="flex items-center gap-2 px-4 py-3 bg-neutral-800/50 border-b border-neutral-800">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-error-500/80" />
+                    <div className="w-3 h-3 rounded-full bg-warning-500/80" />
+                    <div className="w-3 h-3 rounded-full bg-success-500/80" />
+                  </div>
+                  <div className="flex-1 text-center">
+                    <span className="text-neutral-500 text-xs font-mono">talentscore analyze resume.pdf</span>
+                  </div>
+                  <div className="w-16" />
+                </div>
 
-          {/* Indicators */}
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-3">
-            {testimonials.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => {
-                  setDirection(i > currentSlide ? 1 : -1);
-                  setCurrentSlide(i);
-                }}
-                className={`h-1.5 transition-all duration-300 rounded-full ${i === currentSlide ? 'w-8 bg-[#1b1c1e]' : 'w-4 bg-[#1b1c1e]/20'}`}
-              />
+                {/* Terminal Content */}
+                <div className="p-6 font-mono text-sm">
+                  <div className="space-y-1">
+                    <p className="text-neutral-500">
+                      <span className="text-success-500">➜</span> <span className="text-primary-400">~</span> talentscore analyze resume.pdf --job-desc=job.txt
+                    </p>
+                    <p className="text-neutral-600">Analyzing resume structure...</p>
+                    <motion.p 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1 }}
+                      className="text-neutral-600"
+                    >
+                      ✓ Extracted 1,247 words
+                    </motion.p>
+                    <motion.p 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.5 }}
+                      className="text-neutral-600"
+                    >
+                      ✓ Identified 12 sections
+                    </motion.p>
+                    <motion.p 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 2 }}
+                      className="text-neutral-600"
+                    >
+                      ✓ Matched 34 keywords
+                    </motion.p>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 2.5 }}
+                      className="pt-4"
+                    >
+                      <div className="bg-neutral-800/50 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-neutral-400">ATS Compatibility Score</span>
+                          <span className="text-2xl font-bold text-primary-400">72<span className="text-neutral-600">/100</span></span>
+                        </div>
+                        <div className="h-2 bg-neutral-800 rounded-full overflow-hidden">
+                          <motion.div 
+                            className="h-full bg-gradient-to-r from-primary-600 to-primary-400"
+                            initial={{ width: 0 }}
+                            animate={{ width: "72%" }}
+                            transition={{ delay: 3, duration: 1 }}
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-3 p-3 bg-warning-500/10 border border-warning-500/20 rounded-lg">
+                        <p className="text-warning-400 text-xs">
+                          ⚠ Missing: Docker, Kubernetes, CI/CD experience
+                        </p>
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating elements around terminal */}
+              <motion.div 
+                className="absolute -top-4 -right-4 bg-neutral-800 rounded-xl p-3 shadow-xl border border-neutral-700"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-success-500/10 flex items-center justify-center">
+                    <Check className="w-4 h-4 text-success-400" />
+                  </div>
+                  <div>
+                    <p className="text-neutral-100 text-xs font-medium">Skills Match</p>
+                    <p className="text-success-400 text-xs">82% aligned</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                className="absolute -bottom-4 -left-4 bg-neutral-800 rounded-xl p-3 shadow-xl border border-neutral-700"
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-error-500/10 flex items-center justify-center">
+                    <X className="w-4 h-4 text-error-400" />
+                  </div>
+                  <div>
+                    <p className="text-neutral-100 text-xs font-medium">Missing Keywords</p>
+                    <p className="text-error-400 text-xs">8 gaps found</p>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 rounded-full border-2 border-neutral-700 flex justify-center pt-2">
+            <div className="w-1 h-2 rounded-full bg-neutral-500" />
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Social Proof */}
+      <section className="py-8 border-y border-neutral-800/50 bg-neutral-900/20">
+        <div className="container-premium">
+          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-4">
+            <span className="text-neutral-600 text-sm">Trusted by engineers at</span>
+            {["Google", "Stripe", "Airbnb", "Netflix", "Spotify", "Meta"].map((company) => (
+              <span key={company} className="text-neutral-500 font-medium hover:text-neutral-300 transition-colors cursor-default">
+                {company}
+              </span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 7. FAQS */}
-      <section className="max-w-[900px] mx-auto px-6 py-12 mb-40">
-        <h2 className="text-5xl md:text-6xl font-bold text-center text-white mb-20 tracking-tight">Curiosities.</h2>
-        <div className="space-y-6">
-          {faqs.map((faq, i) => (
-            <div key={i} className="bg-[#222327] border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl group transition-all hover:border-white/10">
-              <button 
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full flex items-center justify-between p-10 text-left transition-colors hover:bg-white/5"
+      {/* How It Works */}
+      <section id="how-it-works" className="section">
+        <div className="container-premium">
+          <div className="text-center mb-16">
+            <h2 className="text-neutral-50 mb-4">Three steps to better results</h2>
+            <p className="text-neutral-400 max-w-xl mx-auto">
+              Our streamlined process identifies gaps and provides actionable improvements in minutes.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {steps.map((step, index) => (
+              <motion.div
+                key={step.number}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="card card-hover p-8 relative group"
               >
-                <span className="text-xl font-bold text-white group-hover:text-wallet-purple transition-colors">{faq.q}</span>
-                <div className={`p-3 rounded-full transition-all duration-500 shadow-xl ${openFaq === i ? 'bg-wallet-purple text-wallet-bg rotate-180' : 'bg-white/5 text-wallet-muted'}`}>
-                  {openFaq === i ? <Minus className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
+                <span className="absolute top-6 right-6 text-4xl font-bold text-neutral-800 group-hover:text-primary-900/30 transition-colors">
+                  {step.number}
+                </span>
+                <div className="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center mb-6">
+                  <step.icon className="w-6 h-6 text-primary-400" />
                 </div>
-              </button>
-              <AnimatePresence>
-                {openFaq === i && (
-                  <motion.div 
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                  >
-                    <div className="px-10 pb-10 text-white/40 leading-relaxed font-bold border-t border-white/5 pt-8 text-lg">
-                      {faq.a}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
+                <h3 className="text-xl font-semibold text-neutral-100 mb-3">{step.title}</h3>
+                <p className="text-neutral-400">{step.description}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* 8. FOOTER */}
-      <footer className="w-full max-w-[1280px] mx-auto px-6 py-16 mt-12 border-t border-white/5 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-16 text-sm font-bold">
-        <div className="flex flex-col gap-8">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-2xl bg-wallet-card flex items-center justify-center border border-white/10 shadow-xl">
-              <span className="text-white font-bold text-xs tracking-tight">TS</span>
+      {/* Features */}
+      <section className="section bg-neutral-900/30">
+        <div className="container-premium">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-neutral-50 mb-6">
+                Beyond keyword matching
+              </h2>
+              <p className="text-neutral-400 text-lg mb-8">
+                Modern ATS systems and recruiters look for contextual relevance, measurable impact, 
+                and clear professional narratives. We analyze all three.
+              </p>
+              
+              <div className="space-y-6">
+                {features.map((feature, index) => (
+                  <motion.div
+                    key={feature.title}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex gap-4"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center shrink-0">
+                      <feature.icon className="w-5 h-5 text-primary-400" />
+                    </div>
+                    <div>
+                      <h4 className="text-neutral-100 font-medium mb-1">{feature.title}</h4>
+                      <p className="text-neutral-500 text-sm">{feature.description}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-            <span className="text-2xl font-bold text-white tracking-tight leading-none">TalentScore</span>
+
+            <div className="card p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-2 h-2 rounded-full bg-success-500" />
+                <span className="text-sm text-neutral-400">Live Analysis Preview</span>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="bg-neutral-800/50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm text-neutral-400">Keyword Matches</span>
+                    <span className="text-sm font-medium text-success-500">12 found</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {["React", "TypeScript", "Node.js", "AWS", "GraphQL"].map((kw) => (
+                      <span key={kw} className="px-2.5 py-1 rounded-md bg-success-500/10 text-success-400 text-xs font-medium">
+                        {kw}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-neutral-800/50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm text-neutral-400">Missing Keywords</span>
+                    <span className="text-sm font-medium text-error-500">8 gaps</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {["Docker", "Kubernetes", "CI/CD"].map((kw) => (
+                      <span key={kw} className="px-2.5 py-1 rounded-md bg-error-500/10 text-error-400 text-xs font-medium">
+                        {kw}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-neutral-800/50 rounded-lg p-4">
+                  <span className="text-sm text-neutral-400 block mb-3">Suggestions</span>
+                  <ul className="space-y-2">
+                    {[
+                      "Add measurable metrics to your experience bullets",
+                      "Include Docker experience in your skills section"
+                    ].map((suggestion, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-neutral-300">
+                        <Check className="w-4 h-4 text-primary-400 shrink-0 mt-0.5" />
+                        {suggestion}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-wrap text-white/40 gap-10 uppercase tracking-[0.2em] text-[10px]">
-             <span>© 2026 TalentScore Resume Labs</span>
-             <a href="#" className="hover:text-white transition-colors">Infrastructure</a>
-             <a href="#" className="hover:text-white transition-colors">Terms</a>
-             <a href="#" className="hover:text-white transition-colors">API v1.4</a>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="section">
+        <div className="container-premium">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-neutral-50 mb-4">What professionals say</h2>
+            </div>
+
+            <div className="card p-8 md:p-12 relative">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4 }}
+                  className="text-center"
+                >
+                  <div className="flex justify-center mb-8">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 text-warning-500 fill-warning-500" />
+                    ))}
+                  </div>
+                  
+                  <blockquote className="text-xl md:text-2xl text-neutral-100 font-medium leading-relaxed mb-8 max-w-2xl mx-auto">
+                    "{testimonials[currentSlide].quote}"
+                  </blockquote>
+                  
+                  <div>
+                    <p className="text-neutral-100 font-medium">
+                      {testimonials[currentSlide].author}
+                    </p>
+                    <p className="text-neutral-500 text-sm">
+                      {testimonials[currentSlide].role} @ {testimonials[currentSlide].company}
+                    </p>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Navigation */}
+              <div className="absolute inset-x-8 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none">
+                <button
+                  onClick={prevSlide}
+                  className="pointer-events-auto w-10 h-10 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center transition-colors"
+                >
+                  <ChevronLeft className="w-5 h-5 text-neutral-400" />
+                </button>
+                <button
+                  onClick={nextSlide}
+                  className="pointer-events-auto w-10 h-10 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center transition-colors"
+                >
+                  <ChevronRight className="w-5 h-5 text-neutral-400" />
+                </button>
+              </div>
+
+              {/* Indicators */}
+              <div className="flex justify-center gap-2 mt-8">
+                {testimonials.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      setIsAutoPlaying(false);
+                      setCurrentSlide(i);
+                    }}
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === currentSlide ? 'w-6 bg-primary-500' : 'w-1.5 bg-neutral-700'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="section bg-neutral-900/30">
+        <div className="container-premium">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-neutral-50 mb-4">Common questions</h2>
+              <p className="text-neutral-400">
+                Everything you need to know about TalentScore
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  className="card overflow-hidden"
+                >
+                  <button
+                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                    className="w-full flex items-center justify-between p-6 text-left hover:bg-neutral-800/30 transition-colors"
+                  >
+                    <span className="text-neutral-100 font-medium pr-4">{faq.q}</span>
+                    <div className="w-8 h-8 rounded-lg bg-neutral-800 flex items-center justify-center shrink-0">
+                      {openFaq === index ? (
+                        <Minus className="w-4 h-4 text-neutral-400" />
+                      ) : (
+                        <Plus className="w-4 h-4 text-neutral-400" />
+                      )}
+                    </div>
+                  </button>
+                  <AnimatePresence>
+                    {openFaq === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="px-6 pb-6 text-neutral-400 leading-relaxed">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 md:py-32">
+        <div className="container-premium">
+          <div className="card p-12 md:p-16 text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-600/10 via-transparent to-primary-600/10" />
+            <div className="relative">
+              <h2 className="text-neutral-50 mb-4">Ready to get noticed?</h2>
+              <p className="text-neutral-400 max-w-xl mx-auto mb-8">
+                Join thousands of professionals who've transformed their resumes 
+                and landed their target roles.
+              </p>
+              <a href="/analyze" className="btn-primary text-base px-8 py-4 inline-flex">
+                Analyze My Resume
+                <ArrowRight className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 border-t border-neutral-800/50">
+        <div className="container-premium">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-neutral-800 flex items-center justify-center">
+                <span className="text-neutral-100 font-semibold text-xs">TS</span>
+              </div>
+              <span className="text-neutral-100 font-medium">TalentScore</span>
+            </div>
+            <p className="text-neutral-500 text-sm">
+              © 2026 TalentScore. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>
-
     </div>
   );
 };
