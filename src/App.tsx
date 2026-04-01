@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import Router from './components/Router';
+import { AuthProvider } from './firebase/AuthContext';
+import { ToastProvider } from './components/Toast';
 
 function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -31,7 +33,13 @@ function App() {
     };
   }, []);
 
-  return <Router currentPath={currentPath} />;
+  return (
+    <AuthProvider>
+      <ToastProvider>
+        <Router currentPath={currentPath} />
+      </ToastProvider>
+    </AuthProvider>
+  );
 }
 
 export default App;

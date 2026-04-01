@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Upload, GitCompare, Sparkles, Star, Plus, Minus, ArrowRight,
-  Search, BarChart, Cpu, Check, ChevronLeft, ChevronRight, Play, X
+  Search, BarChart, Cpu, Check, ChevronLeft, ChevronRight, Play, X,
+  FileText, Briefcase
 } from 'lucide-react';
 
 const Home: React.FC = () => {
@@ -92,6 +93,16 @@ const Home: React.FC = () => {
       icon: Cpu,
       title: "AI Enhancement",
       description: "Intelligent rewriting suggestions that preserve your voice while amplifying professional signals."
+    },
+    {
+      icon: FileText,
+      title: "Cover Letter Generator",
+      description: "Transform resume + job description into tailored cover letters that get interviews."
+    },
+    {
+      icon: Briefcase,
+      title: "Application Tracker",
+      description: "Kanban-style tracker to organize your job search and never lose an opportunity."
     }
   ];
 
@@ -115,29 +126,8 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-neutral-950">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass">
-        <div className="container-premium">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <a href="/" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-lg bg-primary-600 flex items-center justify-center">
-                <span className="text-white font-semibold text-sm">TS</span>
-              </div>
-              <span className="text-lg font-semibold text-neutral-100">TalentScore</span>
-            </a>
-            <a 
-              href="/analyze" 
-              className="btn-primary text-sm"
-            >
-              Analyze Resume
-              <ArrowRight className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section - Unique Developer-Made Design */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-16 md:pt-20">
         {/* Background grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
         
@@ -388,89 +378,30 @@ const Home: React.FC = () => {
       {/* Features */}
       <section className="section bg-neutral-900/30">
         <div className="container-premium">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-neutral-50 mb-6">
-                Beyond keyword matching
-              </h2>
-              <p className="text-neutral-400 text-lg mb-8">
-                Modern ATS systems and recruiters look for contextual relevance, measurable impact, 
-                and clear professional narratives. We analyze all three.
-              </p>
-              
-              <div className="space-y-6">
-                {features.map((feature, index) => (
-                  <motion.div
-                    key={feature.title}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    className="flex gap-4"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center shrink-0">
-                      <feature.icon className="w-5 h-5 text-primary-400" />
-                    </div>
-                    <div>
-                      <h4 className="text-neutral-100 font-medium mb-1">{feature.title}</h4>
-                      <p className="text-neutral-500 text-sm">{feature.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-neutral-50 mb-4">Complete job search toolkit</h2>
+            <p className="text-neutral-400 max-w-xl mx-auto">
+              Everything you need to land your next role — from resume optimization to application tracking.
+            </p>
+          </div>
 
-            <div className="card p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-2 h-2 rounded-full bg-success-500" />
-                <span className="text-sm text-neutral-400">Live Analysis Preview</span>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="bg-neutral-800/50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm text-neutral-400">Keyword Matches</span>
-                    <span className="text-sm font-medium text-success-500">12 found</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["React", "TypeScript", "Node.js", "AWS", "GraphQL"].map((kw) => (
-                      <span key={kw} className="px-2.5 py-1 rounded-md bg-success-500/10 text-success-400 text-xs font-medium">
-                        {kw}
-                      </span>
-                    ))}
-                  </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="card card-hover p-6"
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center mb-4">
+                  <feature.icon className="w-6 h-6 text-primary-400" />
                 </div>
-
-                <div className="bg-neutral-800/50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm text-neutral-400">Missing Keywords</span>
-                    <span className="text-sm font-medium text-error-500">8 gaps</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["Docker", "Kubernetes", "CI/CD"].map((kw) => (
-                      <span key={kw} className="px-2.5 py-1 rounded-md bg-error-500/10 text-error-400 text-xs font-medium">
-                        {kw}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bg-neutral-800/50 rounded-lg p-4">
-                  <span className="text-sm text-neutral-400 block mb-3">Suggestions</span>
-                  <ul className="space-y-2">
-                    {[
-                      "Add measurable metrics to your experience bullets",
-                      "Include Docker experience in your skills section"
-                    ].map((suggestion, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-neutral-300">
-                        <Check className="w-4 h-4 text-primary-400 shrink-0 mt-0.5" />
-                        {suggestion}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
+                <h4 className="text-neutral-100 font-medium mb-2">{feature.title}</h4>
+                <p className="text-neutral-500 text-sm">{feature.description}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

@@ -52,7 +52,7 @@ export const generateWithGemini = async (prompt: string): Promise<string> => {
   return text.trim();
 };
 
-export type GeminiTask = 'tailor' | 'rewrite_bullets' | 'summary';
+export type GeminiTask = 'tailor' | 'rewrite_bullets' | 'summary' | 'cover_letter';
 
 export const buildGeminiPrompt = (args: {
   resumeText: string;
@@ -91,7 +91,22 @@ export const buildGeminiPrompt = (args: {
     );
   }
 
-  // Default: tailored improvements
+  if (args.task === 'cover_letter') {
+    return (
+      header +
+      resume +
+      jd +
+      'Task: Write a compelling cover letter tailored to this job.\n\n' +
+      'Structure:\n' +
+      '1. Hook: Why this specific company/role excites you (be specific)\n' +
+      '2. Value proposition: 2-3 key achievements from resume that match requirements\n' +
+      '3. Fit: Why your skills align with their needs\n' +
+      '4. Close: Confident call to action\n\n' +
+      'Tone: Professional but personable, not generic\n' +
+      'Length: 250-350 words\n' +
+      'Output: Full cover letter as plain text, no markdown, no signature block.'
+    );
+  }
   return (
     header +
     resume +

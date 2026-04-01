@@ -1,12 +1,15 @@
-import React, { useState, useRef, memo } from 'react';
+import { useAuth } from '../firebase/AuthContext';
+import { addApplication } from '../firebase/trackerService';
+import React, { useState, useRef, memo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Upload, FileText, Loader2, X, Check, ArrowLeft, 
+  Upload, FileText, Loader2, X, Check, 
   Sparkles, AlertCircle, Terminal, ChevronDown,
-  FileUp, Briefcase, Zap
+  FileUp, Briefcase, Zap, Copy
 } from 'lucide-react';
 import { analyzeResumeText, extractResumeTextFromFile, type AnalysisResult } from '../utils/mockApi';
 import { generateWithGemini, buildGeminiPrompt, type GeminiTask } from '../utils/gemini';
+import { useToast } from '../components/Toast';
 
 // API URL: production uses same domain (Vercel serverless), dev uses Vite proxy
 const API_BASE = import.meta.env.PROD ? '' : '';
@@ -41,6 +44,8 @@ const KeywordTag = memo(({ keyword, type }: { keyword: string; type: 'found' | '
 ));
 
 const Analyze: React.FC = () => {
+  const { showToast } = useToast();
+  
   // Input State
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [resumeText, setResumeText] = useState('');
@@ -60,6 +65,23 @@ const Analyze: React.FC = () => {
   const [geminiOutput, setGeminiOutput] = useState<string>('');
   const [geminiError, setGeminiError] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
+
+  // Cover Letter State
+  const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false);
+  const [coverLetter, setCoverLetter] = useState('');
+  const [showCoverLetterModal, setShowCoverLetterModal] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // Tracker Modal State
+  const [showTrackerModal, setShowTrackerModal] = useState(false);
+  const [trackerForm, setTrackerForm] = useState({
+    company: '',
+    role: '',
+    location: '',
+    salary: '',
+    url: '',
+    notes: ''
+  });
 
   // Handlers
   const handleDrag = (e: React.DragEvent) => {
@@ -162,30 +184,83 @@ const Analyze: React.FC = () => {
     }
   };
 
+  const handleGenerateCoverLetter = async () => {
+    if (!contextText || !jobDescription) return;
+    setIsGeneratingCoverLetter(true);
+    try {
+      const prompt = buildGeminiPrompt({
+        resumeText: contextText,
+        jobDescription,
+        task: 'cover_letter',
+      });
+      const letter = await generateWithGemini(prompt);
+      setCoverLetter(letter);
+      setShowCoverLetterModal(true);
+    } catch (e) {
+      // Silently fail - error not critical
+      console.error('Cover letter generation failed:', e);
+    } finally {
+      setIsGeneratingCoverLetter(false);
+    }
+  };
+
+  const { user, isAuthenticated } = useAuth();
+
+  // Restore pending tracker form data after returning from login
+  useEffect(() => {
+    const pendingForm = localStorage.getItem('pending_tracker_form');
+    if (pendingForm && isAuthenticated) {
+      try {
+        const formData = JSON.parse(pendingForm);
+        setTrackerForm(formData);
+        setShowTrackerModal(true);
+        localStorage.removeItem('pending_tracker_form');
+      } catch {
+        // Ignore invalid JSON
+      }
+    }
+  }, [isAuthenticated]);
+
+  const handleSaveToTracker = async () => {
+    if (!isAuthenticated || !user) {
+      // Store form data before redirecting
+      localStorage.setItem('pending_tracker_form', JSON.stringify(trackerForm));
+      localStorage.setItem('pending_tracker_redirect', 'true');
+      showToast('Please sign in to save applications to your tracker', 'info');
+      window.location.href = '/login';
+      return;
+    }
+    
+    try {
+      await addApplication(user.uid, {
+        company: trackerForm.company,
+        role: trackerForm.role,
+        location: trackerForm.location,
+        salary: trackerForm.salary,
+        url: trackerForm.url,
+        notes: trackerForm.notes,
+        status: 'applied',
+        appliedDate: new Date().toISOString().split('T')[0]
+      });
+      
+      setShowTrackerModal(false);
+      setTrackerForm({ company: '', role: '', location: '', salary: '', url: '', notes: '' });
+      // Clear any pending data
+      localStorage.removeItem('pending_tracker_form');
+      localStorage.removeItem('pending_tracker_redirect');
+      showToast('Application saved to tracker!', 'success');
+    } catch (err) {
+      console.error('Failed to save application:', err);
+      showToast('Failed to save application. Please try again.', 'error');
+    }
+  };
+
   const breakdown = result?.breakdown ?? { skills: 0, experience: 0, impact: 0, quality: 0 };
 
   return (
-    <div className="min-h-screen bg-neutral-950">
-      {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-neutral-800/50">
-        <div className="container-premium">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <a href="/" className="flex items-center gap-3 text-neutral-400 hover:text-neutral-100 transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-              <span className="font-medium">Back</span>
-            </a>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center">
-                <span className="text-white font-semibold text-xs">TS</span>
-              </div>
-              <span className="text-neutral-100 font-medium">TalentScore</span>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <div className="min-h-screen bg-neutral-950 pt-8">
       {/* Main Content */}
-      <main className="pt-24 md:pt-32 pb-20">
+      <main className="pb-20">
         <div className="container-premium">
           {/* Page Header */}
           <div className="mb-12">
@@ -530,12 +605,200 @@ const Analyze: React.FC = () => {
                       )}
                     </AnimatePresence>
                   </div>
+
+                  {/* Next Steps - Cover Letter & Tracker */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {/* Generate Cover Letter */}
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleGenerateCoverLetter()}
+                      disabled={isGeneratingCoverLetter}
+                      className="card p-6 text-left hover:border-primary-500/30 transition-colors group"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center group-hover:bg-primary-500/20 transition-colors">
+                          {isGeneratingCoverLetter ? (
+                            <Loader2 className="w-6 h-6 text-primary-400 animate-spin" />
+                          ) : (
+                            <FileText className="w-6 h-6 text-primary-400" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-neutral-100 font-medium mb-1">
+                            {isGeneratingCoverLetter ? 'Writing your letter...' : 'Generate Cover Letter'}
+                          </h4>
+                          <p className="text-neutral-500 text-sm">
+                            Transform your resume and this job into a tailored cover letter
+                          </p>
+                        </div>
+                      </div>
+                    </motion.button>
+
+                    {/* Save to Tracker */}
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => setShowTrackerModal(true)}
+                      className="card p-6 text-left hover:border-success-500/30 transition-colors group"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-success-500/10 flex items-center justify-center group-hover:bg-success-500/20 transition-colors">
+                          <Briefcase className="w-6 h-6 text-success-400" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-neutral-100 font-medium mb-1">Save to Job Tracker</h4>
+                          <p className="text-neutral-500 text-sm">
+                            Track this application and follow up at the right time
+                          </p>
+                        </div>
+                      </div>
+                    </motion.button>
+                  </div>
                 </div>
               )}
             </div>
           </div>
         </div>
       </main>
+
+      {/* Cover Letter Modal */}
+      <AnimatePresence>
+        {showCoverLetterModal && coverLetter && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setShowCoverLetterModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+              className="bg-neutral-900 rounded-2xl border border-neutral-800 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            >
+              <div className="p-6 border-b border-neutral-800 flex items-center justify-between">
+                <div>
+                  <h3 className="text-neutral-100 font-medium">Your Cover Letter</h3>
+                  <p className="text-neutral-500 text-sm">Generated from your resume and job description</p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(coverLetter);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className="p-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 transition-colors"
+                    title="Copy"
+                  >
+                    {copied ? <Check className="w-4 h-4 text-success-400" /> : <Copy className="w-4 h-4 text-neutral-400" />}
+                  </button>
+                  <button
+                    onClick={() => setShowCoverLetterModal(false)}
+                    className="p-2 rounded-lg hover:bg-neutral-800 transition-colors"
+                  >
+                    <X className="w-4 h-4 text-neutral-400" />
+                  </button>
+                </div>
+              </div>
+              <div className="p-6">
+                <pre className="text-neutral-300 whitespace-pre-wrap font-sans leading-relaxed text-sm">
+                  {coverLetter}
+                </pre>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Save to Tracker Modal */}
+      <AnimatePresence mode="wait">
+        {showTrackerModal && (
+          <motion.div
+            key="tracker-modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setShowTrackerModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+              className="bg-neutral-900 rounded-2xl border border-neutral-800 max-w-md w-full"
+            >
+              <div className="p-6 border-b border-neutral-800">
+                <h3 className="text-neutral-100 font-medium">Save to Job Tracker</h3>
+                <p className="text-neutral-500 text-sm">Track this application</p>
+              </div>
+              <div className="p-6 space-y-4">
+                <input
+                  type="text"
+                  placeholder="Company name *"
+                  value={trackerForm.company}
+                  onChange={e => setTrackerForm({...trackerForm, company: e.target.value})}
+                  className="w-full bg-neutral-800 text-neutral-100 px-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Role / Position *"
+                  value={trackerForm.role}
+                  onChange={e => setTrackerForm({...trackerForm, role: e.target.value})}
+                  className="w-full bg-neutral-800 text-neutral-100 px-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Location (optional)"
+                  value={trackerForm.location}
+                  onChange={e => setTrackerForm({...trackerForm, location: e.target.value})}
+                  className="w-full bg-neutral-800 text-neutral-100 px-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Salary range (optional)"
+                  value={trackerForm.salary}
+                  onChange={e => setTrackerForm({...trackerForm, salary: e.target.value})}
+                  className="w-full bg-neutral-800 text-neutral-100 px-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                />
+                <input
+                  type="url"
+                  placeholder="Job posting URL (optional)"
+                  value={trackerForm.url}
+                  onChange={e => setTrackerForm({...trackerForm, url: e.target.value})}
+                  className="w-full bg-neutral-800 text-neutral-100 px-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                />
+                <textarea
+                  placeholder="Notes (optional) - Interview dates, recruiter name, etc."
+                  value={trackerForm.notes}
+                  onChange={e => setTrackerForm({...trackerForm, notes: e.target.value})}
+                  className="w-full h-24 bg-neutral-800 text-neutral-100 text-sm p-4 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none resize-none"
+                />
+                <div className="flex gap-3 pt-2">
+                  <button
+                    onClick={handleSaveToTracker}
+                    disabled={!trackerForm.company?.trim() || !trackerForm.role?.trim()}
+                    className="flex-1 btn-primary py-3"
+                  >
+                    <Briefcase className="w-4 h-4" />
+                    Save Application
+                  </button>
+                  <button
+                    onClick={() => setShowTrackerModal(false)}
+                    className="px-4 py-3 rounded-xl text-neutral-400 hover:text-neutral-200 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

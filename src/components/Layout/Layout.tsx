@@ -1,5 +1,6 @@
 import React, { type ReactNode } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, FileText, Briefcase, User, LogOut, LogIn } from 'lucide-react';
+import { useAuth } from '../../firebase/AuthContext';
 
 interface LayoutProps {
   children: ReactNode;
@@ -7,6 +8,8 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, currentPath = '/' }) => {
+  const { user, isAuthenticated, logout } = useAuth();
+
   return (
     <div className="min-h-screen bg-neutral-950 flex flex-col">
       {/* Top Header */}
@@ -26,18 +29,54 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPath = '/' }) => {
                   href="/analyze" 
                   className={`text-sm font-medium transition-colors ${currentPath === '/analyze' ? 'text-primary-400' : 'text-neutral-400 hover:text-neutral-100'}`}
                 >
-                  Resume Analyzer
+                  Analyze
+                </a>
+                <a 
+                  href="/cover-letter" 
+                  className={`text-sm font-medium transition-colors ${currentPath === '/cover-letter' ? 'text-primary-400' : 'text-neutral-400 hover:text-neutral-100'}`}
+                >
+                  <span className="flex items-center gap-1.5">
+                    <FileText className="w-4 h-4" />
+                    Cover Letter
+                  </span>
+                </a>
+                <a 
+                  href="/tracker" 
+                  className={`text-sm font-medium transition-colors ${currentPath === '/tracker' ? 'text-primary-400' : 'text-neutral-400 hover:text-neutral-100'}`}
+                >
+                  <span className="flex items-center gap-1.5">
+                    <Briefcase className="w-4 h-4" />
+                    Tracker
+                  </span>
                 </a>
               </nav>
             </div>
 
             <div className="flex items-center gap-4">
-              {currentPath !== '/analyze' && (
-                <a href="/analyze" className="btn-primary text-sm py-2 px-4">
-                  Analyze Resume
-                  <ArrowRight className="w-4 h-4" />
+              {isAuthenticated ? (
+                <div className="flex items-center gap-3">
+                  <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-neutral-800/50">
+                    <User className="w-4 h-4 text-neutral-400" />
+                    <span className="text-sm text-neutral-300">{user?.displayName || user?.email}</span>
+                  </div>
+                  <button 
+                    onClick={() => logout()} 
+                    className="p-2 rounded-lg hover:bg-neutral-800 transition-colors text-neutral-400 hover:text-neutral-200"
+                    title="Sign out"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <a href="/login" className="btn-secondary text-sm py-2 px-4">
+                  <LogIn className="w-4 h-4" />
+                  Sign In
                 </a>
               )}
+              <a href="/analyze" className="btn-primary text-sm py-2 px-4">
+                Analyze Resume
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           </div>
         </div>
