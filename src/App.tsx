@@ -7,6 +7,10 @@ function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPath]);
+
+  useEffect(() => {
     const handlePopState = () => {
       setCurrentPath(window.location.pathname);
     };
