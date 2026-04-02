@@ -181,27 +181,112 @@ const Home: React.FC = () => {
                   </a>
                 </div>
 
+                {/* Mobile Resume Preview */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="lg:hidden mt-12"
+                >
+                  <div className="bg-white rounded-2xl shadow-strong overflow-hidden border border-neutral-200 mx-auto max-w-sm">
+                    {/* Resume Header */}
+                    <div className="bg-gradient-to-r from-primary-500 to-primary-600 px-5 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
+                          <span className="text-white font-bold text-sm">JD</span>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-white font-semibold text-sm truncate">John Doe</p>
+                          <p className="text-primary-100 text-xs">Senior Product Manager</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Resume Content - Compact */}
+                    <div className="p-4 space-y-3">
+                      {/* Experience */}
+                      <div className="flex items-center gap-2">
+                        <div className="w-1 h-3 bg-primary-500 rounded-full" />
+                        <span className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Experience</span>
+                      </div>
+                      <div className="space-y-2 pl-2">
+                        <div className="bg-neutral-50 rounded-lg p-2.5 border-l-2 border-primary-400">
+                          <p className="text-sm font-medium text-neutral-800 truncate">Product Manager @ TechCorp</p>
+                          <p className="text-xs text-neutral-500">2020 - Present</p>
+                        </div>
+                        <div className="bg-neutral-50 rounded-lg p-2.5 border-l-2 border-neutral-300">
+                          <p className="text-sm font-medium text-neutral-700 truncate">Senior Analyst @ StartupXYZ</p>
+                          <p className="text-xs text-neutral-500">2018 - 2020</p>
+                        </div>
+                      </div>
+
+                      {/* Score Bar */}
+                      <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-xl p-3 border border-primary-200"
+                      >
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-xs font-semibold text-primary-700">ATS Score</span>
+                          <span className="text-base font-bold text-primary-600">87/100</span>
+                        </div>
+                        <div className="h-1.5 bg-white rounded-full overflow-hidden">
+                          <motion.div 
+                            className="h-full bg-gradient-to-r from-primary-500 to-primary-600 rounded-full"
+                            initial={{ width: 0 }}
+                            animate={{ width: "87%" }}
+                            transition={{ delay: 0.6, duration: 1 }}
+                          />
+                        </div>
+                      </motion.div>
+                    </div>
+                  </div>
+
+                  {/* Mobile floating badges */}
+                  <div className="flex justify-center gap-3 mt-4">
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.7 }}
+                      className="bg-white rounded-lg shadow-medium border border-neutral-200 px-3 py-2 flex items-center gap-2"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-success-600" />
+                      <span className="text-xs font-medium text-neutral-700">92% Match</span>
+                    </motion.div>
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.8 }}
+                      className="bg-white rounded-lg shadow-medium border border-neutral-200 px-3 py-2 flex items-center gap-2"
+                    >
+                      <AlertCircle className="w-4 h-4 text-warning-600" />
+                      <span className="text-xs font-medium text-neutral-700">3 Tips</span>
+                    </motion.div>
+                  </div>
+                </motion.div>
+
                 {/* Stats row */}
-                <div className="flex items-center gap-10 mt-14 pt-8 border-t border-neutral-200">
-                  <div>
-                    <p className="text-3xl font-semibold text-neutral-900 tracking-tight">50K+</p>
-                    <p className="text-neutral-500 text-sm mt-1">Resumes Analyzed</p>
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-6 sm:gap-8 md:gap-10 mt-12 md:mt-14 pt-6 md:pt-8 pb-6 md:pb-8 border-t border-neutral-200">
+                  <div className="text-center sm:text-left">
+                    <p className="text-2xl md:text-3xl font-semibold text-neutral-900 tracking-tight">50K+</p>
+                    <p className="text-neutral-500 text-xs md:text-sm mt-1">Resumes Analyzed</p>
                   </div>
-                  <div className="w-px h-10 bg-neutral-200" />
-                  <div>
-                    <p className="text-3xl font-semibold text-neutral-900 tracking-tight">87%</p>
-                    <p className="text-neutral-500 text-sm mt-1">Improvement Rate</p>
+                  <div className="hidden sm:block w-px h-8 md:h-10 bg-neutral-200" />
+                  <div className="text-center sm:text-left">
+                    <p className="text-2xl md:text-3xl font-semibold text-neutral-900 tracking-tight">87%</p>
+                    <p className="text-neutral-500 text-xs md:text-sm mt-1">Improvement Rate</p>
                   </div>
-                  <div className="w-px h-10 bg-neutral-200" />
-                  <div>
-                    <p className="text-3xl font-semibold text-neutral-900 tracking-tight">3x</p>
-                    <p className="text-neutral-500 text-sm mt-1">More Interviews</p>
+                  <div className="hidden sm:block w-px h-8 md:h-10 bg-neutral-200" />
+                  <div className="text-center sm:text-left">
+                    <p className="text-2xl md:text-3xl font-semibold text-neutral-900 tracking-tight">3x</p>
+                    <p className="text-neutral-500 text-xs md:text-sm mt-1">More Interviews</p>
                   </div>
                 </div>
               </motion.div>
             </div>
 
-            {/* Right - Interactive Resume Preview */}
+            {/* Right - Interactive Resume Preview (Desktop only) */}
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
@@ -359,26 +444,20 @@ const Home: React.FC = () => {
             </motion.div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2" animate={{ opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2, repeat: Infinity }}>
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-xs font-medium tracking-wider text-neutral-400">SCROLL</span>
-            <div className="w-px h-8 bg-neutral-300" />
-          </div>
-        </motion.div>
       </section>
 
       {/* Social Proof */}
-      <section className="py-8 border-y border-neutral-200 bg-white">
+      <section className="py-6 md:py-8 border-y border-neutral-200 bg-white">
         <div className="container-premium">
-          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-4">
-            <span className="text-neutral-500 text-xs font-medium tracking-wider uppercase">Trusted at</span>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-x-12 md:gap-y-4">
+            <span className="text-neutral-500 text-xs font-medium tracking-wider uppercase shrink-0">Trusted at</span>
+            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 md:gap-x-12">
             {["Google", "Stripe", "Airbnb", "Netflix", "Spotify", "Meta"].map((company) => (
-              <span key={company} className="text-neutral-400 text-sm font-medium hover:text-neutral-600 transition-colors duration-300 cursor-default">
+              <span key={company} className="text-neutral-400 text-xs md:text-sm font-medium hover:text-neutral-600 transition-colors duration-300 cursor-default">
                 {company}
               </span>
             ))}
+            </div>
           </div>
         </div>
       </section>
