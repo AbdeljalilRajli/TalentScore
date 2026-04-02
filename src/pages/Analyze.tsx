@@ -11,9 +11,6 @@ import { analyzeResumeText, extractResumeTextFromFile, type AnalysisResult } fro
 import { generateWithGemini, buildGeminiPrompt, type GeminiTask } from '../utils/gemini';
 import { useToast } from '../components/Toast';
 
-// API URL: production uses same domain (Vercel serverless), dev uses Vite proxy
-const API_BASE = import.meta.env.PROD ? '' : '';
-
 // Memoized result sections for performance
 const ScoreCircle = memo(({ score }: { score: number }) => (
   <div className="relative w-48 h-48 shrink-0">
