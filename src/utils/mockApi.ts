@@ -1,3 +1,9 @@
+import mammoth from 'mammoth';
+
+// PDF.js will be loaded dynamically with local worker
+let pdfjsLib: any = null;
+const PDF_WORKER_URL = '/pdf.worker.min.mjs';
+
 // Mock API for resume analysis
 export interface AnalysisResult {
   score: number;
@@ -49,16 +55,43 @@ const NON_RESUME_INDICATORS = [
   'manual', 'instruction', 'step', 'procedure', 'guide', 'tutorial'
 ];
 
+// Extract text from PDF file
+const extractTextFromPDF = async (file: File): Promise<string> => {
+  // Dynamically import pdfjs-dist
+  if (!pdfjsLib) {
+    const pdfjs = await import('pdfjs-dist');
+    pdfjsLib = pdfjs;
+    // Use local worker file
+    pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_WORKER_URL;
+  }
+  
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  let text = '';
+  
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map((item: any) => item.str).join(' ') + '\n';
+  }
+  
+  return text;
+};
+
+// Extract text from DOCX file
+const extractTextFromDOCX = async (file: File): Promise<string> => {
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer });
+  return result.value;
+};
+
 // Extract text content from file
 const extractTextFromFile = async (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    
-    // For text files, read normally
-    // For PDF/DOC/DOCX in a frontend-only app, we can't reliably extract text without a backend.
     reader.onload = (e) => {
       const text = e.target?.result as string;
-      resolve(text.toLowerCase());
+      resolve(text);
     };
     reader.onerror = () => reject(new Error('Failed to read file'));
     reader.readAsText(file);
@@ -68,10 +101,19 @@ const extractTextFromFile = async (file: File): Promise<string> => {
 export const extractResumeTextFromFile = async (file: File): Promise<string> => {
   const lowerName = file.name.toLowerCase();
   const isTextLike = file.type === 'text/plain' || lowerName.endsWith('.txt');
-  if (!isTextLike) {
-    throw new Error('Unsupported file type');
+  const isPdf = file.type === 'application/pdf' || lowerName.endsWith('.pdf');
+  const isDocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+    lowerName.endsWith('.docx');
+  
+  if (isPdf) {
+    return extractTextFromPDF(file);
+  } else if (isDocx) {
+    return extractTextFromDOCX(file);
+  } else if (isTextLike) {
+    return extractTextFromFile(file);
+  } else {
+    throw new Error('Unsupported file type. Please use PDF, DOCX, or TXT.');
   }
-  return extractTextFromFile(file);
 };
 
 const normalizeText = (text: string) =>

@@ -66,6 +66,24 @@ const Analyze: React.FC = () => {
   const [geminiError, setGeminiError] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // Interview Prep State
+  const [interviewQuestions, setInterviewQuestions] = useState('');
+  const [showInterviewModal, setShowInterviewModal] = useState(false);
+  const [isGeneratingInterview, setIsGeneratingInterview] = useState(false);
+
+  // Salary Estimate State
+  const [salaryEstimate, setSalaryEstimate] = useState<{
+    range_low: number;
+    range_high: number;
+    currency: string;
+    period: string;
+    confidence: string;
+    factors: string[];
+    notes: string;
+  } | null>(null);
+  const [showSalaryModal, setShowSalaryModal] = useState(false);
+  const [isGeneratingSalary, setIsGeneratingSalary] = useState(false);
+
   // Cover Letter State
   const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false);
   const [coverLetter, setCoverLetter] = useState('');
@@ -134,20 +152,7 @@ const Analyze: React.FC = () => {
         const isDocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
           lowerName.endsWith('.docx');
 
-        if (isPdf || isDocx) {
-          const form = new FormData();
-          form.append('file', file);
-          const res = await fetch(`${API_BASE}/api/extract`, { method: 'POST', body: form });
-          if (!res.ok) {
-            const data = await res.json().catch(() => ({ error: 'Failed to extract text' }));
-            throw new Error(data.error || 'Failed to extract text');
-          }
-          const data = await res.json();
-          extractedText = data.text ?? '';
-          if (extractedText.trim().length < 50) {
-            throw new Error('Not enough text could be extracted from this file.');
-          }
-        } else if (isTextLike) {
+        if (isPdf || isDocx || isTextLike) {
           extractedText = await extractResumeTextFromFile(file);
         } else {
           throw new Error('Unsupported file type. Please use PDF, DOCX, or TXT.');
@@ -201,6 +206,56 @@ const Analyze: React.FC = () => {
       console.error('Cover letter generation failed:', e);
     } finally {
       setIsGeneratingCoverLetter(false);
+    }
+  };
+
+  const handleGenerateInterviewQuestions = async () => {
+    if (!contextText || !jobDescription) return;
+    setIsGeneratingInterview(true);
+    try {
+      const prompt = buildGeminiPrompt({
+        resumeText: contextText,
+        jobDescription,
+        task: 'interview_questions',
+      });
+      const questions = await generateWithGemini(prompt);
+      setInterviewQuestions(questions);
+      setShowInterviewModal(true);
+    } catch (e) {
+      console.error('Interview questions generation failed:', e);
+    } finally {
+      setIsGeneratingInterview(false);
+    }
+  };
+
+  const handleGenerateSalaryEstimate = async () => {
+    if (!jobDescription) return;
+    setIsGeneratingSalary(true);
+    try {
+      const prompt = buildGeminiPrompt({
+        resumeText: contextText || '',
+        jobDescription,
+        task: 'salary_estimate',
+      });
+      const response = await generateWithGemini(prompt);
+      
+      // Try to parse the JSON response
+      try {
+        const jsonMatch = response.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]);
+          setSalaryEstimate(parsed);
+        } else {
+          setSalaryEstimate(null);
+        }
+      } catch {
+        setSalaryEstimate(null);
+      }
+      setShowSalaryModal(true);
+    } catch (e) {
+      console.error('Salary estimate generation failed:', e);
+    } finally {
+      setIsGeneratingSalary(false);
     }
   };
 
@@ -301,7 +356,7 @@ const Analyze: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-neutral-900 font-semibold">Resume</h3>
-                      <p className="text-neutral-500 text-sm">PDF, DOCX, or text</p>
+                      <p className="text-neutral-500 text-sm">PDF, DOCX, or TXT</p>
                     </div>
                   </div>
                   <div className="flex bg-neutral-100 rounded-lg p-1">
@@ -570,6 +625,8 @@ const Analyze: React.FC = () => {
                           <option value="tailor">Tailor to job description</option>
                           <option value="rewrite_bullets">Rewrite bullet points</option>
                           <option value="summary">Generate summary</option>
+                          <option value="interview_questions">Interview prep questions</option>
+                          <option value="salary_estimate">Salary estimate</option>
                         </select>
                         <ChevronDown className="w-4 h-4 text-neutral-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                       </div>
@@ -611,6 +668,49 @@ const Analyze: React.FC = () => {
                         </motion.div>
                       )}
                     </AnimatePresence>
+
+                    {/* Quick Actions */}
+                    <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-neutral-200">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleGenerateInterviewQuestions}
+                        disabled={isGeneratingInterview}
+                        className="flex items-center gap-2 p-3 bg-tertiary-50 rounded-xl border border-tertiary-200 hover:bg-tertiary-100 transition-colors text-left"
+                      >
+                        <div className="w-10 h-10 bg-tertiary-100 rounded-lg flex items-center justify-center shrink-0">
+                          {isGeneratingInterview ? (
+                            <Loader2 className="w-5 h-5 text-tertiary-600 animate-spin" />
+                          ) : (
+                            <span className="text-lg">🎯</span>
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-medium text-neutral-900 text-sm">Interview Prep</p>
+                          <p className="text-neutral-500 text-xs">10 questions + answers</p>
+                        </div>
+                      </motion.button>
+
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleGenerateSalaryEstimate}
+                        disabled={isGeneratingSalary}
+                        className="flex items-center gap-2 p-3 bg-success-50 rounded-xl border border-success-200 hover:bg-success-100 transition-colors text-left"
+                      >
+                        <div className="w-10 h-10 bg-success-100 rounded-lg flex items-center justify-center shrink-0">
+                          {isGeneratingSalary ? (
+                            <Loader2 className="w-5 h-5 text-success-600 animate-spin" />
+                          ) : (
+                            <span className="text-lg">💰</span>
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-medium text-neutral-900 text-sm">Salary Insight</p>
+                          <p className="text-neutral-500 text-xs">Market rate estimate</p>
+                        </div>
+                      </motion.button>
+                    </div>
                   </div>
 
                   {/* Next Steps - Cover Letter & Tracker */}
@@ -806,6 +906,123 @@ const Analyze: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Interview Questions Modal */}
+      <AnimatePresence>
+        {showInterviewModal && interviewQuestions && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setShowInterviewModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+              className="bg-white border border-neutral-200 rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-y-auto shadow-strong"
+            >
+              <div className="p-6 border-b border-neutral-200 flex items-center justify-between bg-tertiary-50 rounded-t-2xl">
+                <div>
+                  <h3 className="text-neutral-900 font-semibold text-lg">🎯 Interview Preparation</h3>
+                  <p className="text-neutral-500 text-sm">10 common questions with answer frameworks</p>
+                </div>
+                <button
+                  onClick={() => setShowInterviewModal(false)}
+                  className="p-2 bg-white border border-neutral-200 rounded-lg hover:border-error-300 hover:bg-error-50 transition-colors"
+                >
+                  <X className="w-5 h-5 text-neutral-500" />
+                </button>
+              </div>
+              <div className="p-6">
+                <pre className="text-neutral-700 whitespace-pre-wrap font-sans leading-relaxed text-sm">
+                  {interviewQuestions}
+                </pre>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Salary Estimate Modal */}
+      <AnimatePresence>
+        {showSalaryModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setShowSalaryModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+              className="bg-white border border-neutral-200 rounded-2xl max-w-md w-full shadow-strong"
+            >
+              <div className="p-6 border-b border-neutral-200 flex items-center justify-between bg-success-50 rounded-t-2xl">
+                <div>
+                  <h3 className="text-neutral-900 font-semibold text-lg">💰 Salary Insight</h3>
+                  <p className="text-neutral-500 text-sm">Market rate estimate for this role</p>
+                </div>
+                <button
+                  onClick={() => setShowSalaryModal(false)}
+                  className="p-2 bg-white border border-neutral-200 rounded-lg hover:border-error-300 hover:bg-error-50 transition-colors"
+                >
+                  <X className="w-5 h-5 text-neutral-500" />
+                </button>
+              </div>
+              <div className="p-6 space-y-6">
+                {salaryEstimate ? (
+                  <>
+                    <div className="text-center">
+                      <p className="text-neutral-500 text-sm mb-2">Estimated Range</p>
+                      <p className="text-3xl font-semibold text-neutral-900">
+                        {salaryEstimate.currency} {salaryEstimate.range_low.toLocaleString()} - {salaryEstimate.range_high.toLocaleString()}
+                      </p>
+                      <p className="text-neutral-400 text-xs mt-1 capitalize">per {salaryEstimate.period}</p>
+                      <span className={`inline-block mt-3 px-3 py-1 rounded-full text-xs font-medium ${
+                        salaryEstimate.confidence === 'high' ? 'bg-success-100 text-success-700' :
+                        salaryEstimate.confidence === 'medium' ? 'bg-warning-100 text-warning-700' :
+                        'bg-neutral-100 text-neutral-600'
+                      }`}>
+                        {salaryEstimate.confidence} confidence
+                      </span>
+                    </div>
+                    
+                    {salaryEstimate.factors?.length > 0 && (
+                      <div>
+                        <p className="text-neutral-500 text-sm mb-3">Factors affecting salary:</p>
+                        <ul className="space-y-2">
+                          {salaryEstimate.factors.map((factor, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-neutral-700">
+                              <span className="w-1.5 h-1.5 bg-success-500 rounded-full mt-2 shrink-0" />
+                              {factor}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {salaryEstimate.notes && (
+                      <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+                        <p className="text-neutral-600 text-sm">{salaryEstimate.notes}</p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-neutral-500">Unable to generate estimate. Job description may not contain enough salary information.</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 };
