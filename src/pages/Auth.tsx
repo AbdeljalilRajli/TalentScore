@@ -70,42 +70,45 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-neutral-50 relative flex items-center justify-center p-4">
+      {/* Subtle background pattern */}
+      <div className="fixed inset-0 bg-[linear-gradient(rgba(72,122,145,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(72,122,145,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-10"
       >
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-xl bg-primary-600 flex items-center justify-center mx-auto mb-4">
+        <div className="text-center mb-10">
+          <div className="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center mx-auto mb-6 shadow-soft">
             <span className="text-white font-semibold text-lg">TS</span>
           </div>
-          <h1 className="text-neutral-50 text-2xl font-medium mb-2">
+          <h1 className="text-neutral-900 text-2xl font-semibold mb-2">
             {isLogin ? 'Welcome back' : 'Create account'}
           </h1>
-          <p className="text-neutral-400">
+          <p className="text-neutral-500">
             {isLogin 
               ? 'Sign in to access your job tracker and saved data' 
               : 'Get started with AI-powered resume tools'}
           </p>
         </div>
 
-        <div className="card p-8">
+        <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-soft">
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-3 bg-error-500/10 border border-error-500/20 rounded-lg flex items-start gap-2"
+              className="mb-6 p-3 bg-error-50 border border-error-200 rounded-lg flex items-start gap-2"
             >
               <AlertCircle className="w-4 h-4 text-error-500 shrink-0 mt-0.5" />
-              <p className="text-error-400 text-sm">{error}</p>
+              <p className="text-error-700 text-sm">{error}</p>
             </motion.div>
           )}
 
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white text-neutral-900 rounded-xl font-medium hover:bg-neutral-100 transition-colors mb-6"
+            className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white border border-neutral-200 text-neutral-700 font-medium hover:bg-neutral-50 hover:border-neutral-300 transition-colors rounded-xl mb-6 text-sm"
           >
             <Chrome className="w-5 h-5" />
             Continue with Google
@@ -113,25 +116,25 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
 
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-neutral-800"></div>
+              <div className="w-full border-t border-neutral-200"></div>
             </div>
             <div className="relative flex justify-center">
-              <span className="px-3 bg-neutral-900 text-neutral-500 text-sm">or</span>
+              <span className="px-3 bg-white text-neutral-400 text-sm font-medium">or</span>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div>
-                <label className="block text-neutral-400 text-sm mb-2">Full Name</label>
+                <label className="block text-neutral-700 text-sm mb-2 font-medium">Full Name</label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="John Doe"
-                    className="w-full bg-neutral-800 text-neutral-100 pl-12 pr-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                    className="w-full bg-neutral-50 text-neutral-900 pl-12 pr-4 py-3 rounded-lg border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 text-sm"
                     required={!isLogin}
                   />
                 </div>
@@ -139,30 +142,30 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
             )}
 
             <div>
-              <label className="block text-neutral-400 text-sm mb-2">Email</label>
+              <label className="block text-neutral-700 text-sm mb-2 font-medium">Email</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full bg-neutral-800 text-neutral-100 pl-12 pr-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                  className="w-full bg-neutral-50 text-neutral-900 pl-12 pr-4 py-3 rounded-lg border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 text-sm"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-neutral-400 text-sm mb-2">Password</label>
+              <label className="block text-neutral-700 text-sm mb-2 font-medium">Password</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-neutral-800 text-neutral-100 pl-12 pr-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                  className="w-full bg-neutral-50 text-neutral-900 pl-12 pr-4 py-3 rounded-lg border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 text-sm"
                   required
                   minLength={6}
                 />
@@ -172,10 +175,10 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary py-3 mt-2"
+              className="w-full flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white py-3 font-semibold transition-all duration-300 hover:translate-y-[-2px] active:translate-y-0 mt-2 rounded-xl shadow-soft hover:shadow-medium"
             >
               {loading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white animate-spin rounded-full" />
               ) : (
                 <>
                   {isLogin ? 'Sign In' : 'Create Account'}
@@ -192,7 +195,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
                 setIsLogin(!isLogin);
                 setError('');
               }}
-              className="text-primary-400 hover:text-primary-300 transition-colors"
+              className="text-primary-500 hover:text-primary-600 font-medium transition-colors"
             >
               {isLogin ? 'Sign up' : 'Sign in'}
             </button>

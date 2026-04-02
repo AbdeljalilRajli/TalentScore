@@ -6,14 +6,14 @@
 
 @layer base {
   html {
-    @apply bg-neutral-950 text-neutral-50 antialiased;
+    @apply bg-neutral-50 text-neutral-900 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply bg-neutral-950 text-neutral-50;
+    @apply bg-neutral-50 text-neutral-900;
     font-family: 'Inter', system-ui, sans-serif;
     line-height: 1.6;
   }
@@ -48,7 +48,7 @@
   }
 
   p {
-    @apply text-neutral-400 leading-relaxed;
+    @apply text-neutral-600 leading-relaxed;
   }
 
   /* Form elements */
@@ -58,15 +58,15 @@
 
   /* Focus states */
   :focus-visible {
-    @apply outline-none ring-2 ring-primary-500/50 ring-offset-2 ring-offset-neutral-950;
+    @apply outline-none ring-2 ring-primary-500/50 ring-offset-2 ring-offset-neutral-50;
   }
 }
 
 @layer components {
-  /* Premium button styles */
+  /* Light theme button styles */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 
-           bg-primary-600 hover:bg-primary-500 text-white 
+           bg-primary-500 hover:bg-primary-600 text-white 
            font-medium rounded-lg transition-all duration-200
            shadow-soft hover:shadow-medium
            active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
@@ -74,32 +74,33 @@
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 
-           bg-neutral-800 hover:bg-neutral-700 text-neutral-100 
+           bg-white hover:bg-neutral-100 text-neutral-800 
            font-medium rounded-lg transition-all duration-200
-           border border-neutral-700 hover:border-neutral-600
+           border border-neutral-300 hover:border-neutral-400
+           shadow-soft
            active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2 
-           text-neutral-400 hover:text-neutral-100 hover:bg-neutral-900
+           text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100
            font-medium rounded-lg transition-all duration-200
            active:scale-[0.98];
   }
 
   /* Card styles */
   .card {
-    @apply bg-neutral-900 rounded-xl border border-neutral-800 
+    @apply bg-white rounded-xl border border-neutral-200 
            shadow-soft transition-all duration-300;
   }
 
   .card-hover {
-    @apply hover:border-neutral-700 hover:shadow-medium;
+    @apply hover:border-neutral-300 hover:shadow-medium;
   }
 
-  /* Glass effect - subtle only */
+  /* Glass effect - subtle for light theme */
   .glass {
-    @apply bg-neutral-900/80 backdrop-blur-xl border border-neutral-800/50;
+    @apply bg-white/80 backdrop-blur-xl border border-neutral-200/50;
   }
 
   /* Section spacing */
@@ -115,12 +116,12 @@
 @layer utilities {
   /* Text gradients */
   .text-gradient {
-    @apply bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 bg-clip-text text-transparent;
   }
 
   /* Subtle glow effects */
   .glow-primary {
-    box-shadow: 0 0 40px -12px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 40px -12px rgba(72, 122, 145, 0.4);
   }
 
   /* Animation utilities */
@@ -133,7 +134,7 @@
   }
 }
 
-/* Custom scrollbar - minimal */
+/* Custom scrollbar - minimal for light theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -144,13 +145,13 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-neutral-700 rounded-full;
+  @apply bg-neutral-300 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-neutral-600;
+  @apply bg-neutral-400;
 }
 
 ::selection {
-  @apply bg-primary-500/30 text-white;
+  @apply bg-primary-100 text-primary-900;
 }

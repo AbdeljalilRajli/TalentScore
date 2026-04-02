@@ -121,14 +121,15 @@ const validateResume = (content: string): { isValid: boolean; confidence: number
 
   NON_RESUME_INDICATORS.forEach(indicator => {
     if (content.includes(indicator)) {
-      nonResumeScore += 2; // Weight non-resume indicators more heavily
+      nonResumeScore += 1;
     }
   });
 
-  const confidence = Math.max(0, Math.min(100, (resumeScore * 10) - (nonResumeScore * 5)));
+  const confidence = Math.max(0, Math.min(100, (resumeScore * 10) - (nonResumeScore * 3)));
   
-  // Only reject if there are many cooking/recipe indicators
-  if (nonResumeScore > 5) {
+  // Only reject if there are strong indicators this is definitely NOT a resume
+  // Require many non-resume keywords and very few/no resume keywords
+  if (nonResumeScore > 15 && resumeScore < 2) {
     return { 
       isValid: false, 
       confidence, 
@@ -136,8 +137,9 @@ const validateResume = (content: string): { isValid: boolean; confidence: number
     };
   }
 
-  // Be more lenient - only require 1 resume indicator instead of 3
-  if (resumeScore < 1 && nonResumeScore > 2) {
+  // Very lenient check - allow if there's any reasonable content
+  // Most uploaded files with sufficient length should pass unless clearly wrong
+  if (resumeScore === 0 && nonResumeScore > 8) {
     return { 
       isValid: false, 
       confidence, 

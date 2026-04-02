@@ -18,26 +18,26 @@ const API_BASE = import.meta.env.PROD ? '' : '';
 const ScoreCircle = memo(({ score }: { score: number }) => (
   <div className="relative w-48 h-48 shrink-0">
     <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6" />
+      <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(72,122,145,0.1)" strokeWidth="6" />
       <motion.circle 
-        cx="50" cy="50" r="42" fill="none" stroke="#6366f1" strokeWidth="6" strokeLinecap="round"
+        cx="50" cy="50" r="42" fill="none" stroke="#487A91" strokeWidth="6" strokeLinecap="round"
         initial={{ strokeDasharray: "0 264" }}
         animate={{ strokeDasharray: `${score * 2.64} 264` }}
         transition={{ duration: 2, ease: "easeOut" }}
       />
     </svg>
     <div className="absolute inset-0 flex flex-col items-center justify-center">
-      <span className="text-6xl font-semibold text-neutral-50 tracking-tight">{score}</span>
+      <span className="text-6xl font-semibold text-neutral-900 tracking-tight">{score}</span>
       <span className="text-xs text-neutral-500 mt-1">ATS Score</span>
     </div>
   </div>
 ));
 
 const KeywordTag = memo(({ keyword, type }: { keyword: string; type: 'found' | 'missing' }) => (
-  <span className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+  <span className={`px-3 py-1.5 text-xs font-medium transition-colors rounded-lg border ${
     type === 'found' 
-      ? 'bg-success-500/10 text-success-400 border border-success-500/20' 
-      : 'bg-error-500/10 text-error-400 border border-error-500/20'
+      ? 'border-success-200 text-success-700 bg-success-50' 
+      : 'border-neutral-200 text-neutral-600 bg-neutral-100'
   }`}>
     {keyword}
   </span>
@@ -258,19 +258,23 @@ const Analyze: React.FC = () => {
   const breakdown = result?.breakdown ?? { skills: 0, experience: 0, impact: 0, quality: 0 };
 
   return (
-    <div className="min-h-screen bg-neutral-950 pt-8">
+    <div className="min-h-screen bg-neutral-50 relative">
+      {/* Subtle background pattern */}
+      <div className="fixed inset-0 bg-[linear-gradient(rgba(72,122,145,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(72,122,145,0.02)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+      
       {/* Main Content */}
-      <main className="pb-20">
+      <main className="pb-20 pt-24 relative">
         <div className="container-premium">
           {/* Page Header */}
           <div className="mb-12">
-            <h1 className="text-neutral-50 mb-3">Analyze your resume</h1>
-            <p className="text-neutral-400 text-lg max-w-2xl">
+            <span className="text-primary-500 text-sm font-medium tracking-wider uppercase mb-4 block">Analysis</span>
+            <h1 className="text-3xl md:text-4xl font-semibold text-neutral-900 mb-4">Analyze your resume</h1>
+            <p className="text-neutral-600 max-w-lg">
               Upload your resume and job description to identify gaps and get AI-powered optimization suggestions.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-5 gap-8">
+          <div className="grid lg:grid-cols-5 gap-6">
             {/* Left Column - Inputs */}
             <div className="lg:col-span-2 space-y-6">
               {/* Error Alert */}
@@ -280,31 +284,31 @@ const Analyze: React.FC = () => {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="p-4 bg-error-500/10 border border-error-500/20 rounded-xl flex items-start gap-3"
+                    className="p-4 bg-error-50 border border-error-200 rounded-xl flex items-start gap-3"
                   >
                     <AlertCircle className="w-5 h-5 text-error-500 shrink-0 mt-0.5" />
-                    <p className="text-error-400 text-sm">{error}</p>
+                    <p className="text-error-700 text-sm">{error}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
 
               {/* Resume Input */}
-              <div className="card p-6">
+              <div className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-soft">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center">
-                      <FileUp className="w-5 h-5 text-primary-400" />
+                    <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center">
+                      <FileUp className="w-6 h-6 text-primary-500" />
                     </div>
                     <div>
-                      <h3 className="text-neutral-100 font-medium">Resume</h3>
+                      <h3 className="text-neutral-900 font-semibold">Resume</h3>
                       <p className="text-neutral-500 text-sm">PDF, DOCX, or text</p>
                     </div>
                   </div>
-                  <div className="flex bg-neutral-800 rounded-lg p-1">
+                  <div className="flex bg-neutral-100 rounded-lg p-1">
                     <button
                       onClick={() => setResumeInputMode('file')}
                       className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
-                        resumeInputMode === 'file' ? 'bg-neutral-700 text-neutral-100' : 'text-neutral-500'
+                        resumeInputMode === 'file' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'
                       }`}
                     >
                       File
@@ -312,7 +316,7 @@ const Analyze: React.FC = () => {
                     <button
                       onClick={() => setResumeInputMode('text')}
                       className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
-                        resumeInputMode === 'text' ? 'bg-neutral-700 text-neutral-100' : 'text-neutral-500'
+                        resumeInputMode === 'text' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'
                       }`}
                     >
                       Text
@@ -325,10 +329,10 @@ const Analyze: React.FC = () => {
                     <label
                       className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
                         dragActive 
-                          ? 'border-primary-500 bg-primary-500/5' 
+                          ? 'border-primary-400 bg-primary-50/50' 
                           : resumeFile 
-                            ? 'border-success-500/30 bg-success-500/5' 
-                            : 'border-neutral-700 hover:border-neutral-600'
+                            ? 'border-success-300 bg-success-50/30' 
+                            : 'border-neutral-300 hover:border-neutral-400 bg-neutral-50'
                       }`}
                       onDragEnter={handleDrag}
                       onDragLeave={handleDrag}
@@ -344,24 +348,24 @@ const Analyze: React.FC = () => {
                       />
                       {resumeFile ? (
                         <div className="flex flex-col items-center gap-3">
-                          <div className="w-12 h-12 rounded-lg bg-success-500/10 flex items-center justify-center">
-                            <FileText className="w-6 h-6 text-success-400" />
+                          <div className="w-12 h-12 bg-success-100 rounded-xl flex items-center justify-center">
+                            <FileText className="w-6 h-6 text-success-600" />
                           </div>
                           <div>
-                            <p className="text-neutral-100 font-medium truncate max-w-[200px]">
+                            <p className="text-neutral-900 font-medium truncate max-w-[200px]">
                               {resumeFile.name}
                             </p>
-                            <p className="text-neutral-500 text-xs">{(resumeFile.size / 1024).toFixed(1)} KB</p>
+                            <p className="text-neutral-500 text-sm">{(resumeFile.size / 1024).toFixed(1)} KB</p>
                           </div>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center gap-3">
-                          <div className="w-12 h-12 rounded-lg bg-neutral-800 flex items-center justify-center">
-                            <Upload className="w-6 h-6 text-neutral-500" />
+                          <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center">
+                            <Upload className="w-6 h-6 text-neutral-400" />
                           </div>
                           <div>
-                            <p className="text-neutral-300 font-medium text-sm">Drop file or click to upload</p>
-                            <p className="text-neutral-500 text-xs mt-1">PDF, DOCX, or TXT</p>
+                            <p className="text-neutral-700 font-medium">Drop file or click to upload</p>
+                            <p className="text-neutral-500 text-sm mt-1">PDF, DOCX, or TXT</p>
                           </div>
                         </div>
                       )}
@@ -369,9 +373,9 @@ const Analyze: React.FC = () => {
                     {resumeFile && (
                       <button
                         onClick={clearFile}
-                        className="absolute -top-2 -right-2 w-6 h-6 bg-neutral-800 border border-neutral-700 rounded-full flex items-center justify-center hover:bg-error-500/10 hover:border-error-500/30 transition-colors"
+                        className="absolute -top-2 -right-2 w-6 h-6 bg-white border border-neutral-200 rounded-full flex items-center justify-center hover:border-error-300 hover:bg-error-50 transition-colors shadow-soft"
                       >
-                        <X className="w-3 h-3 text-neutral-400" />
+                        <X className="w-3 h-3 text-neutral-400 hover:text-error-500" />
                       </button>
                     )}
                   </div>
@@ -380,19 +384,19 @@ const Analyze: React.FC = () => {
                     value={resumeText}
                     onChange={(e) => setResumeText(e.target.value)}
                     placeholder="Paste your resume text here..."
-                    className="w-full h-48 bg-neutral-800/50 text-neutral-100 text-sm p-4 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none resize-none"
+                    className="w-full h-48 bg-neutral-50 text-neutral-900 text-sm p-4 rounded-xl border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 resize-none"
                   />
                 )}
               </div>
 
               {/* Job Description */}
-              <div className="card p-6">
+              <div className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-soft">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center">
-                    <Briefcase className="w-5 h-5 text-primary-400" />
+                  <div className="w-12 h-12 bg-tertiary-50 rounded-xl flex items-center justify-center">
+                    <Briefcase className="w-6 h-6 text-tertiary-600" />
                   </div>
                   <div>
-                    <h3 className="text-neutral-100 font-medium">Job Description</h3>
+                    <h3 className="text-neutral-900 font-semibold">Job Description</h3>
                     <p className="text-neutral-500 text-sm">Paste the full description</p>
                   </div>
                 </div>
@@ -400,20 +404,20 @@ const Analyze: React.FC = () => {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the job description here..."
-                  className="w-full h-48 bg-neutral-800/50 text-neutral-100 text-sm p-4 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none resize-none"
+                  className="w-full h-48 bg-neutral-50 text-neutral-900 text-sm p-4 rounded-xl border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 resize-none"
                 />
-                <div className="flex items-center justify-between mt-3">
-                  <div className="flex gap-1">
+                <div className="flex items-center justify-between mt-4">
+                  <div className="flex gap-2">
                     {[...Array(4)].map((_, i) => (
                       <div
                         key={i}
-                        className={`w-1.5 h-4 rounded-full transition-colors ${
-                          jobDescription.length > (i + 1) * 150 ? 'bg-primary-500' : 'bg-neutral-700'
+                        className={`w-8 h-2 rounded-full transition-colors ${
+                          jobDescription.length > (i + 1) * 150 ? 'bg-primary-400' : 'bg-neutral-200'
                         }`}
                       />
                     ))}
                   </div>
-                  <span className="text-neutral-600 text-xs">{jobDescription.length} chars</span>
+                  <span className="text-neutral-500 text-sm font-medium">{jobDescription.length} chars</span>
                 </div>
               </div>
 
@@ -421,7 +425,7 @@ const Analyze: React.FC = () => {
               <button
                 onClick={handleAnalyze}
                 disabled={!canAnalyze || isAnalyzing}
-                className="w-full btn-primary py-4 text-base"
+                className="w-full flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white py-4 text-sm font-semibold rounded-xl transition-all duration-300 hover:translate-y-[-2px] active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed shadow-soft hover:shadow-medium"
               >
                 {isAnalyzing ? (
                   <>
@@ -440,12 +444,12 @@ const Analyze: React.FC = () => {
             {/* Right Column - Results */}
             <div className="lg:col-span-3">
               {!result ? (
-                <div className="card h-full min-h-[500px] flex flex-col items-center justify-center text-center p-12">
-                  <div className="w-20 h-20 rounded-2xl bg-neutral-800/50 flex items-center justify-center mb-6">
-                    <Terminal className="w-10 h-10 text-neutral-600" />
+                <div className="h-full min-h-[500px] flex flex-col items-center justify-center text-center p-12 bg-white rounded-2xl border border-neutral-200 border-dashed">
+                  <div className="w-20 h-20 bg-primary-50 rounded-2xl flex items-center justify-center mb-6">
+                    <Terminal className="w-10 h-10 text-primary-400" />
                   </div>
-                  <h3 className="text-neutral-300 font-medium mb-2">Ready to analyze</h3>
-                  <p className="text-neutral-500 text-sm max-w-xs">
+                  <h3 className="text-neutral-900 font-semibold mb-2 text-xl">Ready to analyze</h3>
+                  <p className="text-neutral-500 max-w-xs">
                     Upload your resume and job description to see your match score and optimization suggestions.
                   </p>
                 </div>
@@ -453,39 +457,39 @@ const Analyze: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="card p-12 text-center"
+                  className="bg-white rounded-2xl border border-error-200 p-12 text-center"
                 >
-                  <div className="w-16 h-16 rounded-2xl bg-error-500/10 flex items-center justify-center mx-auto mb-6">
+                  <div className="w-16 h-16 bg-error-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <AlertCircle className="w-8 h-8 text-error-500" />
                   </div>
-                  <h3 className="text-neutral-100 text-xl mb-3">Invalid Resume</h3>
-                  <p className="text-error-400">{result.error}</p>
+                  <h3 className="text-neutral-900 text-xl mb-3 font-semibold">Invalid Resume</h3>
+                  <p className="text-error-600">{result.error}</p>
                 </motion.div>
               ) : (
                 <div className="space-y-6">
                   {/* Score Card */}
-                  <div className="card p-8">
+                  <div className="bg-white rounded-2xl border border-neutral-200 p-8 shadow-soft">
                     <div className="flex flex-col md:flex-row items-center gap-8">
                       <ScoreCircle score={result.score} />
                       <div className="flex-1 w-full">
                         <div className="grid grid-cols-2 gap-4">
                           {[
-                            { label: 'Skills', val: breakdown.skills, color: 'bg-success-500' },
+                            { label: 'Skills', val: breakdown.skills, color: 'bg-primary-500' },
                             { label: 'Experience', val: breakdown.experience, color: 'bg-primary-500' },
-                            { label: 'Impact', val: breakdown.impact, color: 'bg-warning-500' },
-                            { label: 'Quality', val: breakdown.quality, color: 'bg-primary-400' },
+                            { label: 'Impact', val: breakdown.impact, color: 'bg-primary-500' },
+                            { label: 'Quality', val: breakdown.quality, color: 'bg-primary-500' },
                           ].map((item) => (
                             <div key={item.label}>
                               <div className="flex justify-between items-center mb-2">
-                                <span className="text-neutral-500 text-xs">{item.label}</span>
-                                <span className="text-neutral-300 text-sm font-medium">{Math.round(item.val)}%</span>
+                                <span className="text-neutral-500 text-sm font-medium">{item.label}</span>
+                                <span className="text-neutral-900 text-sm font-semibold">{Math.round(item.val)}%</span>
                               </div>
-                              <div className="h-2 bg-neutral-800 rounded-full overflow-hidden">
+                              <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
                                 <motion.div
                                   initial={{ width: 0 }}
                                   animate={{ width: `${item.val}%` }}
                                   transition={{ duration: 1, delay: 0.2 }}
-                                  className={`h-full ${item.color}`}
+                                  className={`h-full ${item.color} rounded-full`}
                                 />
                               </div>
                             </div>
@@ -497,13 +501,13 @@ const Analyze: React.FC = () => {
 
                   {/* Keywords */}
                   <div className="grid md:grid-cols-2 gap-6">
-                    <div className="card p-6">
+                    <div className="bg-white rounded-2xl border border-success-200 p-6 shadow-soft">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
-                          <Check className="w-4 h-4 text-success-500" />
-                          <h4 className="text-neutral-100 font-medium text-sm">Found Keywords</h4>
+                          <div className="w-2 h-2 bg-success-500 rounded-full" />
+                          <h4 className="text-neutral-900 font-semibold">Found Keywords</h4>
                         </div>
-                        <span className="text-success-400 text-xs font-medium">{result.foundKeywords.length}</span>
+                        <span className="bg-success-100 text-success-700 px-2 py-1 rounded-lg text-xs font-semibold">{result.foundKeywords.length}</span>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {result.foundKeywords.map((kw) => (
@@ -512,13 +516,13 @@ const Analyze: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="card p-6">
+                    <div className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-soft">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
-                          <X className="w-4 h-4 text-error-500" />
-                          <h4 className="text-neutral-100 font-medium text-sm">Missing Keywords</h4>
+                          <div className="w-2 h-2 bg-neutral-400 rounded-full" />
+                          <h4 className="text-neutral-900 font-semibold">Missing Keywords</h4>
                         </div>
-                        <span className="text-error-400 text-xs font-medium">{result.missingKeywords.length}</span>
+                        <span className="bg-neutral-100 text-neutral-600 px-2 py-1 rounded-lg text-xs font-semibold">{result.missingKeywords.length}</span>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {result.missingKeywords.map((kw) => (
@@ -529,26 +533,29 @@ const Analyze: React.FC = () => {
                   </div>
 
                   {/* Suggestions */}
-                  <div className="card p-6">
-                    <h4 className="text-neutral-100 font-medium mb-4">Suggestions</h4>
+                  <div className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-soft">
+                    <h4 className="text-neutral-900 font-semibold mb-4 flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-primary-500" />
+                      Suggestions
+                    </h4>
                     <ul className="space-y-3">
                       {result.suggestions.map((suggestion, i) => (
                         <li key={i} className="flex gap-3 text-sm">
-                          <span className="text-primary-500 font-mono text-xs shrink-0">{String(i + 1).padStart(2, '0')}</span>
-                          <span className="text-neutral-400">{suggestion}</span>
+                          <span className="w-6 h-6 bg-primary-50 text-primary-600 rounded-lg font-semibold text-xs flex items-center justify-center shrink-0">{i + 1}</span>
+                          <span className="text-neutral-700 leading-relaxed">{suggestion}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   {/* AI Assistant */}
-                  <div className="card p-6">
+                  <div className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-soft">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center">
-                        <Sparkles className="w-5 h-5 text-primary-400" />
+                      <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center">
+                        <Sparkles className="w-6 h-6 text-primary-500" />
                       </div>
                       <div>
-                        <h4 className="text-neutral-100 font-medium">AI Assistant</h4>
+                        <h4 className="text-neutral-900 font-semibold">AI Assistant</h4>
                         <p className="text-neutral-500 text-sm">Get personalized improvements</p>
                       </div>
                     </div>
@@ -558,18 +565,18 @@ const Analyze: React.FC = () => {
                         <select
                           value={geminiTask}
                           onChange={(e) => setGeminiTask(e.target.value as GeminiTask)}
-                          className="w-full h-11 bg-neutral-800/50 text-neutral-100 text-sm px-4 pr-10 rounded-lg border border-neutral-700 focus:border-primary-500/50 focus:outline-none appearance-none"
+                          className="w-full h-11 bg-neutral-50 text-neutral-900 text-sm px-4 pr-10 rounded-lg border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 appearance-none"
                         >
                           <option value="tailor">Tailor to job description</option>
                           <option value="rewrite_bullets">Rewrite bullet points</option>
                           <option value="summary">Generate summary</option>
                         </select>
-                        <ChevronDown className="w-4 h-4 text-neutral-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        <ChevronDown className="w-4 h-4 text-neutral-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                       </div>
                       <button
                         onClick={handleGenerateAI}
                         disabled={isGenerating}
-                        className="btn-primary h-11 px-6"
+                        className="inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white h-11 px-6 text-sm font-semibold rounded-lg transition-all duration-300 hover:translate-y-[-1px] active:translate-y-0 shadow-soft"
                       >
                         {isGenerating ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
@@ -583,7 +590,7 @@ const Analyze: React.FC = () => {
                     </div>
 
                     {geminiError && (
-                      <div className="p-3 bg-error-500/10 border border-error-500/20 rounded-lg text-error-400 text-sm mb-4">
+                      <div className="p-3 bg-error-50 border border-error-200 rounded-lg text-error-700 text-sm mb-4">
                         {geminiError}
                       </div>
                     )}
@@ -596,8 +603,8 @@ const Analyze: React.FC = () => {
                           exit={{ height: 0, opacity: 0 }}
                           className="overflow-hidden"
                         >
-                          <div className="p-4 bg-neutral-800/30 rounded-lg border border-neutral-700/50">
-                            <pre className="text-sm text-neutral-300 whitespace-pre-wrap font-sans leading-relaxed">
+                          <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+                            <pre className="text-sm text-neutral-700 whitespace-pre-wrap font-sans leading-relaxed">
                               {geminiOutput}
                             </pre>
                           </div>
@@ -607,25 +614,25 @@ const Analyze: React.FC = () => {
                   </div>
 
                   {/* Next Steps - Cover Letter & Tracker */}
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid md:grid-cols-2 gap-6">
                     {/* Generate Cover Letter */}
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleGenerateCoverLetter()}
                       disabled={isGeneratingCoverLetter}
-                      className="card p-6 text-left hover:border-primary-500/30 transition-colors group"
+                      className="bg-white rounded-2xl border border-neutral-200 p-6 text-left hover:border-primary-300 hover:shadow-medium transition-all group shadow-soft"
                     >
                       <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center group-hover:bg-primary-500/20 transition-colors">
+                        <div className="w-14 h-14 bg-primary-50 rounded-xl flex items-center justify-center group-hover:bg-primary-100 transition-colors">
                           {isGeneratingCoverLetter ? (
-                            <Loader2 className="w-6 h-6 text-primary-400 animate-spin" />
+                            <Loader2 className="w-7 h-7 text-primary-500 animate-spin" />
                           ) : (
-                            <FileText className="w-6 h-6 text-primary-400" />
+                            <FileText className="w-7 h-7 text-primary-500" />
                           )}
                         </div>
                         <div className="flex-1">
-                          <h4 className="text-neutral-100 font-medium mb-1">
+                          <h4 className="text-neutral-900 font-semibold mb-1">
                             {isGeneratingCoverLetter ? 'Writing your letter...' : 'Generate Cover Letter'}
                           </h4>
                           <p className="text-neutral-500 text-sm">
@@ -640,14 +647,14 @@ const Analyze: React.FC = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setShowTrackerModal(true)}
-                      className="card p-6 text-left hover:border-success-500/30 transition-colors group"
+                      className="bg-white rounded-2xl border border-neutral-200 p-6 text-left hover:border-success-300 hover:shadow-medium transition-all group shadow-soft"
                     >
                       <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-success-500/10 flex items-center justify-center group-hover:bg-success-500/20 transition-colors">
-                          <Briefcase className="w-6 h-6 text-success-400" />
+                        <div className="w-14 h-14 bg-success-50 rounded-xl flex items-center justify-center group-hover:bg-success-100 transition-colors">
+                          <Briefcase className="w-7 h-7 text-success-600" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="text-neutral-100 font-medium mb-1">Save to Job Tracker</h4>
+                          <h4 className="text-neutral-900 font-semibold mb-1">Save to Job Tracker</h4>
                           <p className="text-neutral-500 text-sm">
                             Track this application and follow up at the right time
                           </p>
@@ -669,7 +676,7 @@ const Analyze: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
             onClick={() => setShowCoverLetterModal(false)}
           >
             <motion.div
@@ -677,11 +684,11 @@ const Analyze: React.FC = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={e => e.stopPropagation()}
-              className="bg-neutral-900 rounded-2xl border border-neutral-800 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+              className="bg-white border border-neutral-200 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-strong"
             >
-              <div className="p-6 border-b border-neutral-800 flex items-center justify-between">
+              <div className="p-6 border-b border-neutral-200 flex items-center justify-between bg-neutral-50 rounded-t-2xl">
                 <div>
-                  <h3 className="text-neutral-100 font-medium">Your Cover Letter</h3>
+                  <h3 className="text-neutral-900 font-semibold text-lg">Your Cover Letter</h3>
                   <p className="text-neutral-500 text-sm">Generated from your resume and job description</p>
                 </div>
                 <div className="flex gap-2">
@@ -691,21 +698,21 @@ const Analyze: React.FC = () => {
                       setCopied(true);
                       setTimeout(() => setCopied(false), 2000);
                     }}
-                    className="p-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 transition-colors"
+                    className="p-2 bg-white border border-neutral-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors"
                     title="Copy"
                   >
-                    {copied ? <Check className="w-4 h-4 text-success-400" /> : <Copy className="w-4 h-4 text-neutral-400" />}
+                    {copied ? <Check className="w-5 h-5 text-success-500" /> : <Copy className="w-5 h-5 text-neutral-500" />}
                   </button>
                   <button
                     onClick={() => setShowCoverLetterModal(false)}
-                    className="p-2 rounded-lg hover:bg-neutral-800 transition-colors"
+                    className="p-2 bg-white border border-neutral-200 rounded-lg hover:border-error-300 hover:bg-error-50 transition-colors"
                   >
-                    <X className="w-4 h-4 text-neutral-400" />
+                    <X className="w-5 h-5 text-neutral-500" />
                   </button>
                 </div>
               </div>
               <div className="p-6">
-                <pre className="text-neutral-300 whitespace-pre-wrap font-sans leading-relaxed text-sm">
+                <pre className="text-neutral-700 whitespace-pre-wrap font-sans leading-relaxed">
                   {coverLetter}
                 </pre>
               </div>
@@ -722,7 +729,7 @@ const Analyze: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
             onClick={() => setShowTrackerModal(false)}
           >
             <motion.div
@@ -730,10 +737,10 @@ const Analyze: React.FC = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={e => e.stopPropagation()}
-              className="bg-neutral-900 rounded-2xl border border-neutral-800 max-w-md w-full"
+              className="bg-white border border-neutral-200 rounded-2xl max-w-md w-full shadow-strong"
             >
-              <div className="p-6 border-b border-neutral-800">
-                <h3 className="text-neutral-100 font-medium">Save to Job Tracker</h3>
+              <div className="p-6 border-b border-neutral-200 bg-neutral-50 rounded-t-2xl">
+                <h3 className="text-neutral-900 font-semibold text-lg">Save to Job Tracker</h3>
                 <p className="text-neutral-500 text-sm">Track this application</p>
               </div>
               <div className="p-6 space-y-4">
@@ -742,54 +749,54 @@ const Analyze: React.FC = () => {
                   placeholder="Company name *"
                   value={trackerForm.company}
                   onChange={e => setTrackerForm({...trackerForm, company: e.target.value})}
-                  className="w-full bg-neutral-800 text-neutral-100 px-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                  className="w-full bg-neutral-50 text-neutral-900 px-4 py-3 rounded-lg border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 text-sm"
                 />
                 <input
                   type="text"
                   placeholder="Role / Position *"
                   value={trackerForm.role}
                   onChange={e => setTrackerForm({...trackerForm, role: e.target.value})}
-                  className="w-full bg-neutral-800 text-neutral-100 px-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                  className="w-full bg-neutral-50 text-neutral-900 px-4 py-3 rounded-lg border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 text-sm"
                 />
                 <input
                   type="text"
                   placeholder="Location (optional)"
                   value={trackerForm.location}
                   onChange={e => setTrackerForm({...trackerForm, location: e.target.value})}
-                  className="w-full bg-neutral-800 text-neutral-100 px-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                  className="w-full bg-neutral-50 text-neutral-900 px-4 py-3 rounded-lg border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 text-sm"
                 />
                 <input
                   type="text"
                   placeholder="Salary range (optional)"
                   value={trackerForm.salary}
                   onChange={e => setTrackerForm({...trackerForm, salary: e.target.value})}
-                  className="w-full bg-neutral-800 text-neutral-100 px-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                  className="w-full bg-neutral-50 text-neutral-900 px-4 py-3 rounded-lg border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 text-sm"
                 />
                 <input
                   type="url"
                   placeholder="Job posting URL (optional)"
                   value={trackerForm.url}
                   onChange={e => setTrackerForm({...trackerForm, url: e.target.value})}
-                  className="w-full bg-neutral-800 text-neutral-100 px-4 py-3 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none"
+                  className="w-full bg-neutral-50 text-neutral-900 px-4 py-3 rounded-lg border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 text-sm"
                 />
                 <textarea
                   placeholder="Notes (optional) - Interview dates, recruiter name, etc."
                   value={trackerForm.notes}
                   onChange={e => setTrackerForm({...trackerForm, notes: e.target.value})}
-                  className="w-full h-24 bg-neutral-800 text-neutral-100 text-sm p-4 rounded-xl border border-neutral-700 focus:border-primary-500/50 focus:outline-none resize-none"
+                  className="w-full h-24 bg-neutral-50 text-neutral-900 text-sm p-4 rounded-lg border border-neutral-200 focus:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-100 resize-none"
                 />
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={handleSaveToTracker}
                     disabled={!trackerForm.company?.trim() || !trackerForm.role?.trim()}
-                    className="flex-1 btn-primary py-3"
+                    className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white py-3 text-sm font-semibold rounded-lg transition-all duration-300 hover:translate-y-[-2px] active:translate-y-0 disabled:opacity-50"
                   >
                     <Briefcase className="w-4 h-4" />
                     Save Application
                   </button>
                   <button
                     onClick={() => setShowTrackerModal(false)}
-                    className="px-4 py-3 rounded-xl text-neutral-400 hover:text-neutral-200 transition-colors"
+                    className="px-6 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-lg transition-colors text-sm"
                   >
                     Cancel
                   </button>
