@@ -52,9 +52,9 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPath = '/' }) => {
               </nav>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               {isAuthenticated ? (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 md:gap-3">
                   <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-neutral-100 rounded-lg">
                     <User className="w-4 h-4 text-neutral-500" />
                     <span className="text-sm text-neutral-700">{user?.displayName || user?.email}</span>
@@ -68,14 +68,16 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPath = '/' }) => {
                   </button>
                 </div>
               ) : (
-                <a href="/login" className="inline-flex items-center gap-2 text-sm py-2 px-4 border border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:text-neutral-900 bg-white hover:bg-neutral-50 rounded-lg transition-colors">
-                  <LogIn className="w-4 h-4" />
-                  Sign In
+                <a href="/login" className="inline-flex items-center gap-1.5 md:gap-2 text-xs md:text-sm py-1.5 md:py-2 px-2.5 md:px-4 border border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:text-neutral-900 bg-white hover:bg-neutral-50 rounded-lg transition-colors">
+                  <LogIn className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                  <span className="hidden sm:inline">Sign In</span>
+                  <span className="sm:hidden">Sign In</span>
                 </a>
               )}
-              <a href="/analyze" className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white text-sm py-2 px-4 font-medium rounded-lg transition-all hover:translate-y-[-1px] active:translate-y-0 shadow-soft hover:shadow-medium">
-                Analyze Resume
-                <ArrowRight className="w-4 h-4" />
+              <a href="/analyze" className="inline-flex items-center gap-1.5 md:gap-2 bg-primary-500 hover:bg-primary-600 text-white text-xs md:text-sm py-1.5 md:py-2 px-2.5 md:px-4 font-medium rounded-lg transition-all hover:translate-y-[-1px] active:translate-y-0 shadow-soft hover:shadow-medium whitespace-nowrap">
+                <span className="hidden sm:inline">Analyze Resume</span>
+                <span className="sm:hidden">Analyze</span>
+                <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
               </a>
             </div>
           </div>

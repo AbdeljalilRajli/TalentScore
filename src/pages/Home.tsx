@@ -206,7 +206,7 @@ const Home: React.FC = () => {
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="relative lg:pl-8"
+              className="hidden lg:block relative lg:pl-8"
             >
               {/* Main Resume Card with 3D tilt */}
               <motion.div 
