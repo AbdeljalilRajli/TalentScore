@@ -3,6 +3,7 @@ import Home from '../pages/Home';
 import Analyze from '../pages/Analyze';
 import CoverLetter from '../pages/CoverLetter';
 import Tracker from '../pages/Tracker';
+import Templates from '../pages/Templates';
 import Auth from '../pages/Auth';
 import Layout from './Layout/Layout';
 
@@ -40,6 +41,12 @@ const Router: React.FC<RouterProps> = ({ currentPath }) => {
       return (
         <Layout currentPath={currentPath}>
           <Tracker />
+        </Layout>
+      );
+    case '/templates':
+      return (
+        <Layout currentPath={currentPath}>
+          <Templates />
         </Layout>
       );
     default:
