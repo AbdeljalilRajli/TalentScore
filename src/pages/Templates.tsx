@@ -628,447 +628,447 @@ export default function Templates() {
                 </div>
               </div>
 
-              {/* Summary */}
-              <div
-                draggable
-                onDragStart={() => handleDragStart('summary')}
-                onDragOver={(e) => handleDragOver(e, 'summary')}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, 'summary')}
-                onDragEnd={handleDragEnd}
-                className={`bg-white rounded-xl border-2 p-6 transition-all cursor-move ${
-                  draggedItem === 'summary' ? 'opacity-50 border-primary-400' : 
-                  dragOverItem === 'summary' ? 'border-primary-400 border-dashed' : 
-                  'border-neutral-200'
-                }`}
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="text-neutral-400">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                  </div>
-                  <h2 className="text-lg font-semibold text-neutral-900">Professional Summary</h2>
-                </div>
-                <textarea
-                  value={resumeData.summary}
-                  onChange={(e) => handleInputChange('summary', e.target.value)}
-                  rows={4}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                  placeholder="Brief overview of your professional background and key strengths..."
-                />
-              </div>
-
-              {/* Experience */}
-              <div
-                draggable
-                onDragStart={() => handleDragStart('experience')}
-                onDragOver={(e) => handleDragOver(e, 'experience')}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, 'experience')}
-                onDragEnd={handleDragEnd}
-                className={`bg-white rounded-xl border-2 p-6 transition-all cursor-move ${
-                  draggedItem === 'experience' ? 'opacity-50 border-primary-400' : 
-                  dragOverItem === 'experience' ? 'border-primary-400 border-dashed' : 
-                  'border-neutral-200'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="text-neutral-400">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                    </div>
-                    <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
-                      <Briefcase className="w-5 h-5 text-primary-500" />
-                      Work Experience
-                    </h2>
-                  </div>
-                  <button
-                    onClick={addExperience}
-                    className="text-sm text-primary-500 hover:text-primary-600 font-medium"
-                  >
-                    + Add Experience
-                  </button>
-                </div>
-                <div className="space-y-4">
-                  {resumeData.experience.map((exp, index) => (
-                    <div key={exp.id} className="p-4 bg-neutral-50 rounded-lg">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                        <input
-                          type="text"
-                          value={exp.company}
-                          onChange={(e) => handleExperienceChange(index, 'company', e.target.value)}
-                          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          placeholder="Company Name"
-                        />
-                        <input
-                          type="text"
-                          value={exp.role}
-                          onChange={(e) => handleExperienceChange(index, 'role', e.target.value)}
-                          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          placeholder="Job Title"
-                        />
-                        <input
-                          type="text"
-                          value={exp.startDate}
-                          onChange={(e) => handleExperienceChange(index, 'startDate', e.target.value)}
-                          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          placeholder="Start Date (e.g., Jan 2020)"
-                        />
-                        <input
-                          type="text"
-                          value={exp.endDate}
-                          onChange={(e) => handleExperienceChange(index, 'endDate', e.target.value)}
-                          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          placeholder="End Date (e.g., Present)"
-                        />
-                      </div>
-                      {/* Description with Bullet Points */}
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-medium text-neutral-500">Description (add bullet points below):</span>
-                        </div>
-                        
-                        {/* Bullet Points */}
-                        {exp.bullets?.map((bullet, bulletIndex) => (
-                          <div key={bulletIndex} className="flex items-start gap-2">
-                            <span className="mt-2 text-neutral-400">•</span>
-                            <textarea
-                              value={bullet}
-                              onChange={(e) => updateBullet(index, bulletIndex, e.target.value)}
-                              rows={2}
-                              className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
-                              placeholder="Achievement or responsibility..."
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeBullet(index, bulletIndex)}
-                              className="mt-1 p-1 text-neutral-400 hover:text-error-500 transition-colors"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
+              {/* Dynamic Sections based on sectionOrder */}
+              {sectionOrder.map((section) => {
+                const isDragged = draggedItem === section.id;
+                const isDragOver = dragOverItem === section.id;
+                const baseClasses = "bg-white rounded-xl border-2 p-6 transition-all cursor-move";
+                const dragClasses = isDragged 
+                  ? "opacity-50 border-primary-400" 
+                  : isDragOver 
+                    ? "border-primary-400 border-dashed" 
+                    : "border-neutral-200";
+                
+                switch (section.id) {
+                  case 'summary':
+                    return (
+                      <div
+                        key="summary"
+                        draggable
+                        onDragStart={() => handleDragStart('summary')}
+                        onDragOver={(e) => handleDragOver(e, 'summary')}
+                        onDragLeave={handleDragLeave}
+                        onDrop={(e) => handleDrop(e, 'summary')}
+                        onDragEnd={handleDragEnd}
+                        className={`${baseClasses} ${dragClasses}`}
+                      >
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="text-neutral-400">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
                           </div>
-                        ))}
-                        
-                        {/* Add Bullet Button */}
-                        <button
-                          type="button"
-                          onClick={() => addBullet(index)}
-                          className="flex items-center gap-1 text-sm text-primary-500 hover:text-primary-600 font-medium"
-                        >
-                          <Plus className="w-4 h-4" />
-                          Add Bullet Point
-                        </button>
-                      </div>
-                      {resumeData.experience.length > 1 && (
-                        <button
-                          onClick={() => removeExperience(index)}
-                          className="mt-2 text-xs text-error-500 hover:text-error-600"
-                        >
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Education */}
-              <div
-                draggable
-                onDragStart={() => handleDragStart('education')}
-                onDragOver={(e) => handleDragOver(e, 'education')}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, 'education')}
-                onDragEnd={handleDragEnd}
-                className={`bg-white rounded-xl border-2 p-6 transition-all cursor-move ${
-                  draggedItem === 'education' ? 'opacity-50 border-primary-400' : 
-                  dragOverItem === 'education' ? 'border-primary-400 border-dashed' : 
-                  'border-neutral-200'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="text-neutral-400">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                    </div>
-                    <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
-                      <GraduationCap className="w-5 h-5 text-primary-500" />
-                      Education
-                    </h2>
-                  </div>
-                  <button
-                    onClick={addEducation}
-                    className="text-sm text-primary-500 hover:text-primary-600 font-medium"
-                  >
-                    + Add Education
-                  </button>
-                </div>
-                <div className="space-y-4">
-                  {resumeData.education.map((edu, index) => (
-                    <div key={edu.id} className="p-4 bg-neutral-50 rounded-lg space-y-3">
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <input
-                          type="text"
-                          value={edu.school}
-                          onChange={(e) => handleEducationChange(index, 'school', e.target.value)}
-                          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          placeholder="School/University"
-                        />
-                        <input
-                          type="text"
-                          value={edu.degree}
-                          onChange={(e) => handleEducationChange(index, 'degree', e.target.value)}
-                          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          placeholder="Degree/Certificate"
-                        />
-                        <input
-                          type="text"
-                          value={edu.graduationDate}
-                          onChange={(e) => handleEducationChange(index, 'graduationDate', e.target.value)}
-                          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          placeholder="Graduation Date"
+                          <h2 className="text-lg font-semibold text-neutral-900">Professional Summary</h2>
+                        </div>
+                        <textarea
+                          value={resumeData.summary}
+                          onChange={(e) => handleInputChange('summary', e.target.value)}
+                          rows={4}
+                          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                          placeholder="Brief overview of your professional background and key strengths..."
                         />
                       </div>
-                      <textarea
-                        value={edu.description}
-                        onChange={(e) => handleEducationChange(index, 'description', e.target.value)}
-                        rows={2}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
-                        placeholder="Description (optional)..."
-                      />
-                      {resumeData.education.length > 1 && (
-                        <button
-                          onClick={() => removeEducation(index)}
-                          className="text-xs text-error-500 hover:text-error-600 text-left"
-                        >
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Skills */}
-              <div
-                draggable
-                onDragStart={() => handleDragStart('skills')}
-                onDragOver={(e) => handleDragOver(e, 'skills')}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, 'skills')}
-                onDragEnd={handleDragEnd}
-                className={`bg-white rounded-xl border-2 p-6 transition-all cursor-move ${
-                  draggedItem === 'skills' ? 'opacity-50 border-primary-400' : 
-                  dragOverItem === 'skills' ? 'border-primary-400 border-dashed' : 
-                  'border-neutral-200'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="text-neutral-400">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                    </div>
-                    <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
-                      <Wrench className="w-5 h-5 text-primary-500" />
-                      Skills
-                    </h2>
-                  </div>
-                  <button
-                    onClick={addSkill}
-                    className="text-sm text-primary-500 hover:text-primary-600 font-medium flex items-center gap-1"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Add Skill
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {resumeData.skills.map((skill, index) => (
-                    <div key={skill.id} className="flex items-center gap-1 bg-primary-50 px-3 py-2 rounded-lg">
-                      <input
-                        type="text"
-                        value={skill.name}
-                        onChange={(e) => updateSkill(index, e.target.value)}
-                        className="bg-transparent text-sm text-neutral-700 focus:outline-none w-24"
-                        placeholder="Skill name"
-                      />
-                      <button
-                        onClick={() => removeSkill(index)}
-                        className="text-neutral-400 hover:text-error-500 transition-colors"
+                    );
+                  case 'experience':
+                    return (
+                      <div
+                        key="experience"
+                        draggable
+                        onDragStart={() => handleDragStart('experience')}
+                        onDragOver={(e) => handleDragOver(e, 'experience')}
+                        onDragLeave={handleDragLeave}
+                        onDrop={(e) => handleDrop(e, 'experience')}
+                        onDragEnd={handleDragEnd}
+                        className={`${baseClasses} ${dragClasses}`}
                       >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))}
-                  {resumeData.skills.length === 0 && (
-                    <p className="text-sm text-neutral-400 italic">Click "Add Skill" to add your skills</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Projects */}
-              <div
-                draggable
-                onDragStart={() => handleDragStart('projects')}
-                onDragOver={(e) => handleDragOver(e, 'projects')}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, 'projects')}
-                onDragEnd={handleDragEnd}
-                className={`bg-white rounded-xl border-2 p-6 transition-all cursor-move ${
-                  draggedItem === 'projects' ? 'opacity-50 border-primary-400' : 
-                  dragOverItem === 'projects' ? 'border-primary-400 border-dashed' : 
-                  'border-neutral-200'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="text-neutral-400">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                    </div>
-                    <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
-                      <LayoutTemplate className="w-5 h-5 text-primary-500" />
-                      Projects
-                    </h2>
-                  </div>
-                  <button
-                    onClick={addProject}
-                    className="text-sm text-primary-500 hover:text-primary-600 font-medium"
-                  >
-                    + Add Project
-                  </button>
-                </div>
-                <div className="space-y-4">
-                  {resumeData.projects.map((project, index) => (
-                    <div key={project.id} className="p-4 bg-neutral-50 rounded-lg space-y-3">
-                      <input
-                        type="text"
-                        value={project.name}
-                        onChange={(e) => updateProject(index, 'name', e.target.value)}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                        placeholder="Project Name"
-                      />
-                      <div className="grid grid-cols-2 gap-3">
-                        <input
-                          type="text"
-                          value={project.startDate}
-                          onChange={(e) => updateProject(index, 'startDate', e.target.value)}
-                          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          placeholder="Start Date"
-                        />
-                        <input
-                          type="text"
-                          value={project.endDate}
-                          onChange={(e) => updateProject(index, 'endDate', e.target.value)}
-                          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          placeholder="End Date"
-                        />
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className="text-neutral-400">
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                              </svg>
+                            </div>
+                            <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
+                              <Briefcase className="w-5 h-5 text-primary-500" />
+                              Work Experience
+                            </h2>
+                          </div>
+                          <button
+                            onClick={addExperience}
+                            className="text-sm text-primary-500 hover:text-primary-600 font-medium"
+                          >
+                            + Add Experience
+                          </button>
+                        </div>
+                        <div className="space-y-4">
+                          {resumeData.experience.map((exp, index) => (
+                            <div key={exp.id} className="p-4 bg-neutral-50 rounded-lg">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                                <input
+                                  type="text"
+                                  value={exp.company}
+                                  onChange={(e) => handleExperienceChange(index, 'company', e.target.value)}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                  placeholder="Company Name"
+                                />
+                                <input
+                                  type="text"
+                                  value={exp.role}
+                                  onChange={(e) => handleExperienceChange(index, 'role', e.target.value)}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                  placeholder="Job Title"
+                                />
+                                <input
+                                  type="text"
+                                  value={exp.startDate}
+                                  onChange={(e) => handleExperienceChange(index, 'startDate', e.target.value)}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                  placeholder="Start Date (e.g., Jan 2020)"
+                                />
+                                <input
+                                  type="text"
+                                  value={exp.endDate}
+                                  onChange={(e) => handleExperienceChange(index, 'endDate', e.target.value)}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                  placeholder="End Date (e.g., Present)"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="text-xs font-medium text-neutral-500">Description (add bullet points below):</span>
+                                </div>
+                                {exp.bullets?.map((bullet, bulletIndex) => (
+                                  <div key={bulletIndex} className="flex items-start gap-2">
+                                    <span className="mt-2 text-neutral-400">•</span>
+                                    <textarea
+                                      value={bullet}
+                                      onChange={(e) => updateBullet(index, bulletIndex, e.target.value)}
+                                      rows={2}
+                                      className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                                      placeholder="Achievement or responsibility..."
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => removeBullet(index, bulletIndex)}
+                                      className="mt-1 p-1 text-neutral-400 hover:text-error-500 transition-colors"
+                                    >
+                                      <X className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                ))}
+                                <button
+                                  type="button"
+                                  onClick={() => addBullet(index)}
+                                  className="flex items-center gap-1 text-sm text-primary-500 hover:text-primary-600 font-medium"
+                                >
+                                  <Plus className="w-4 h-4" />
+                                  Add Bullet Point
+                                </button>
+                              </div>
+                              {resumeData.experience.length > 1 && (
+                                <button
+                                  onClick={() => removeExperience(index)}
+                                  className="mt-2 text-xs text-error-500 hover:text-error-600"
+                                >
+                                  Remove
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <input
-                        type="text"
-                        value={project.associatedExperience}
-                        onChange={(e) => updateProject(index, 'associatedExperience', e.target.value)}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                        placeholder="Associated with (e.g., Company Name, Personal)"
-                      />
-                      <textarea
-                        value={project.description}
-                        onChange={(e) => updateProject(index, 'description', e.target.value)}
-                        rows={3}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
-                        placeholder="Project description..."
-                      />
-                      <button
-                        onClick={() => removeProject(index)}
-                        className="text-xs text-error-500 hover:text-error-600"
+                    );
+                  case 'education':
+                    return (
+                      <div
+                        key="education"
+                        draggable
+                        onDragStart={() => handleDragStart('education')}
+                        onDragOver={(e) => handleDragOver(e, 'education')}
+                        onDragLeave={handleDragLeave}
+                        onDrop={(e) => handleDrop(e, 'education')}
+                        onDragEnd={handleDragEnd}
+                        className={`${baseClasses} ${dragClasses}`}
                       >
-                        Remove Project
-                      </button>
-                    </div>
-                  ))}
-                  {resumeData.projects.length === 0 && (
-                    <p className="text-sm text-neutral-400 italic">Click "Add Project" to add your projects</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Certifications */}
-              <div
-                draggable
-                onDragStart={() => handleDragStart('certifications')}
-                onDragOver={(e) => handleDragOver(e, 'certifications')}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, 'certifications')}
-                onDragEnd={handleDragEnd}
-                className={`bg-white rounded-xl border-2 p-6 transition-all cursor-move ${
-                  draggedItem === 'certifications' ? 'opacity-50 border-primary-400' : 
-                  dragOverItem === 'certifications' ? 'border-primary-400 border-dashed' : 
-                  'border-neutral-200'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="text-neutral-400">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                    </div>
-                    <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
-                      <Check className="w-5 h-5 text-primary-500" />
-                      Certifications
-                    </h2>
-                  </div>
-                  <button
-                    onClick={addCertification}
-                    className="text-sm text-primary-500 hover:text-primary-600 font-medium"
-                  >
-                    + Add Certification
-                  </button>
-                </div>
-                <div className="space-y-4">
-                  {resumeData.certifications.map((cert, index) => (
-                    <div key={cert.id} className="p-4 bg-neutral-50 rounded-lg space-y-3">
-                      <input
-                        type="text"
-                        value={cert.name}
-                        onChange={(e) => updateCertification(index, 'name', e.target.value)}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                        placeholder="Certification Name"
-                      />
-                      <input
-                        type="text"
-                        value={cert.dateAcquired}
-                        onChange={(e) => updateCertification(index, 'dateAcquired', e.target.value)}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                        placeholder="Date Acquired (e.g., Jan 2023)"
-                      />
-                      <textarea
-                        value={cert.description}
-                        onChange={(e) => updateCertification(index, 'description', e.target.value)}
-                        rows={2}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
-                        placeholder="Description (optional)..."
-                      />
-                      <button
-                        onClick={() => removeCertification(index)}
-                        className="text-xs text-error-500 hover:text-error-600"
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className="text-neutral-400">
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                              </svg>
+                            </div>
+                            <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
+                              <GraduationCap className="w-5 h-5 text-primary-500" />
+                              Education
+                            </h2>
+                          </div>
+                          <button
+                            onClick={addEducation}
+                            className="text-sm text-primary-500 hover:text-primary-600 font-medium"
+                          >
+                            + Add Education
+                          </button>
+                        </div>
+                        <div className="space-y-4">
+                          {resumeData.education.map((edu, index) => (
+                            <div key={edu.id} className="p-4 bg-neutral-50 rounded-lg space-y-3">
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <input
+                                  type="text"
+                                  value={edu.school}
+                                  onChange={(e) => handleEducationChange(index, 'school', e.target.value)}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                  placeholder="School/University"
+                                />
+                                <input
+                                  type="text"
+                                  value={edu.degree}
+                                  onChange={(e) => handleEducationChange(index, 'degree', e.target.value)}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                  placeholder="Degree/Certificate"
+                                />
+                                <input
+                                  type="text"
+                                  value={edu.graduationDate}
+                                  onChange={(e) => handleEducationChange(index, 'graduationDate', e.target.value)}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                  placeholder="Graduation Date"
+                                />
+                              </div>
+                              <textarea
+                                value={edu.description}
+                                onChange={(e) => handleEducationChange(index, 'description', e.target.value)}
+                                rows={2}
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                                placeholder="Description (optional)..."
+                              />
+                              {resumeData.education.length > 1 && (
+                                <button
+                                  onClick={() => removeEducation(index)}
+                                  className="text-xs text-error-500 hover:text-error-600 text-left"
+                                >
+                                  Remove
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  case 'skills':
+                    return (
+                      <div
+                        key="skills"
+                        draggable
+                        onDragStart={() => handleDragStart('skills')}
+                        onDragOver={(e) => handleDragOver(e, 'skills')}
+                        onDragLeave={handleDragLeave}
+                        onDrop={(e) => handleDrop(e, 'skills')}
+                        onDragEnd={handleDragEnd}
+                        className={`${baseClasses} ${dragClasses}`}
                       >
-                        Remove Certification
-                      </button>
-                    </div>
-                  ))}
-                  {resumeData.certifications.length === 0 && (
-                    <p className="text-sm text-neutral-400 italic">Click "Add Certification" to add your certifications</p>
-                  )}
-                </div>
-              </div>
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className="text-neutral-400">
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                              </svg>
+                            </div>
+                            <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
+                              <Wrench className="w-5 h-5 text-primary-500" />
+                              Skills
+                            </h2>
+                          </div>
+                          <button
+                            onClick={addSkill}
+                            className="text-sm text-primary-500 hover:text-primary-600 font-medium flex items-center gap-1"
+                          >
+                            <Plus className="w-4 h-4" />
+                            Add Skill
+                          </button>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {resumeData.skills.map((skill, index) => (
+                            <div key={skill.id} className="flex items-center gap-1 bg-primary-50 px-3 py-2 rounded-lg">
+                              <input
+                                type="text"
+                                value={skill.name}
+                                onChange={(e) => updateSkill(index, e.target.value)}
+                                className="bg-transparent text-sm text-neutral-700 focus:outline-none w-24"
+                                placeholder="Skill name"
+                              />
+                              <button
+                                onClick={() => removeSkill(index)}
+                                className="text-neutral-400 hover:text-error-500 transition-colors"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ))}
+                          {resumeData.skills.length === 0 && (
+                            <p className="text-sm text-neutral-400 italic">Click "Add Skill" to add your skills</p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  case 'projects':
+                    return (
+                      <div
+                        key="projects"
+                        draggable
+                        onDragStart={() => handleDragStart('projects')}
+                        onDragOver={(e) => handleDragOver(e, 'projects')}
+                        onDragLeave={handleDragLeave}
+                        onDrop={(e) => handleDrop(e, 'projects')}
+                        onDragEnd={handleDragEnd}
+                        className={`${baseClasses} ${dragClasses}`}
+                      >
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className="text-neutral-400">
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                              </svg>
+                            </div>
+                            <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
+                              <LayoutTemplate className="w-5 h-5 text-primary-500" />
+                              Projects
+                            </h2>
+                          </div>
+                          <button
+                            onClick={addProject}
+                            className="text-sm text-primary-500 hover:text-primary-600 font-medium"
+                          >
+                            + Add Project
+                          </button>
+                        </div>
+                        <div className="space-y-4">
+                          {resumeData.projects.map((project, index) => (
+                            <div key={project.id} className="p-4 bg-neutral-50 rounded-lg space-y-3">
+                              <input
+                                type="text"
+                                value={project.name}
+                                onChange={(e) => updateProject(index, 'name', e.target.value)}
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                placeholder="Project Name"
+                              />
+                              <div className="grid grid-cols-2 gap-3">
+                                <input
+                                  type="text"
+                                  value={project.startDate}
+                                  onChange={(e) => updateProject(index, 'startDate', e.target.value)}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                  placeholder="Start Date"
+                                />
+                                <input
+                                  type="text"
+                                  value={project.endDate}
+                                  onChange={(e) => updateProject(index, 'endDate', e.target.value)}
+                                  className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                  placeholder="End Date"
+                                />
+                              </div>
+                              <input
+                                type="text"
+                                value={project.associatedExperience}
+                                onChange={(e) => updateProject(index, 'associatedExperience', e.target.value)}
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                placeholder="Associated with (e.g., Company Name, Personal)"
+                              />
+                              <textarea
+                                value={project.description}
+                                onChange={(e) => updateProject(index, 'description', e.target.value)}
+                                rows={3}
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                                placeholder="Project description..."
+                              />
+                              <button
+                                onClick={() => removeProject(index)}
+                                className="text-xs text-error-500 hover:text-error-600"
+                              >
+                                Remove Project
+                              </button>
+                            </div>
+                          ))}
+                          {resumeData.projects.length === 0 && (
+                            <p className="text-sm text-neutral-400 italic">Click "Add Project" to add your projects</p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  case 'certifications':
+                    return (
+                      <div
+                        key="certifications"
+                        draggable
+                        onDragStart={() => handleDragStart('certifications')}
+                        onDragOver={(e) => handleDragOver(e, 'certifications')}
+                        onDragLeave={handleDragLeave}
+                        onDrop={(e) => handleDrop(e, 'certifications')}
+                        onDragEnd={handleDragEnd}
+                        className={`${baseClasses} ${dragClasses}`}
+                      >
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className="text-neutral-400">
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                              </svg>
+                            </div>
+                            <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
+                              <Check className="w-5 h-5 text-primary-500" />
+                              Certifications
+                            </h2>
+                          </div>
+                          <button
+                            onClick={addCertification}
+                            className="text-sm text-primary-500 hover:text-primary-600 font-medium"
+                          >
+                            + Add Certification
+                          </button>
+                        </div>
+                        <div className="space-y-4">
+                          {resumeData.certifications.map((cert, index) => (
+                            <div key={cert.id} className="p-4 bg-neutral-50 rounded-lg space-y-3">
+                              <input
+                                type="text"
+                                value={cert.name}
+                                onChange={(e) => updateCertification(index, 'name', e.target.value)}
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                placeholder="Certification Name"
+                              />
+                              <input
+                                type="text"
+                                value={cert.dateAcquired}
+                                onChange={(e) => updateCertification(index, 'dateAcquired', e.target.value)}
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                placeholder="Date Acquired (e.g., Jan 2023)"
+                              />
+                              <textarea
+                                value={cert.description}
+                                onChange={(e) => updateCertification(index, 'description', e.target.value)}
+                                rows={2}
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                                placeholder="Description (optional)..."
+                              />
+                              <button
+                                onClick={() => removeCertification(index)}
+                                className="text-xs text-error-500 hover:text-error-600"
+                              >
+                                Remove Certification
+                              </button>
+                            </div>
+                          ))}
+                          {resumeData.certifications.length === 0 && (
+                            <p className="text-sm text-neutral-400 italic">Click "Add Certification" to add your certifications</p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  default:
+                    return null;
+                }
+              })}
             </div>
           ) : (
             <div className="bg-white rounded-xl border border-neutral-200 p-8">
