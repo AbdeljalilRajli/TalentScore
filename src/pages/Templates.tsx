@@ -189,7 +189,7 @@ export default function Templates() {
       // Auto-download after restore if authenticated
       setTimeout(() => {
         if (isAuthenticated && resumeRef.current) {
-          downloadResume(true);
+          downloadResume();
         }
       }, 500);
     }
@@ -260,10 +260,6 @@ export default function Templates() {
         bullets: [''] 
       }]
     }));
-  };
-
-  const handleSkillsChange = (_value: string) => {
-    // No longer used - skills are managed individually
   };
 
   const addSkill = () => {
@@ -365,7 +361,7 @@ export default function Templates() {
     downloadResume();
   };
 
-  const downloadResume = async (autoDownload = false) => {
+  const downloadResume = async () => {
     if (!resumeRef.current) return;
     
     const element = resumeRef.current;
@@ -1592,10 +1588,4 @@ function ResumePreview({ template, data, sectionOrder }: { template: string; dat
   };
 
   return renderers[template]?.() || renderModern();
-}
-
-// Generate HTML for download
-function generateResumeHTML(_template: string, _data: ResumeData): string {
-  // Kept for compatibility - PDF generation uses html2pdf.js instead
-  return '';
 }
