@@ -117,6 +117,107 @@ const templates = [
   }
 ];
 
+// Template Preview Miniature Component
+function TemplatePreview({ templateId }: { templateId: string }): React.ReactElement {
+  const renderModernPreview = () => (
+    <svg viewBox="0 0 160 224" className="w-full h-full">
+      <rect width="160" height="224" fill="white"/>
+      <rect x="0" y="0" width="50" height="224" fill="#3b82f6"/>
+      <rect x="60" y="16" width="90" height="12" rx="2" fill="#1f2937"/>
+      <rect x="60" y="32" width="70" height="8" rx="2" fill="#3b82f6"/>
+      <rect x="60" y="48" width="50" height="4" rx="1" fill="#6b7280"/>
+      <rect x="60" y="56" width="40" height="4" rx="1" fill="#6b7280"/>
+      <rect x="60" y="80" width="80" height="6" rx="1" fill="#3b82f6"/>
+      <rect x="60" y="92" width="90" height="4" rx="1" fill="#4b5563"/>
+      <rect x="60" y="100" width="85" height="4" rx="1" fill="#4b5563"/>
+      <rect x="60" y="108" width="70" height="4" rx="1" fill="#4b5563"/>
+      <rect x="60" y="128" width="80" height="6" rx="1" fill="#3b82f6"/>
+      <rect x="60" y="140" width="90" height="4" rx="1" fill="#374151"/>
+      <rect x="60" y="148" width="60" height="3" rx="1" fill="#6b7280"/>
+      <rect x="10" y="16" width="30" height="6" rx="1" fill="white" opacity="0.3"/>
+      <rect x="10" y="80" width="30" height="6" rx="1" fill="white" opacity="0.3"/>
+      <rect x="10" y="92" width="25" height="3" rx="1" fill="white" opacity="0.5"/>
+      <rect x="10" y="100" width="28" height="3" rx="1" fill="white" opacity="0.5"/>
+      <rect x="10" y="128" width="30" height="6" rx="1" fill="white" opacity="0.3"/>
+    </svg>
+  );
+
+  const renderClassicPreview = () => (
+    <svg viewBox="0 0 160 224" className="w-full h-full">
+      <rect width="160" height="224" fill="white"/>
+      <rect x="16" y="60" width="128" height="2" fill="#1f2937"/>
+      <rect x="40" y="20" width="80" height="14" rx="2" fill="#1f2937"/>
+      <rect x="30" y="42" width="30" height="4" rx="1" fill="#4b5563"/>
+      <rect x="70" y="42" width="30" height="4" rx="1" fill="#4b5563"/>
+      <rect x="110" y="42" width="20" height="4" rx="1" fill="#4b5563"/>
+      <rect x="16" y="76" width="60" height="6" rx="1" fill="#1f2937"/>
+      <rect x="16" y="88" width="128" height="1" fill="#9ca3af"/>
+      <rect x="16" y="96" width="120" height="4" rx="1" fill="#4b5563"/>
+      <rect x="16" y="104" width="110" height="4" rx="1" fill="#4b5563"/>
+      <rect x="16" y="112" width="115" height="4" rx="1" fill="#4b5563"/>
+      <rect x="16" y="132" width="80" height="6" rx="1" fill="#1f2937"/>
+      <rect x="16" y="144" width="128" height="1" fill="#9ca3af"/>
+      <rect x="16" y="152" width="90" height="4" rx="1" fill="#374151"/>
+      <rect x="110" y="152" width="34" height="4" rx="1" fill="#6b7280"/>
+      <rect x="16" y="160" width="70" height="4" rx="1" fill="#4b5563"/>
+      <rect x="16" y="168" width="120" height="3" rx="1" fill="#6b7280"/>
+      <rect x="16" y="176" width="115" height="3" rx="1" fill="#6b7280"/>
+    </svg>
+  );
+
+  const renderMinimalPreview = () => (
+    <svg viewBox="0 0 160 224" className="w-full h-full">
+      <rect width="160" height="224" fill="white"/>
+      <rect x="20" y="24" width="100" height="12" rx="2" fill="#1f2937"/>
+      <rect x="20" y="44" width="80" height="8" rx="2" fill="#6b7280"/>
+      <rect x="20" y="64" width="40" height="4" rx="1" fill="#9ca3af"/>
+      <rect x="70" y="64" width="40" height="4" rx="1" fill="#9ca3af"/>
+      <rect x="20" y="92" width="120" height="4" rx="1" fill="#4b5563"/>
+      <rect x="20" y="100" width="120" height="4" rx="1" fill="#4b5563"/>
+      <rect x="20" y="108" width="100" height="4" rx="1" fill="#4b5563"/>
+      <rect x="20" y="132" width="50" height="5" rx="1" fill="#9ca3af"/>
+      <rect x="20" y="148" width="80" height="5" rx="1" fill="#374151"/>
+      <rect x="110" y="148" width="30" height="5" rx="1" fill="#9ca3af"/>
+      <rect x="20" y="158" width="50" height="4" rx="1" fill="#6b7280"/>
+      <rect x="20" y="166" width="120" height="3" rx="1" fill="#4b5563"/>
+    </svg>
+  );
+
+  const renderTechnicalPreview = () => (
+    <svg viewBox="0 0 160 224" className="w-full h-full">
+      <rect width="160" height="224" fill="white"/>
+      <rect x="12" y="16" width="4" height="40" fill="#f59e0b"/>
+      <rect x="24" y="20" width="80" height="12" rx="2" fill="#1f2937"/>
+      <rect x="24" y="38" width="70" height="8" rx="2" fill="#4b5563"/>
+      <rect x="24" y="52" width="40" height="4" rx="1" fill="#6b7280"/>
+      <rect x="70" y="52" width="50" height="4" rx="1" fill="#6b7280"/>
+      <rect x="24" y="80" width="80" height="6" rx="1" fill="#1f2937"/>
+      <rect x="24" y="88" width="120" height="2" fill="#f59e0b"/>
+      <rect x="24" y="100" width="120" height="4" rx="1" fill="#374151"/>
+      <rect x="24" y="124" width="100" height="6" rx="1" fill="#1f2937"/>
+      <rect x="24" y="132" width="120" height="2" fill="#f59e0b"/>
+      <rect x="24" y="144" width="60" height="4" rx="1" fill="#374151"/>
+      <rect x="90" y="144" width="50" height="4" rx="1" fill="#6b7280"/>
+      <rect x="24" y="152" width="4" height="4" fill="#f59e0b"/>
+      <rect x="32" y="152" width="50" height="4" rx="1" fill="#4b5563"/>
+      <rect x="24" y="160" width="110" height="3" rx="1" fill="#6b7280"/>
+    </svg>
+  );
+
+  const previews: Record<string, () => React.ReactElement> = {
+    modern: renderModernPreview,
+    classic: renderClassicPreview,
+    minimal: renderMinimalPreview,
+    technical: renderTechnicalPreview
+  };
+
+  return (
+    <div className="w-20 h-28 rounded-lg shadow-soft overflow-hidden bg-white border border-neutral-200 shrink-0">
+      {previews[templateId]?.() || renderModernPreview()}
+    </div>
+  );
+}
+
 export default function Templates() {
   const { isAuthenticated } = useAuth();
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
@@ -437,9 +538,7 @@ export default function Templates() {
               >
                 {/* Template Preview Card */}
                 <div className="flex items-start gap-4">
-                  <div className={`w-20 h-28 ${template.color} rounded-lg flex items-center justify-center shadow-soft`}>
-                    <FileText className="w-8 h-8 text-white" />
-                  </div>
+                  <TemplatePreview templateId={template.id} />
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-neutral-900 mb-1 group-hover:text-primary-500 transition-colors">
                       {template.name}
