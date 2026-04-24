@@ -15,6 +15,7 @@ interface ProfileSection {
   icon: React.ElementType;
   content: string;
   score: number;
+  maxScore?: number;
   tips: string[];
 }
 
@@ -146,18 +147,26 @@ const LinkedInOptimizer: React.FC = () => {
     return Math.min(score, 100);
   };
 
-  // Get score color
+  // Get score color (for overall score 0-100)
   const getScoreColor = (score: number): string => {
     if (score >= 80) return 'text-success-500';
     if (score >= 60) return 'text-warning-500';
     return 'text-error-500';
   };
 
-  // Get score bg color
+  // Get score bg color (for overall score 0-100)
   const getScoreBgColor = (score: number): string => {
     if (score >= 80) return 'bg-success-500';
     if (score >= 60) return 'bg-warning-500';
     return 'bg-error-500';
+  };
+
+  // Get section score color based on percentage of max points
+  const getSectionScoreColor = (score: number, maxPoints: number): string => {
+    const percentage = (score / maxPoints) * 100;
+    if (percentage >= 80) return 'text-success-500';
+    if (percentage >= 60) return 'text-warning-500';
+    return 'text-error-500';
   };
 
   // Copy to clipboard
@@ -176,6 +185,7 @@ const LinkedInOptimizer: React.FC = () => {
         icon: User,
         content: generateHeadline(data),
         score: data.professionalTitle ? 15 : 5,
+        maxScore: 15,
         tips: [
           'Use your current title and company',
           'Add 2-3 key skills separated by pipes (|)',
@@ -189,6 +199,7 @@ const LinkedInOptimizer: React.FC = () => {
         icon: FileText,
         content: generateAbout(data),
         score: data.summary ? (data.summary.length > 100 ? 20 : 10) : 5,
+        maxScore: 20,
         tips: [
           'Start with your current role and expertise',
           'Include metrics and achievements (%, $, #)',
@@ -205,6 +216,7 @@ const LinkedInOptimizer: React.FC = () => {
           `${exp.role} at ${exp.company}\n${generateExperienceBullet(exp)}`
         ).join('\n\n'),
         score: data.experience.length >= 3 ? 25 : (data.experience.length >= 1 ? 15 : 0),
+        maxScore: 25,
         tips: [
           'Focus on achievements, not responsibilities',
           'Start bullets with action verbs',
@@ -218,6 +230,7 @@ const LinkedInOptimizer: React.FC = () => {
         icon: Wrench,
         content: data.skills.map(s => s.name).join(', '),
         score: data.skills.length >= 10 ? 20 : (data.skills.length >= 5 ? 15 : data.skills.length * 2),
+        maxScore: 20,
         tips: [
           'List 10-20 relevant skills',
           'Include both technical and soft skills',
@@ -427,8 +440,8 @@ const LinkedInOptimizer: React.FC = () => {
                   </div>
                   <div className="text-left">
                     <h3 className="font-semibold text-neutral-900">{section.title}</h3>
-                    <span className={`text-sm ${getScoreColor(section.score)}`}>
-                      {section.score}/25 points
+                    <span className={`text-sm ${getSectionScoreColor(section.score, section.maxScore || 25)}`}>
+                      {section.score}/{section.maxScore || 25} points
                     </span>
                   </div>
                 </div>
