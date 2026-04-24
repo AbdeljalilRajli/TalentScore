@@ -1,5 +1,5 @@
 import React, { type ReactNode } from 'react';
-import { ArrowRight, FileText, Briefcase, User, LogOut, LogIn, LayoutTemplate } from 'lucide-react';
+import { ArrowRight, FileText, Briefcase, User, LogOut, LogIn, LayoutTemplate, Linkedin } from 'lucide-react';
 import { useAuth } from '../../firebase/AuthContext';
 
 interface LayoutProps {
@@ -56,6 +56,15 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPath = '/' }) => {
                   <span className="flex items-center gap-1.5">
                     <Briefcase className="w-4 h-4" />
                     Tracker
+                  </span>
+                </a>
+                <a 
+                  href="/linkedin" 
+                  className={`text-sm font-medium transition-colors ${currentPath === '/linkedin' ? 'text-primary-500' : 'text-neutral-600 hover:text-neutral-900'}`}
+                >
+                  <span className="flex items-center gap-1.5">
+                    <Linkedin className="w-4 h-4" />
+                    LinkedIn
                   </span>
                 </a>
               </nav>

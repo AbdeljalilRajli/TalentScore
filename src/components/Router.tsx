@@ -4,6 +4,7 @@ import Analyze from '../pages/Analyze';
 import CoverLetter from '../pages/CoverLetter';
 import Tracker from '../pages/Tracker';
 import Templates from '../pages/Templates';
+import LinkedIn from '../pages/LinkedIn';
 import Auth from '../pages/Auth';
 import Layout from './Layout/Layout';
 
@@ -47,6 +48,12 @@ const Router: React.FC<RouterProps> = ({ currentPath }) => {
       return (
         <Layout currentPath={currentPath}>
           <Templates />
+        </Layout>
+      );
+    case '/linkedin':
+      return (
+        <Layout currentPath={currentPath}>
+          <LinkedIn />
         </Layout>
       );
     default:

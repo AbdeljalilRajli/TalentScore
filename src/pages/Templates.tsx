@@ -2,11 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   LayoutTemplate, FileText, User, Briefcase, GraduationCap, 
-  Wrench, Download, Eye, X, Plus,
+  Wrench, Download, X, Plus, Save,
   ChevronRight, Check, Sparkles, ArrowLeft, Lock
 } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { useAuth } from '../firebase/AuthContext';
+import { saveResume } from '../firebase/resumeService';
 
 interface ResumeData {
   fullName: string;
@@ -219,11 +220,10 @@ function TemplatePreview({ templateId }: { templateId: string }): React.ReactEle
 }
 
 export default function Templates() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
-  const [showPreview, setShowPreview] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [sectionOrder, setSectionOrder] = useState<SectionOrderItem[]>([
     { id: 'summary', label: 'Professional Summary', icon: FileText },
@@ -235,6 +235,8 @@ export default function Templates() {
   ]);
   const [draggedItem, setDraggedItem] = useState<SectionType | null>(null);
   const [dragOverItem, setDragOverItem] = useState<SectionType | null>(null);
+  const [savingResume, setSavingResume] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   const handleDragStart = (sectionId: SectionType) => {
     setDraggedItem(sectionId);
@@ -295,6 +297,11 @@ export default function Templates() {
       }, 500);
     }
   }, [isAuthenticated]);
+
+  // Save resume data to localStorage for LinkedIn optimizer
+  useEffect(() => {
+    localStorage.setItem('lastResumeData', JSON.stringify(resumeData));
+  }, [resumeData]);
 
   const handleInputChange = (field: keyof ResumeData, value: string) => {
     setResumeData(prev => ({ ...prev, [field]: value }));
@@ -451,6 +458,31 @@ export default function Templates() {
 
   const resumeRef = useRef<HTMLDivElement>(null);
 
+  const handleSaveResume = async () => {
+    if (!isAuthenticated || !user?.uid) {
+      setShowAuthModal(true);
+      return;
+    }
+    
+    setSavingResume(true);
+    setSaveSuccess(false);
+    
+    try {
+      await saveResume(user.uid, {
+        ...resumeData,
+        template: selectedTemplate || undefined,
+        sectionOrder: sectionOrder.map(s => s.id)
+      });
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (error) {
+      console.error('Failed to save resume:', error);
+      alert('Failed to save resume. Please try again.');
+    } finally {
+      setSavingResume(false);
+    }
+  };
+
   const handleDownloadClick = () => {
     if (!isAuthenticated) {
       // Save resume data before redirecting to login
@@ -604,13 +636,34 @@ export default function Templates() {
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => setShowPreview(!showPreview)}
-                className="flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
-              >
-                <Eye className="w-4 h-4" />
-                {showPreview ? 'Hide Preview' : 'Show Preview'}
-              </button>
+              {isAuthenticated && (
+                <button
+                  onClick={handleSaveResume}
+                  disabled={!resumeData.fullName || savingResume}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                    saveSuccess 
+                      ? 'bg-success-600 text-white' 
+                      : 'bg-success-500 text-white hover:bg-success-600'
+                  }`}
+                >
+                  {savingResume ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Saving...
+                    </>
+                  ) : saveSuccess ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      Saved!
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4" />
+                      Save Resume
+                    </>
+                  )}
+                </button>
+              )}
               <button
                 onClick={handleDownloadClick}
                 disabled={!resumeData.fullName}
@@ -625,9 +678,9 @@ export default function Templates() {
       </div>
 
       {/* Main Content */}
-      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative ${showPreview ? 'grid grid-cols-1 lg:grid-cols-2 gap-8 items-start' : ''}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         {/* Editor */}
-        <div className={`${showPreview ? '' : 'max-w-3xl mx-auto'}`}>
+        <div>
           {/* Tabs */}
           <div className="flex gap-1 bg-neutral-100 p-1 rounded-lg mb-6 w-fit">
             {(['edit', 'preview'] as const).map((tab) => (
@@ -1176,9 +1229,8 @@ export default function Templates() {
           )}
         </div>
 
-        {/* Live Preview (when showPreview is true) */}
-        {showPreview && (
-          <div className="sticky top-24 self-start">
+        {/* Live Preview */}
+        <div className="sticky top-24 self-start">
             <div className="bg-white rounded-xl border border-neutral-200 p-4 shadow-soft">
               <h3 className="text-sm font-medium text-neutral-500 mb-4">Live Preview</h3>
               <div className="overflow-auto max-h-[calc(100vh-200px)]" ref={resumeRef}>
@@ -1186,7 +1238,6 @@ export default function Templates() {
               </div>
             </div>
           </div>
-        )}
       </div>
       {/* Auth Modal */}
       {showAuthModal && (
