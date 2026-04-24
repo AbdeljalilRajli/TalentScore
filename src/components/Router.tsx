@@ -5,6 +5,7 @@ import CoverLetter from '../pages/CoverLetter';
 import Tracker from '../pages/Tracker';
 import Templates from '../pages/Templates';
 import LinkedIn from '../pages/LinkedIn';
+import MyResumes from '../pages/MyResumes';
 import Auth from '../pages/Auth';
 import Layout from './Layout/Layout';
 
@@ -54,6 +55,12 @@ const Router: React.FC<RouterProps> = ({ currentPath }) => {
       return (
         <Layout currentPath={currentPath}>
           <LinkedIn />
+        </Layout>
+      );
+    case '/my-resumes':
+      return (
+        <Layout currentPath={currentPath}>
+          <MyResumes />
         </Layout>
       );
     default:

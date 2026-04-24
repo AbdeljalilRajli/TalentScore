@@ -282,6 +282,27 @@ export default function Templates() {
 
   // Restore resume data from localStorage after login
   useEffect(() => {
+    // Check for edit resume data from MyResumes page first
+    const editResumeData = localStorage.getItem('editResumeData');
+    
+    if (editResumeData) {
+      const parsed = JSON.parse(editResumeData);
+      setResumeData(parsed);
+      setSelectedTemplate(parsed.template || 'modern');
+      if (parsed.sectionOrder) {
+        const newOrder = parsed.sectionOrder
+          .map((id: string) => sectionOrder.find(s => s.id === id))
+          .filter(Boolean) as SectionOrderItem[];
+        if (newOrder.length === sectionOrder.length) {
+          setSectionOrder(newOrder);
+        }
+      }
+      // Clear the edit data so it doesn't reload on refresh
+      localStorage.removeItem('editResumeData');
+      return;
+    }
+    
+    // Check for pending resume data from download flow
     const savedResume = localStorage.getItem('pendingResumeData');
     const savedTemplate = localStorage.getItem('pendingResumeTemplate');
     if (savedResume && savedTemplate) {
@@ -459,7 +480,10 @@ export default function Templates() {
   const resumeRef = useRef<HTMLDivElement>(null);
 
   const handleSaveResume = async () => {
+    console.log('Save clicked. isAuthenticated:', isAuthenticated, 'user:', user?.uid);
+    
     if (!isAuthenticated || !user?.uid) {
+      console.log('Not authenticated, showing auth modal');
       setShowAuthModal(true);
       return;
     }
@@ -475,9 +499,10 @@ export default function Templates() {
       });
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to save resume:', error);
-      alert('Failed to save resume. Please try again.');
+      const errorMessage = error?.message || 'Unknown error';
+      alert(`Failed to save resume: ${errorMessage}`);
     } finally {
       setSavingResume(false);
     }
@@ -498,11 +523,24 @@ export default function Templates() {
     if (!resumeRef.current) return;
     
     const element = resumeRef.current;
+    
+    // Temporarily remove scroll constraints for full capture
+    const originalStyle = element.style.cssText;
+    element.style.maxHeight = 'none';
+    element.style.overflow = 'visible';
+    
     const opt = {
-      margin: 0,
+      margin: [10, 10, 10, 10] as [number, number, number, number],
       filename: `${resumeData.fullName.replace(/\s+/g, '_')}_resume.pdf`,
       image: { type: 'jpeg' as const, quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
+      html2canvas: { 
+        scale: 2, 
+        useCORS: true,
+        scrollY: 0,
+        scrollX: 0,
+        windowHeight: element.scrollHeight,
+        height: element.scrollHeight
+      },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const }
     };
     
@@ -511,6 +549,9 @@ export default function Templates() {
     } catch (error) {
       console.error('PDF generation failed:', error);
       alert('Failed to generate PDF. Please try again.');
+    } finally {
+      // Restore original styles
+      element.style.cssText = originalStyle;
     }
   };
 
@@ -796,16 +837,18 @@ export default function Templates() {
                     return (
                       <div
                         key="summary"
-                        draggable
-                        onDragStart={() => handleDragStart('summary')}
                         onDragOver={(e) => handleDragOver(e, 'summary')}
                         onDragLeave={handleDragLeave}
                         onDrop={(e) => handleDrop(e, 'summary')}
-                        onDragEnd={handleDragEnd}
                         className={`${baseClasses} ${dragClasses}`}
                       >
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="text-neutral-400">
+                        <div 
+                          draggable
+                          onDragStart={() => handleDragStart('summary')}
+                          onDragEnd={handleDragEnd}
+                          className="flex items-center gap-2 mb-4 cursor-move"
+                        >
+                          <div className="text-neutral-400 hover:text-neutral-600">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
@@ -825,17 +868,19 @@ export default function Templates() {
                     return (
                       <div
                         key="experience"
-                        draggable
-                        onDragStart={() => handleDragStart('experience')}
                         onDragOver={(e) => handleDragOver(e, 'experience')}
                         onDragLeave={handleDragLeave}
                         onDrop={(e) => handleDrop(e, 'experience')}
-                        onDragEnd={handleDragEnd}
                         className={`${baseClasses} ${dragClasses}`}
                       >
-                        <div className="flex items-center justify-between mb-4">
+                        <div 
+                          draggable
+                          onDragStart={() => handleDragStart('experience')}
+                          onDragEnd={handleDragEnd}
+                          className="flex items-center justify-between mb-4 cursor-move"
+                        >
                           <div className="flex items-center gap-2">
-                            <div className="text-neutral-400">
+                            <div className="text-neutral-400 hover:text-neutral-600">
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                               </svg>
@@ -934,17 +979,19 @@ export default function Templates() {
                     return (
                       <div
                         key="education"
-                        draggable
-                        onDragStart={() => handleDragStart('education')}
                         onDragOver={(e) => handleDragOver(e, 'education')}
                         onDragLeave={handleDragLeave}
                         onDrop={(e) => handleDrop(e, 'education')}
-                        onDragEnd={handleDragEnd}
                         className={`${baseClasses} ${dragClasses}`}
                       >
-                        <div className="flex items-center justify-between mb-4">
+                        <div 
+                          draggable
+                          onDragStart={() => handleDragStart('education')}
+                          onDragEnd={handleDragEnd}
+                          className="flex items-center justify-between mb-4 cursor-move"
+                        >
                           <div className="flex items-center gap-2">
-                            <div className="text-neutral-400">
+                            <div className="text-neutral-400 hover:text-neutral-600">
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                               </svg>
@@ -1011,17 +1058,19 @@ export default function Templates() {
                     return (
                       <div
                         key="skills"
-                        draggable
-                        onDragStart={() => handleDragStart('skills')}
                         onDragOver={(e) => handleDragOver(e, 'skills')}
                         onDragLeave={handleDragLeave}
                         onDrop={(e) => handleDrop(e, 'skills')}
-                        onDragEnd={handleDragEnd}
                         className={`${baseClasses} ${dragClasses}`}
                       >
-                        <div className="flex items-center justify-between mb-4">
+                        <div 
+                          draggable
+                          onDragStart={() => handleDragStart('skills')}
+                          onDragEnd={handleDragEnd}
+                          className="flex items-center justify-between mb-4 cursor-move"
+                        >
                           <div className="flex items-center gap-2">
-                            <div className="text-neutral-400">
+                            <div className="text-neutral-400 hover:text-neutral-600">
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                               </svg>
@@ -1067,17 +1116,19 @@ export default function Templates() {
                     return (
                       <div
                         key="projects"
-                        draggable
-                        onDragStart={() => handleDragStart('projects')}
                         onDragOver={(e) => handleDragOver(e, 'projects')}
                         onDragLeave={handleDragLeave}
                         onDrop={(e) => handleDrop(e, 'projects')}
-                        onDragEnd={handleDragEnd}
                         className={`${baseClasses} ${dragClasses}`}
                       >
-                        <div className="flex items-center justify-between mb-4">
+                        <div 
+                          draggable
+                          onDragStart={() => handleDragStart('projects')}
+                          onDragEnd={handleDragEnd}
+                          className="flex items-center justify-between mb-4 cursor-move"
+                        >
                           <div className="flex items-center gap-2">
-                            <div className="text-neutral-400">
+                            <div className="text-neutral-400 hover:text-neutral-600">
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                               </svg>
@@ -1152,17 +1203,19 @@ export default function Templates() {
                     return (
                       <div
                         key="certifications"
-                        draggable
-                        onDragStart={() => handleDragStart('certifications')}
                         onDragOver={(e) => handleDragOver(e, 'certifications')}
                         onDragLeave={handleDragLeave}
                         onDrop={(e) => handleDrop(e, 'certifications')}
-                        onDragEnd={handleDragEnd}
                         className={`${baseClasses} ${dragClasses}`}
                       >
-                        <div className="flex items-center justify-between mb-4">
+                        <div 
+                          draggable
+                          onDragStart={() => handleDragStart('certifications')}
+                          onDragEnd={handleDragEnd}
+                          className="flex items-center justify-between mb-4 cursor-move"
+                        >
                           <div className="flex items-center gap-2">
-                            <div className="text-neutral-400">
+                            <div className="text-neutral-400 hover:text-neutral-600">
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                               </svg>
@@ -1444,12 +1497,15 @@ function ResumePreview({ template, data, sectionOrder }: { template: string; dat
           <div className="mb-5" key="education">
             <h2 className="text-base font-bold text-neutral-900 border-b border-neutral-400 mb-3 pb-1">EDUCATION</h2>
             {data.education.filter(e => e.school).map((edu, i) => (
-              <div key={i} className="flex justify-between items-baseline mb-2">
-                <div>
-                  <span className="font-bold text-neutral-900">{edu.school}</span>
-                  <span className="text-neutral-600"> — {edu.degree}</span>
+              <div key={i} className="mb-2">
+                <div className="flex justify-between items-baseline">
+                  <div>
+                    <span className="font-bold text-neutral-900">{edu.school}</span>
+                    <span className="text-neutral-600"> — {edu.degree}</span>
+                  </div>
+                  <span className="text-sm text-neutral-600">{edu.graduationDate}</span>
                 </div>
-                <span className="text-sm text-neutral-600">{edu.graduationDate}</span>
+                {edu.description && <p className="text-neutral-500 text-sm mt-1">{edu.description}</p>}
               </div>
             ))}
           </div>
@@ -1550,9 +1606,12 @@ function ResumePreview({ template, data, sectionOrder }: { template: string; dat
           <div className="mb-6" key="education">
             <h2 className="text-sm font-medium text-neutral-400 uppercase tracking-wider mb-4">Education</h2>
             {data.education.filter(e => e.school).map((edu, i) => (
-              <div key={i} className="flex justify-between items-baseline mb-2">
-                <span className="text-neutral-900">{edu.school} <span className="text-neutral-500">— {edu.degree}</span></span>
-                <span className="text-sm text-neutral-400">{edu.graduationDate}</span>
+              <div key={i} className="mb-2">
+                <div className="flex justify-between items-baseline">
+                  <span className="text-neutral-900">{edu.school} <span className="text-neutral-500">— {edu.degree}</span></span>
+                  <span className="text-sm text-neutral-400">{edu.graduationDate}</span>
+                </div>
+                {edu.description && <p className="text-neutral-500 text-sm mt-1">{edu.description}</p>}
               </div>
             ))}
           </div>
