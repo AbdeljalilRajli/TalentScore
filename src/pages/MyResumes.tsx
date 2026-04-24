@@ -90,10 +90,6 @@ const MyResumes: React.FC = () => {
       container.style.boxSizing = 'border-box';
       document.body.appendChild(container);
       
-      // Render resume content based on template
-      const sectionOrder = resume.sectionOrder || ['summary', 'experience', 'education', 'skills', 'projects', 'certifications'];
-      const template = resume.template || 'modern';
-      
       // Simple HTML structure for PDF generation
       container.innerHTML = `
         <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
