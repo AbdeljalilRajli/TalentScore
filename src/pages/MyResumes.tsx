@@ -3,19 +3,17 @@ import { motion } from 'framer-motion';
 import { 
   FileText, Edit2, Trash2, ExternalLink, 
   Calendar, LayoutTemplate, AlertCircle,
-  Plus, Loader2, Download
+  Plus, Loader2
 } from 'lucide-react';
 import { useAuth } from '../firebase/AuthContext';
 import type { ResumeData } from '../firebase/resumeService';
 import { getResumes, deleteResume } from '../firebase/resumeService';
-import html2pdf from 'html2pdf.js';
 
 const MyResumes: React.FC = () => {
   const { isAuthenticated, user } = useAuth();
   const [resumes, setResumes] = useState<ResumeData[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -73,70 +71,6 @@ const MyResumes: React.FC = () => {
   const handleOptimizeLinkedIn = (_resume: ResumeData) => {
     window.history.pushState({}, '', '/linkedin');
     window.dispatchEvent(new PopStateEvent('popstate'));
-  };
-
-  const handleDownload = async (resume: ResumeData) => {
-    try {
-      setDownloadingId(resume.id!);
-      
-      // Create a temporary container for the resume
-      const container = document.createElement('div');
-      container.style.position = 'absolute';
-      container.style.left = '-9999px';
-      container.style.top = '0';
-      container.style.width = '210mm';
-      container.style.background = 'white';
-      container.style.padding = '20mm';
-      container.style.boxSizing = 'border-box';
-      document.body.appendChild(container);
-      
-      // Simple HTML structure for PDF generation
-      container.innerHTML = `
-        <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-          <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 5px; color: #1f2937;">${resume.fullName}</h1>
-          <p style="font-size: 14px; color: #3b82f6; margin-bottom: 10px;">${resume.professionalTitle}</p>
-          <div style="font-size: 12px; color: #6b7280; margin-bottom: 20px;">
-            ${resume.email} ${resume.phone ? '| ' + resume.phone : ''} ${resume.location ? '| ' + resume.location : ''}
-          </div>
-          
-          ${resume.summary ? `<div style="margin-bottom: 20px;"><h2 style="font-size: 14px; font-weight: bold; color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 5px; margin-bottom: 10px;">Professional Summary</h2><p style="font-size: 12px; color: #4b5563;">${resume.summary}</p></div>` : ''}
-          
-          ${resume.experience?.length ? `<div style="margin-bottom: 20px;"><h2 style="font-size: 14px; font-weight: bold; color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 5px; margin-bottom: 10px;">Experience</h2>${resume.experience.map(exp => `<div style="margin-bottom: 10px;"><div style="font-weight: 600; font-size: 13px;">${exp.role} at ${exp.company}</div><div style="font-size: 11px; color: #6b7280;">${exp.startDate} - ${exp.endDate}</div>${exp.bullets?.map(b => `<div style="font-size: 12px; color: #4b5563; margin-top: 3px;">• ${b}</div>`).join('')}</div>`).join('')}</div>` : ''}
-          
-          ${resume.education?.length ? `<div style="margin-bottom: 20px;"><h2 style="font-size: 14px; font-weight: bold; color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 5px; margin-bottom: 10px;">Education</h2>${resume.education.map(edu => `<div style="margin-bottom: 8px;"><div style="font-weight: 600; font-size: 13px;">${edu.school} — ${edu.degree}</div><div style="font-size: 11px; color: #6b7280;">${edu.graduationDate}</div>${edu.description ? `<div style="font-size: 12px; color: #4b5563; margin-top: 3px;">${edu.description}</div>` : ''}</div>`).join('')}</div>` : ''}
-          
-          ${resume.skills?.length ? `<div style="margin-bottom: 20px;"><h2 style="font-size: 14px; font-weight: bold; color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 5px; margin-bottom: 10px;">Skills</h2><p style="font-size: 12px; color: #4b5563;">${resume.skills.map(s => s.name).join(', ')}</p></div>` : ''}
-          
-          ${resume.projects?.length ? `<div style="margin-bottom: 20px;"><h2 style="font-size: 14px; font-weight: bold; color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 5px; margin-bottom: 10px;">Projects</h2>${resume.projects.map(proj => `<div style="margin-bottom: 8px;"><div style="font-weight: 600; font-size: 13px;">${proj.name}</div><div style="font-size: 11px; color: #6b7280;">${proj.startDate} - ${proj.endDate}</div><div style="font-size: 12px; color: #4b5563; margin-top: 3px;">${proj.description}</div></div>`).join('')}</div>` : ''}
-          
-          ${resume.certifications?.length ? `<div style="margin-bottom: 20px;"><h2 style="font-size: 14px; font-weight: bold; color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 5px; margin-bottom: 10px;">Certifications</h2>${resume.certifications.map(cert => `<div style="margin-bottom: 8px;"><div style="font-weight: 600; font-size: 13px;">${cert.name}</div><div style="font-size: 11px; color: #6b7280;">${cert.dateAcquired}</div>${cert.description ? `<div style="font-size: 12px; color: #4b5563; margin-top: 3px;">${cert.description}</div>` : ''}</div>`).join('')}</div>` : ''}
-        </div>
-      `;
-      
-      // Generate PDF
-      const opt = {
-        margin: [10, 10, 10, 10] as [number, number, number, number],
-        filename: `${resume.fullName.replace(/\s+/g, '_')}_resume.pdf`,
-        image: { type: 'jpeg' as const, quality: 0.98 },
-        html2canvas: { 
-          scale: 2, 
-          useCORS: true,
-          scrollY: 0,
-          scrollX: 0
-        },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const }
-      };
-      
-      await html2pdf().set(opt).from(container).save();
-      
-      // Clean up
-      document.body.removeChild(container);
-    } catch (err) {
-      console.error('Failed to download resume:', err);
-      alert('Failed to generate PDF. Please try again.');
-    } finally {
-      setDownloadingId(null);
-    }
   };
 
   const formatDate = (timestamp: any) => {
@@ -296,18 +230,6 @@ const MyResumes: React.FC = () => {
                 >
                   <Edit2 className="w-4 h-4" />
                   Edit
-                </button>
-                <button
-                  onClick={() => handleDownload(resume)}
-                  disabled={downloadingId === resume.id}
-                  className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-success-600 hover:bg-success-50 rounded-lg transition-colors disabled:opacity-50"
-                >
-                  {downloadingId === resume.id ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Download className="w-4 h-4" />
-                  )}
-                  Download
                 </button>
                 <button
                   onClick={() => handleOptimizeLinkedIn(resume)}
