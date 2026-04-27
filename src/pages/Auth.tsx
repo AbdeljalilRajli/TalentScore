@@ -80,9 +80,11 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         className="w-full max-w-md relative z-10"
       >
         <div className="text-center mb-10">
-          <div className="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center mx-auto mb-6 shadow-soft">
-            <span className="text-white font-semibold text-lg">TS</span>
-          </div>
+          <img 
+            src="/talentscore-logo.png" 
+            alt="TalentScore" 
+            className="h-16 w-auto mx-auto mb-6 object-contain"
+          />
           <h1 className="text-neutral-900 text-2xl font-semibold mb-2">
             {isLogin ? 'Welcome back' : 'Create account'}
           </h1>

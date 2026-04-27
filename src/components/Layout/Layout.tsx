@@ -18,10 +18,11 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPath = '/' }) => {
           <div className="h-16 md:h-20 flex items-center justify-between">
             <div className="flex items-center gap-8">
               <a href="/" className="flex items-center gap-3 group">
-                <div className="w-8 h-8 bg-primary-500 flex items-center justify-center rounded-sm">
-                  <span className="text-white font-semibold text-xs">TS</span>
-                </div>
-                <span className="text-lg font-semibold text-neutral-900 group-hover:text-primary-500 transition-colors">TalentScore</span>
+                <img 
+                  src="/talentscore-logo.png" 
+                  alt="TalentScore" 
+                  className="h-10 w-auto object-contain"
+                />
               </a>
               
               <nav className="hidden md:flex items-center gap-6">
@@ -123,10 +124,11 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPath = '/' }) => {
         <div className="container-premium">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-neutral-200 flex items-center justify-center rounded-sm">
-                <span className="text-neutral-700 font-semibold text-xs">TS</span>
-              </div>
-              <span className="text-neutral-900 font-medium">TalentScore</span>
+              <img 
+                src="/talentscore-logo.png" 
+                alt="TalentScore" 
+                className="h-10 w-auto object-contain"
+              />
             </div>
             
             <p className="text-neutral-500 text-sm">
