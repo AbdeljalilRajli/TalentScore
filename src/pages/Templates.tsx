@@ -50,6 +50,7 @@ interface SkillEntry {
 interface ProjectEntry {
   id: string;
   name: string;
+  link: string;
   startDate: string;
   endDate: string;
   associatedExperience: string;
@@ -431,6 +432,7 @@ export default function Templates() {
       projects: [...prev.projects, { 
         id: Date.now().toString(), 
         name: '', 
+        link: '',
         startDate: '', 
         endDate: '', 
         associatedExperience: '',
@@ -1155,6 +1157,13 @@ export default function Templates() {
                                 className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
                                 placeholder="Project Name"
                               />
+                              <input
+                                type="url"
+                                value={project.link}
+                                onChange={(e) => updateProject(index, 'link', e.target.value)}
+                                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                placeholder="Project Link (URL)"
+                              />
                               <div className="grid grid-cols-2 gap-3">
                                 <input
                                   type="text"
@@ -1412,7 +1421,14 @@ function ResumePreview({ template, data, sectionOrder }: { template: string; dat
             {data.projects.filter(p => p.name).map((project, i) => (
               <div key={i} className="mb-3">
                 <div className="flex justify-between items-baseline">
-                  <h3 className="font-semibold text-neutral-900">{project.name}</h3>
+                  <h3 className="font-semibold text-neutral-900">
+                    {project.name}
+                    {project.link && (
+                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-primary-500 hover:text-primary-600 text-sm ml-2">
+                        ↗
+                      </a>
+                    )}
+                  </h3>
                   <span className="text-sm text-neutral-500">{project.startDate} - {project.endDate}</span>
                 </div>
                 {project.associatedExperience && <p className="text-neutral-600 text-sm">{project.associatedExperience}</p>}
@@ -1469,24 +1485,26 @@ function ResumePreview({ template, data, sectionOrder }: { template: string; dat
     switch (sectionId) {
       case 'summary':
         return data.summary ? (
-          <div className="mb-5" key="summary">
-            <h2 className="text-base font-bold text-neutral-900 border-b border-neutral-400 mb-2 pb-1">SUMMARY</h2>
-            <p className="text-neutral-700 leading-relaxed">{data.summary}</p>
+          <div className="mb-4" key="summary">
+            <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wider mb-1">Summary</h2>
+            <div className="border-b border-neutral-300 mb-2"></div>
+            <p className="text-neutral-700 text-[10.5pt] leading-snug">{data.summary}</p>
           </div>
         ) : null;
       case 'experience':
         return data.experience.some(e => e.company) ? (
-          <div className="mb-5" key="experience">
-            <h2 className="text-base font-bold text-neutral-900 border-b border-neutral-400 mb-3 pb-1">PROFESSIONAL EXPERIENCE</h2>
+          <div className="mb-4" key="experience">
+            <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wider mb-1">Professional Experience</h2>
+            <div className="border-b border-neutral-300 mb-2"></div>
             {data.experience.filter(e => e.company).map((exp, i) => (
-              <div key={i} className="mb-4">
+              <div key={i} className="mb-3">
                 <div className="flex justify-between items-baseline">
-                  <h3 className="font-bold text-neutral-900">{exp.company}</h3>
-                  <span className="text-sm text-neutral-600 italic">{exp.startDate} - {exp.endDate}</span>
+                  <h3 className="font-bold text-neutral-900 text-[11pt]">{exp.company}</h3>
+                  <span className="text-[9.5pt] text-neutral-500 italic">{exp.startDate} - {exp.endDate}</span>
                 </div>
-                <p className="font-semibold text-neutral-800 italic mb-1">{exp.role}</p>
+                <p className="font-medium text-neutral-800 italic text-[10.5pt] mb-0.5">{exp.role}</p>
                 {exp.bullets?.filter(b => b.trim()).map((bullet, bulletIdx) => (
-                  <p key={bulletIdx} className="text-neutral-700 text-sm">• {bullet}</p>
+                  <p key={bulletIdx} className="text-neutral-700 text-[10pt] leading-snug">• {bullet}</p>
                 ))}
               </div>
             ))}
@@ -1494,41 +1512,49 @@ function ResumePreview({ template, data, sectionOrder }: { template: string; dat
         ) : null;
       case 'education':
         return data.education.some(e => e.school) ? (
-          <div className="mb-5" key="education">
-            <h2 className="text-base font-bold text-neutral-900 border-b border-neutral-400 mb-3 pb-1">EDUCATION</h2>
+          <div className="mb-4" key="education">
+            <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wider mb-1">Education</h2>
+            <div className="border-b border-neutral-300 mb-2"></div>
             {data.education.filter(e => e.school).map((edu, i) => (
-              <div key={i} className="mb-2">
+              <div key={i} className="mb-1.5">
                 <div className="flex justify-between items-baseline">
                   <div>
-                    <span className="font-bold text-neutral-900">{edu.school}</span>
-                    <span className="text-neutral-600"> — {edu.degree}</span>
+                    <span className="font-bold text-neutral-900 text-[11pt]">{edu.school}</span>
+                    <span className="text-neutral-600 text-[10pt]"> — {edu.degree}</span>
                   </div>
-                  <span className="text-sm text-neutral-600">{edu.graduationDate}</span>
+                  <span className="text-[9.5pt] text-neutral-500">{edu.graduationDate}</span>
                 </div>
-                {edu.description && <p className="text-neutral-500 text-sm mt-1">{edu.description}</p>}
+                {edu.description && <p className="text-neutral-500 text-[10pt] mt-0.5">{edu.description}</p>}
               </div>
             ))}
           </div>
         ) : null;
       case 'skills':
         return data.skills.length > 0 ? (
-          <div className="mb-5" key="skills">
-            <h2 className="text-base font-bold text-neutral-900 border-b border-neutral-400 mb-2 pb-1">SKILLS</h2>
-            <p className="text-neutral-700">{data.skills.map(s => s.name).join(', ')}</p>
+          <div className="mb-4" key="skills">
+            <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wider mb-1">Skills</h2>
+            <div className="border-b border-neutral-300 mb-2"></div>
+            <p className="text-neutral-700 text-[10.5pt] leading-snug">{data.skills.map(s => s.name).join(', ')}</p>
           </div>
         ) : null;
       case 'projects':
         return data.projects.some(p => p.name) ? (
-          <div className="mb-5" key="projects">
-            <h2 className="text-base font-bold text-neutral-900 border-b border-neutral-400 mb-3 pb-1">PROJECTS</h2>
+          <div className="mb-4" key="projects">
+            <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wider mb-1">Projects</h2>
+            <div className="border-b border-neutral-300 mb-2"></div>
             {data.projects.filter(p => p.name).map((project, i) => (
-              <div key={i} className="mb-3">
+              <div key={i} className="mb-2">
                 <div className="flex justify-between items-baseline">
-                  <h3 className="font-bold text-neutral-900">{project.name}</h3>
-                  <span className="text-sm text-neutral-600">{project.startDate} - {project.endDate}</span>
+                  <h3 className="font-bold text-neutral-900 text-[11pt]">{project.name}</h3>
+                  <span className="text-[9.5pt] text-neutral-500">{project.startDate} - {project.endDate}</span>
                 </div>
-                {project.associatedExperience && <p className="text-neutral-600 text-sm">{project.associatedExperience}</p>}
-                {project.description && <p className="text-neutral-700 text-sm">{project.description}</p>}
+                {project.link && (
+                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="block text-neutral-500 text-[9.5pt] hover:text-neutral-700 underline mb-0.5">
+                    {project.link.replace(/^https?:\/\//, '')}
+                  </a>
+                )}
+                {project.associatedExperience && <p className="text-neutral-600 text-[10pt]">{project.associatedExperience}</p>}
+                {project.description && <p className="text-neutral-700 text-[10pt] leading-snug">{project.description}</p>}
               </div>
             ))}
           </div>
@@ -1536,14 +1562,15 @@ function ResumePreview({ template, data, sectionOrder }: { template: string; dat
       case 'certifications':
         return data.certifications.some(c => c.name) ? (
           <div key="certifications">
-            <h2 className="text-base font-bold text-neutral-900 border-b border-neutral-400 mb-2 pb-1">CERTIFICATIONS</h2>
+            <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wider mb-1">Certifications</h2>
+            <div className="border-b border-neutral-300 mb-2"></div>
             {data.certifications.filter(c => c.name).map((cert, i) => (
-              <div key={i} className="mb-2">
+              <div key={i} className="mb-1.5">
                 <div className="flex justify-between items-baseline">
-                  <span className="font-bold text-neutral-900">{cert.name}</span>
-                  <span className="text-sm text-neutral-600">{cert.dateAcquired}</span>
+                  <span className="font-bold text-neutral-900 text-[11pt]">{cert.name}</span>
+                  <span className="text-[9.5pt] text-neutral-500">{cert.dateAcquired}</span>
                 </div>
-                {cert.description && <p className="text-neutral-700 text-sm">{cert.description}</p>}
+                {cert.description && <p className="text-neutral-700 text-[10pt] leading-snug">{cert.description}</p>}
               </div>
             ))}
           </div>
@@ -1554,19 +1581,17 @@ function ResumePreview({ template, data, sectionOrder }: { template: string; dat
   };
 
   const renderClassic = () => (
-    <div style={templateStyles.classic} className="bg-white p-8">
-      {/* Centered Header */}
-      <div className="text-center mb-6 pb-6 border-b-2 border-neutral-800">
-        <h1 className="text-3xl font-bold text-neutral-900 mb-1">{data.fullName || 'Your Name'}</h1>
-        <p className="text-neutral-600 font-medium mb-2">{data.professionalTitle || ''}</p>
-        <div className="flex justify-center flex-wrap gap-x-4 gap-y-1 text-sm text-neutral-600">
+    <div style={templateStyles.classic} className="bg-white px-8 py-6">
+      {/* Centered Header - Compact */}
+      <div className="text-center mb-4 pb-3 border-b border-neutral-400">
+        <h1 className="text-[22pt] font-bold text-neutral-900 mb-0.5 tracking-tight">{data.fullName || 'Your Name'}</h1>
+        <p className="text-neutral-600 text-[11pt] mb-1.5">{data.professionalTitle || ''}</p>
+        <div className="flex justify-center flex-wrap gap-x-3 gap-y-0.5 text-[9.5pt] text-neutral-500">
           {data.location && <span>{data.location}</span>}
-          {data.phone && <span>{data.phone}</span>}
-          {data.email && <span>{data.email}</span>}
-        </div>
-        <div className="flex justify-center flex-wrap gap-x-4 text-sm text-neutral-600 mt-1">
-          {data.website && <span>{data.website}</span>}
-          {data.linkedin && <span>{data.linkedin}</span>}
+          {data.phone && <span>• {data.phone}</span>}
+          {data.email && <span>• {data.email}</span>}
+          {data.website && <span>• {data.website}</span>}
+          {data.linkedin && <span>• {data.linkedin}</span>}
         </div>
       </div>
 
@@ -1636,7 +1661,14 @@ function ResumePreview({ template, data, sectionOrder }: { template: string; dat
             {data.projects.filter(p => p.name).map((project, i) => (
               <div key={i} className="mb-3">
                 <div className="flex justify-between items-baseline">
-                  <h3 className="font-medium text-neutral-900">{project.name}</h3>
+                  <h3 className="font-medium text-neutral-900">
+                    {project.name}
+                    {project.link && (
+                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-primary-500 hover:text-primary-600 text-sm ml-2">
+                        ↗
+                      </a>
+                    )}
+                  </h3>
                   <span className="text-sm text-neutral-400">{project.startDate} - {project.endDate}</span>
                 </div>
                 {project.associatedExperience && <p className="text-neutral-500 text-sm">{project.associatedExperience}</p>}
@@ -1741,7 +1773,14 @@ function ResumePreview({ template, data, sectionOrder }: { template: string; dat
             {data.projects.filter(p => p.name).map((project, i) => (
               <div key={i} className="mb-3">
                 <div className="flex justify-between items-baseline mb-1">
-                  <h3 className="font-semibold text-neutral-900">{project.name}</h3>
+                  <h3 className="font-semibold text-neutral-900">
+                    {project.name}
+                    {project.link && (
+                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-warning-500 hover:text-warning-600 text-xs ml-2">
+                        [link]
+                      </a>
+                    )}
+                  </h3>
                   <span className="text-xs text-neutral-500">{project.startDate} - {project.endDate}</span>
                 </div>
                 {project.associatedExperience && <p className="text-neutral-600 text-sm pl-3">▸ {project.associatedExperience}</p>}
